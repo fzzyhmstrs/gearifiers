@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "gearifiers",
+  "version": "${version}",
+  "name": "Gearifiers",
+  "description": "Gives armor, tools, and trinkets various quality and effect modifiers.",
+  "authors": [
+    "fzzyhmstrs"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/gearifiers",
+    "issues": "https://github.com/fzzyhmstrs/gearifiers/issues",
+    "sources": "https://github.com/fzzyhmstrs/gearifiers"
+  },
+  "license": "MIT License",
+  "icon": "assets/gearifiers/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.gearifiers.Gearifiers"
+      }
+    ]
+  },
+  "mixins": [
+    "gearifiers.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.11",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0",
+    "minecraft": ">=1.19",
+    "java": ">=17"
+  }
+}

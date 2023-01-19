@@ -1,0 +1,20 @@
+{
+	"equipment.modifier.gearifiers:blunt": "Blunt",
+	"equipment.modifier.gearifiers:dull": "Dull",
+	"equipment.modifier.gearifiers:honed": "Honed",
+	"equipment.modifier.gearifiers:keen": "Keen",
+	"equipment.modifier.gearifiers:razor_sharp": "Razor Sharp",
+	"equipment.modifier.gearifiers:sharp": "Sharp",
+	"equipment.modifier.gearifiers:ungodly_sharp": "Ungodly Sharp",
+	"equipment.modifier.gearifiers:useless": "Useless",
+
+	"equipment.modifier.gearifiers:blunt.desc": "-1.0 Attack Damage",
+	"equipment.modifier.gearifiers:dull.desc": "-0.5 Attack Damage",
+	"equipment.modifier.gearifiers:honed.desc": "+1.0 Attack Damage",
+	"equipment.modifier.gearifiers:keen.desc": "+1.5 Attack Damage",
+	"equipment.modifier.gearifiers:razor_sharp.desc": "+2.0 Attack Damage",
+	"equipment.modifier.gearifiers:sharp.desc": "+0.5 Attack Damage",
+	"equipment.modifier.gearifiers:ungodly_sharp.desc": "+3.0 Attack Damage",
+	"equipment.modifier.gearifiers:useless.desc": "-2.0 Attack Damage"
+
+}
