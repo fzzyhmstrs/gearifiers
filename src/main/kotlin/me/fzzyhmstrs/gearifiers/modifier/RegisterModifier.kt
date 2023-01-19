@@ -117,7 +117,7 @@ object RegisterModifier {
         .withAttributeModifier(
             EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,"2blq6mg1-908f-11ed-a1eb-0242ac120002",0.1,
             EntityAttributeModifier.Operation.ADDITION)
-        .withOnDamaged(ModifierConsumers.INDOMITABLE_DAMAGE_CONSUMER)
+        .withOnDamaged(ModifierConsumers.INDOMITABLE_DAMAGE_FUNCTION)
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.RARE)
