@@ -1,10 +1,15 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
+import me.fzzyhmstrs.amethyst_core.coding_util.PerLvlI
 import me.fzzyhmstrs.amethyst_core.modifier_util.AbstractModifier
 import me.fzzyhmstrs.amethyst_core.modifier_util.EquipmentModifier
+import me.fzzyhmstrs.amethyst_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.loot.provider.number.BinomialLootNumberProvider
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider
+import net.minecraft.loot.provider.number.UniformLootNumberProvider
 import net.minecraft.util.Identifier
 
 object RegisterModifier {
@@ -153,7 +158,7 @@ object RegisterModifier {
         .withDescendant(THICK)
         .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val UNSUBSTANTIAL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unsubstantial"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.VERY_BAD)
+    val UNSUBSTANTIAL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unsubstantial"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"6fds7tpm-908f-11ed-a1eb-0242ac120002",-1.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -187,7 +192,7 @@ object RegisterModifier {
         .withDurabilityMod(PerLvlI(0,0,-25))
         .withDescendant(TATTERED)
         .also { regMod.add(it) }
-    val DESTROYED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"destroyed"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE, 2, EquipmentModifier.Rarity.VERY_BAD)
+    val DESTROYED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"destroyed"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE, 2, EquipmentModifier.Rarity.REALLY_BAD)
         .withDurabilityMod(PerLvlI(-50,0,-50))
         .withDescendant(DISREPAIRED)
         .withToll(VERY_EXPENSIVE_TOLL)
@@ -219,7 +224,7 @@ object RegisterModifier {
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDescendant(ENERGETIC)
         .also { regMod.add(it) }
-    val UNWEILDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unweildy"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 5, EquipmentModifier.Rarity.VERY_BAD)
+    val UNWEILDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unweildy"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 5, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,"5t8g9a6p-908f-11ed-a1eb-0242ac120002",0.25,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -255,7 +260,7 @@ object RegisterModifier {
         .withDescendant(HEALTHY)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val WIMPY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"wimpy"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 4, EquipmentModifier.Rarity.VERY_BAD)
+    val WIMPY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"wimpy"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 4, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MAX_HEALTH,"450uy3dm-908f-11ed-a1eb-0242ac120002",-1.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -305,7 +310,7 @@ object RegisterModifier {
         .withDescendant(QUICK)
         .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val SLUGGISH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"sluggish"), EquipmentModifier.EquipmentModifierTarget.ARMOR_LEGS, 4, EquipmentModifier.Rarity.VERY_BAD)
+    val SLUGGISH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"sluggish"), EquipmentModifier.EquipmentModifierTarget.ARMOR_LEGS, 4, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,"3lf8a0d5-908f-11ed-a1eb-0242ac120002",-0.05,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
