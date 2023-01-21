@@ -20,6 +20,12 @@ repositories {
         name = "Ladysnake Libs"
         url = uri("https://ladysnake.jfrog.io/artifactory/mods")
     }
+    maven {
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release")
+        content {
+            includeGroup( "com.jamieswhiteshirt")
+        }
+    }
     flatDir {
         dirs("F:\\Documents\\Mod Libraries\\ac\\build\\libs")
     }
@@ -41,11 +47,12 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
     }
 
-    val trinketsVersion: String by project
-    modImplementation("dev.emi:trinkets:$trinketsVersion"){
+    //reach attribute lib
+    val reachVersion: String by project
+    modImplementation("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion"){
         exclude("net.fabricmc.fabric-api")
     }
-    include("dev.emi:trinkets:$trinketsVersion")
+    include("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion")
 
 }
 tasks {
