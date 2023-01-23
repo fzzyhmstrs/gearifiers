@@ -1,13 +1,15 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes
-import me.fzzyhmstrs.amethyst_core.coding_util.PerLvlI
-import me.fzzyhmstrs.amethyst_core.modifier_util.AbstractModifier
-import me.fzzyhmstrs.amethyst_core.modifier_util.EquipmentModifier
-import me.fzzyhmstrs.amethyst_core.registry.ModifierRegistry
+import me.fzzyhmstrs.fzzy_core.coding_util.PerLvlI
+import me.fzzyhmstrs.fzzy_core.modifier_util.AbstractModifier
+import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
+import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.item.ItemStack
+import net.minecraft.item.ShieldItem
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider
 import net.minecraft.loot.provider.number.UniformLootNumberProvider
@@ -21,6 +23,12 @@ object RegisterModifier {
     private val EXPENSIVE_TOLL = ConstantLootNumberProvider.create(7f)
     private val VERY_EXPENSIVE_TOLL = ConstantLootNumberProvider.create(9f)
     private val RANDOM_TOLL = BinomialLootNumberProvider.create(10,0.5f)
+
+    private val TRINKET_AND_SHIELD = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"trinket_and_shield")){
+        override fun isAcceptableItem(stack: ItemStack): Boolean {
+            return TRINKET.isStackAcceptable(stack) || stack.item is ShieldItem
+        }
+    }
     
     //legendary modifier
     val LEGENDARY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.ANY, 1,EquipmentModifier.Rarity.LEGENDARY)
@@ -128,7 +136,7 @@ object RegisterModifier {
         .withAttributeModifier(
             EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,"2blq6mg1-908f-11ed-a1eb-0242ac120002",0.1,
             EntityAttributeModifier.Operation.ADDITION)
-        .withOnDamaged(ModifierConsumers.INDOMITABLE_DAMAGE_FUNCTION)
+        .withOnDamaged(ModifierFunctions.INDOMITABLE_DAMAGE_FUNCTION)
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.RARE)
@@ -395,6 +403,12 @@ object RegisterModifier {
             ReachEntityAttributes.REACH,"16ex94hp-908f-11ed-a1eb-0242ac120002",-1.25,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(LESSER_LIMITING)
+        .withToll(EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+
+    //misc modifiers
+    val SHIELDING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"shielding"), TRINKET_AND_SHIELD,5,EquipmentModifier.Rarity.UNCOMMON)
+        .withOnDamaged(ModifierFunctions.SHIELDING_DAMAGE_FUNCTION)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 

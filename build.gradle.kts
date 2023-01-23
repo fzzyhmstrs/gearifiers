@@ -26,8 +26,15 @@ repositories {
             includeGroup( "com.jamieswhiteshirt")
         }
     }
+    maven {
+        name = "Jitpack"
+        url = uri("https://jitpack.io")
+    }
     flatDir {
-        dirs("F:\\Documents\\Mod Libraries\\ac\\build\\libs")
+        dirs("F:\\Documents\\Mod Libraries\\gc\\build\\libs")
+    }
+    flatDir {
+        dirs("F:\\Documents\\Mod Libraries\\fc\\build\\libs")
     }
 }
 dependencies {
@@ -42,8 +49,13 @@ dependencies {
     val fabricKotlinVersion: String by project
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
 
-    val acVersion: String by project
-    modImplementation(":amethyst_core-$acVersion"){
+    val fcVersion: String by project
+    modImplementation(":fzzy_core-$fcVersion"){
+        exclude("net.fabricmc.fabric-api")
+    }
+
+    val gcVersion: String by project
+    modImplementation(":gear_core-$gcVersion"){
         exclude("net.fabricmc.fabric-api")
     }
 
@@ -53,6 +65,11 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
     }
     include("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion")
+
+    val meVersion: String by project
+    implementation("com.github.LlamaLad7:MixinExtras:$meVersion")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:$meVersion")
+    include("com.github.LlamaLad7:MixinExtras:$meVersion")
 
 }
 tasks {

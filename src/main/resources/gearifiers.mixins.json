@@ -2,7 +2,10 @@
   "required": true,
   "package": "me.fzzyhmstrs.gearifiers.mixins",
   "compatibilityLevel": "JAVA_16",
-  "client": [
+  "mixins": [
+    "ItemStackMixin",
+    "EntityMixin",
+    "LootTableMixin"
   ],
   "injectors": {
     "defaultRequire": 1
