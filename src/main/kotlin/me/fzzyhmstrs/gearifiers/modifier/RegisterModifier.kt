@@ -411,6 +411,55 @@ object RegisterModifier {
         .withOnDamaged(ModifierFunctions.SHIELDING_DAMAGE_FUNCTION)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
+    val POISONOUS = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"poisonous"), TRINKET_AND_SHIELD,2,EquipmentModifier.Rarity.RARE)
+        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(120,1))
+        .withToll(EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+    val TOXIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"toxic"), TRINKET_AND_SHIELD,5,EquipmentModifier.Rarity.UNCOMMON)
+        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(100,0))
+        .withToll(EXPENSIVE_TOLL)
+        .withDescendant(POISONOUS)
+        .also { regMod.add(it) }
+    val DESECRATED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"desecrated"), TRINKET_AND_SHIELD,1,EquipmentModifier.Rarity.EPIC)
+        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(120,1))
+        .withToll(EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+    val UNHOLY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unholy"), TRINKET_AND_SHIELD,3,EquipmentModifier.Rarity.RARE)
+        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(100,0))
+        .withToll(EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+    val FORCEFUL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"forceful"), EquipmentModifier.EquipmentModifierTarget.TRINKET_AND_WEAPON,3,EquipmentModifier.Rarity.UNCOMMON)
+        .withAttributeModifier(
+            EntityAttributes.GENERIC_ATTACK_KNOCKBACK,"6th9uh85-908f-11ed-a1eb-0242ac120002",0.5,
+            EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+        .also { regMod.add(it) }
+    val GREATER_THIEVING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"greater_thieving"), EquipmentModifier.EquipmentModifierTarget.WEAPON,2,EquipmentModifier.Rarity.EPIC)
+        .withKilledOther(ModifierConsumers.ThievingKillConsumer(0.15f))
+        .withToll(VERY_EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+    val THIEVING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"thieving"), EquipmentModifier.EquipmentModifierTarget.WEAPON,5,EquipmentModifier.Rarity.RARE)
+        .withKilledOther(ModifierConsumers.ThievingKillConsumer(0.1f))
+        .withToll(EXPENSIVE_TOLL)
+        .withDescendant(GREATER_THIEVING)
+        .also { regMod.add(it) }
+    val LESSER_THIEVING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_thieving"), EquipmentModifier.EquipmentModifierTarget.WEAPON,7,EquipmentModifier.Rarity.UNCOMMON)
+        .withKilledOther(ModifierConsumers.ThievingKillConsumer(0.05f))
+        .withDescendant(THIEVING)
+        .also { regMod.add(it) }
+    val SPLITTING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"splitting"), EquipmentModifier.EquipmentModifierTarget.AXE,5,EquipmentModifier.Rarity.UNCOMMON)
+        .withPostMine(ModifierConsumers.SPLITTING_MINE_CONSUMER)
+        .also { regMod.add(it) }
+    val ENRICHED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"enriched"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,1,EquipmentModifier.Rarity.EPIC)
+        .withPostMine(ModifierConsumers.ENRICHED_MINE_CONSUMER)
+        .also { regMod.add(it) }
+    val METALLIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"metallic"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,4,EquipmentModifier.Rarity.RARE)
+        .withPostMine(ModifierConsumers.METALLIC_MINE_CONSUMER)
+        .withDescendant(ENRICHED)
+        .also { regMod.add(it) }
+    val ANTHRACITIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"anthracitic"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,7,EquipmentModifier.Rarity.UNCOMMON)
+        .withPostMine(ModifierConsumers.ANTHRACITIC_MINE_CONSUMER)
+        .withDescendant(METALLIC)
+        .also { regMod.add(it) }
 
     fun registerAll(){
         regMod.forEach {
