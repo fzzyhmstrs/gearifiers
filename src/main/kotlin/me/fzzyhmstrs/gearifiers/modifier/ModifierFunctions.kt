@@ -31,6 +31,36 @@ object ModifierFunctions {
                 amount
             }
         }
+        
+    class PoisonousDamageFunction(private val dur: Int, private val amp: Int): EquipmentModifier.DamageFunction{
+        override fun test(
+            stack: ItemStack,
+            user: LivingEntity,
+            attacker: LivingEntity?,
+            source: DamageSource,
+            amount: Float
+        ): Float {
+            if(attacker != null){
+                EffectQueue.addStatusToQueue(attacker, StatusEffects.POISON,dur,amp)
+            }
+            return amount
+        }
+    }
+    
+    class DesecratedDamageFunction(private val dur: Int, private val amp: Int): EquipmentModifier.DamageFunction{
+        override fun test(
+            stack: ItemStack,
+            user: LivingEntity,
+            attacker: LivingEntity?,
+            source: DamageSource,
+            amount: Float
+        ): Float {
+            if(attacker != null){
+                EffectQueue.addStatusToQueue(attacker, StatusEffects.WITHER,dur,amp)
+            }
+            return amount
+        }
+    }
 
     class DamageMultiplierFunction(private val multiplier: Float): EquipmentModifier.DamageFunction{
         override fun test(
