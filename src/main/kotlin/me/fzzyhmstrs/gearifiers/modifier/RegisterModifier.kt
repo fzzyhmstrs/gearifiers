@@ -9,6 +9,7 @@ import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.item.ItemStack
+import net.minecraft.item.PickaxeItem
 import net.minecraft.item.ShieldItem
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider
@@ -26,14 +27,20 @@ object RegisterModifier {
 
     private val TRINKET_AND_SHIELD = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"trinket_and_shield")){
         override fun isAcceptableItem(stack: ItemStack): Boolean {
-            return TRINKET.isStackAcceptable(stack) || stack.item is ShieldItem
+            return TRINKET.isItemAcceptableOrTagged(stack) || stack.item is ShieldItem
+        }
+    }
+
+    private val PICKAXE = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"pickaxe")){
+        override fun isAcceptableItem(stack: ItemStack): Boolean {
+            return stack.item is PickaxeItem
         }
     }
     
-    //legendary modifier
+    //legendary modifiers
     val LEGENDARY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.ANY, 1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,"5t8g9a6p-908f-11ed-a1eb-0242ac120002",-0.10,
+            EntityAttributes.GENERIC_ATTACK_SPEED,"5t8g9a6p-908f-11ed-a1eb-0242ac120002",0.10,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,"32tl59oa-908f-11ed-a1eb-0242ac120002",1.5,
@@ -49,6 +56,13 @@ object RegisterModifier {
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDurabilityMod(PerLvlI(0,0,25))
         .withToll(UniformLootNumberProvider.create(12f,18f))
+        .also { regMod.add(it) }
+
+    val VORPAL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"anthracitic"), EquipmentModifier.EquipmentModifierTarget.SWORD,1,EquipmentModifier.Rarity.LEGENDARY)
+        .withAttributeModifier(
+            EntityAttributes.GENERIC_ATTACK_SPEED,"5t8g9a6p-908f-11ed-a1eb-0242ac120002",0.20,
+            EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+        .withPostHit(ModifierConsumers.VORPAL_HIT_CONSUMER)
         .also { regMod.add(it) }
     
     //basic damage modification for weapons
@@ -402,8 +416,29 @@ object RegisterModifier {
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"16ex94hp-908f-11ed-a1eb-0242ac120002",-1.25,
             EntityAttributeModifier.Operation.ADDITION)
-        .withDescendant(LESSER_LIMITING)
         .withToll(EXPENSIVE_TOLL)
+        .withDescendant(LESSER_LIMITING)
+        .also { regMod.add(it) }
+
+    //directly damage modification modifiers
+    val BLUNTING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"blunting"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,3,EquipmentModifier.Rarity.RARE)
+        .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(-.05f))
+        .withToll(EXPENSIVE_TOLL)
+        .also { regMod.add(it) }
+    val DULLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"dulling"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,6,EquipmentModifier.Rarity.UNCOMMON)
+        .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(-.025f))
+        .withDescendant(BLUNTING)
+        .also { regMod.add(it) }
+    val HARSH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"harsh"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,6,EquipmentModifier.Rarity.BAD)
+        .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(-.025f))
+        .withDescendant(DULLING)
+        .also { regMod.add(it) }
+    val REDUCTIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"reductive"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,6,EquipmentModifier.Rarity.UNCOMMON)
+        .withOnDamaged(ModifierFunctions.DamageAdderFunction(-.25f))
+        .also { regMod.add(it) }
+    val ADDITIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"additive"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,4,EquipmentModifier.Rarity.BAD)
+        .withOnDamaged(ModifierFunctions.DamageAdderFunction(.25f))
+        .withDescendant(REDUCTIVE)
         .also { regMod.add(it) }
 
     //misc modifiers
@@ -427,8 +462,9 @@ object RegisterModifier {
     val UNHOLY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unholy"), TRINKET_AND_SHIELD,3,EquipmentModifier.Rarity.RARE)
         .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(100,0))
         .withToll(EXPENSIVE_TOLL)
+        .withDescendant(DESECRATED)
         .also { regMod.add(it) }
-    val FORCEFUL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"forceful"), EquipmentModifier.EquipmentModifierTarget.TRINKET_AND_WEAPON,3,EquipmentModifier.Rarity.UNCOMMON)
+    val FORCEFUL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"forceful"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET,3,EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_KNOCKBACK,"6th9uh85-908f-11ed-a1eb-0242ac120002",0.5,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -449,16 +485,36 @@ object RegisterModifier {
     val SPLITTING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"splitting"), EquipmentModifier.EquipmentModifierTarget.AXE,5,EquipmentModifier.Rarity.UNCOMMON)
         .withPostMine(ModifierConsumers.SPLITTING_MINE_CONSUMER)
         .also { regMod.add(it) }
-    val ENRICHED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"enriched"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,1,EquipmentModifier.Rarity.EPIC)
+    val ENRICHED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"enriched"), PICKAXE,2,EquipmentModifier.Rarity.EPIC)
         .withPostMine(ModifierConsumers.ENRICHED_MINE_CONSUMER)
+        .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val METALLIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"metallic"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,4,EquipmentModifier.Rarity.RARE)
+    val METALLIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"metallic"), PICKAXE,4,EquipmentModifier.Rarity.RARE)
         .withPostMine(ModifierConsumers.METALLIC_MINE_CONSUMER)
+        .withToll(EXPENSIVE_TOLL)
         .withDescendant(ENRICHED)
         .also { regMod.add(it) }
-    val ANTHRACITIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"anthracitic"), EquipmentModifier.EquipmentModifierTarget.PICKAXE,7,EquipmentModifier.Rarity.UNCOMMON)
+    val ANTHRACITIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"anthracitic"), PICKAXE,7,EquipmentModifier.Rarity.UNCOMMON)
         .withPostMine(ModifierConsumers.ANTHRACITIC_MINE_CONSUMER)
         .withDescendant(METALLIC)
+        .also { regMod.add(it) }
+
+    //misc bad modifiers
+    val DOUBLE_EDGED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"jarring"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+        .withPostHit(ModifierConsumers.DOUBLE_EDGED_HIT_CONSUMER)
+        .also { regMod.add(it) }
+    val JARRING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"jarring"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+        .withPostHit(ModifierConsumers.JARRING_HIT_CONSUMER)
+        .also { regMod.add(it) }
+    val CLANGING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"clanging"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+        .withPostHit(ModifierConsumers.CLANGING_HIT_CONSUMER)
+        .also { regMod.add(it) }
+    val GREATER_CRUMBLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"greater_crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,2,EquipmentModifier.Rarity.REALLY_BAD)
+        .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.5f))
+        .also { regMod.add(it) }
+    val CRUMBLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,5,EquipmentModifier.Rarity.BAD)
+        .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.25f))
+        .withDescendant(GREATER_CRUMBLING)
         .also { regMod.add(it) }
 
     fun registerAll(){

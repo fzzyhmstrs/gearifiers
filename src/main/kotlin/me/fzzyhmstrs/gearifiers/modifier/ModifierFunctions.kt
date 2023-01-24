@@ -2,10 +2,12 @@ package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ItemStack
+import net.minecraft.item.ToolItem
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 
@@ -57,6 +59,31 @@ object ModifierFunctions {
         ): Float {
             if(attacker != null){
                 EffectQueue.addStatusToQueue(attacker, StatusEffects.WITHER,dur,amp)
+            }
+            return amount
+        }
+    }
+
+    class CrumblingDamageFunction(private val chance: Float): EquipmentModifier.DamageFunction{
+        override fun test(
+            stack: ItemStack,
+            user: LivingEntity,
+            attacker: LivingEntity?,
+            source: DamageSource,
+            amount: Float
+        ): Float {
+            if(user.world.random.nextFloat() < chance){
+                var found = false
+                for (slot in EquipmentSlot.values()){
+                    if (user.getEquippedStack(slot) == stack){
+                        stack.damage(1,user) { player -> player.sendEquipmentBreakStatus(slot) }
+                        found = true
+                        break
+                    }
+                }
+                if (!found){
+                    stack.damage(1,user) { player -> player.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND) }
+                }
             }
             return amount
         }

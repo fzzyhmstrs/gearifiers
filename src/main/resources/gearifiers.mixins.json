@@ -5,7 +5,8 @@
   "mixins": [
     "ItemStackMixin",
     "EntityMixin",
-    "LootTableMixin"
+    "LootTableMixin",
+    "LivingEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
