@@ -28,7 +28,7 @@ public class EntityMixin {
             if (((Entity)(Object)this) instanceof PlayerEntity player){
                 contextBuilder.luck(player.getLuck());
             }
-            EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, contextBuilder.build(LootContextTypes.GENERIC));
+            EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, contextBuilder.build(LootContextTypes.EMPTY));
         }
     }
 
