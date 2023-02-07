@@ -6,10 +6,11 @@ Find a _Razor Sharp_ sword in a chest, or maybe a _Blunt_ one.... Hone it up in 
 
 |Todo|Status|version|
 |---|---|---|
-|Fix quick transfer off crafting table not adding modifiers|Not Started|0.1.0|
-|Check chest loot|Not Started|0.1.0|
+|Fix quick transfer off crafting table not adding modifiers|In work|0.1.0|
+|Check chest loot|In work|0.1.0|
 |Check mob drops|Not Started|0.1.0|
 |Go Over modifier chances thoroughly|Not Started|0.1.0|
 |Check that consumers and functions etc. are acutally working|Not Started|0.1.0|
-|Add rerolling mechanic in grindstone or similar|Not Started|?.?.?|
+|Add rerolling mechanic in grindstone or similar|In work|0.1.0|
+|Add gilded anvil block for rerolling modifiers|In work|0.1.0|
 |Wiki describing all the modifiers|Not Started|?.?.?|
