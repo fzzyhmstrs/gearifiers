@@ -21,13 +21,20 @@ object RegisterModifier {
     private val regMod: MutableList<AbstractModifier<*>> = mutableListOf()
     
     private val CHEAP_TOLL = ConstantLootNumberProvider.create(3f) // 96% probability
-    private val EXPENSIVE_TOLL = ConstantLootNumberProvider.create(7f) //39% chance of enough toll
-    private val VERY_EXPENSIVE_TOLL = ConstantLootNumberProvider.create(9f) //12% chance of toll
+    // private val NORMAL_TOLL = ConstantLootNumberProvider.create(5f) //75% probability
+    private val EXPENSIVE_TOLL = UniformLootNumberProvider.create(6f,7f) //50% chance of enough toll
+    private val VERY_EXPENSIVE_TOLL = UniformLootNumberProvider.create(7f,9f) //25% chance of toll
     private val RANDOM_TOLL = BinomialLootNumberProvider.create(20,0.5f)
 
     private val TRINKET_AND_SHIELD = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"trinket_and_shield")){
         override fun isAcceptableItem(stack: ItemStack): Boolean {
             return TRINKET.isItemAcceptableOrTagged(stack) || stack.item is ShieldItem
+        }
+    }
+    
+    private val TRINKET_AND_ARMOR_AND_SHIELD = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"trinket_and_armor_and_shield")){
+        override fun isAcceptableItem(stack: ItemStack): Boolean {
+            return TRINKET_AND_SHIELD.isItemAcceptableOrTagged(stack) || ARMOR.isItemAcceptableOrTagged(stack)
         }
     }
 
@@ -61,7 +68,7 @@ object RegisterModifier {
             EntityAttributes.GENERIC_MOVEMENT_SPEED,"603046be-9c16-11ed-a8fc-0242ac120002",0.05,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDurabilityMod(PerLvlI(0,0,25))
-        .withToll(UniformLootNumberProvider.create(10f,14f)) //0.76% chance
+        .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
     val VORPAL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"vorpal"), EquipmentModifier.EquipmentModifierTarget.SWORD,1,EquipmentModifier.Rarity.LEGENDARY)
@@ -69,11 +76,11 @@ object RegisterModifier {
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",0.20,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withPostHit(ModifierConsumers.VORPAL_HIT_CONSUMER)
-        .withToll(UniformLootNumberProvider.create(8f,15f)) //1.5% chance
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     
     //basic damage modification for weapons
-    val DEMONIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 2, EquipmentModifier.Rarity.LEGENDARY)
+    val DEMONIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 3, EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",0.15,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -97,9 +104,9 @@ object RegisterModifier {
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",0.05,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDescendant(DEMONIC)
-        .withToll(VERY_EXPENSIVE_TOLL)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val RAZOR_SHARP = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"razor_sharp"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 5,EquipmentModifier.Rarity.RARE)
+    val RAZOR_SHARP = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"razor_sharp"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 6,EquipmentModifier.Rarity.RARE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,"6030404c-9c16-11ed-a8fc-0242ac120002",1.5,
             EntityAttributeModifier.Operation.ADDITION)
@@ -112,7 +119,7 @@ object RegisterModifier {
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(RAZOR_SHARP)
         .also { regMod.add(it) }
-    val HONED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"honed"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 10)
+    val HONED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"honed"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 12)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,"6030404c-9c16-11ed-a8fc-0242ac120002",0.75,
             EntityAttributeModifier.Operation.ADDITION)
@@ -125,7 +132,7 @@ object RegisterModifier {
         .withDescendant(HONED)
         .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val DULL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"dull"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 10,EquipmentModifier.Rarity.BAD)
+    val DULL = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"dull"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 8,EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,"6030404c-9c16-11ed-a8fc-0242ac120002",-0.5,
             EntityAttributeModifier.Operation.ADDITION)
@@ -143,11 +150,10 @@ object RegisterModifier {
             EntityAttributes.GENERIC_ATTACK_DAMAGE,"6030404c-9c16-11ed-a8fc-0242ac120002",-2.0,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(BLUNT)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
     //generic protection attributes
-    val INDOMITABLE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"indomitable"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 2, EquipmentModifier.Rarity.EPIC)
+    val INDOMITABLE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"indomitable"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"603041be-9c16-11ed-a8fc-0242ac120002",2.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -158,9 +164,9 @@ object RegisterModifier {
             EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,"60304b32-9c16-11ed-a8fc-0242ac120002",0.1,
             EntityAttributeModifier.Operation.ADDITION)
         .withOnDamaged(ModifierFunctions.INDOMITABLE_DAMAGE_FUNCTION)
-        .withToll(VERY_EXPENSIVE_TOLL)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 4, EquipmentModifier.Rarity.RARE)
+    val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 5, EquipmentModifier.Rarity.RARE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"603041be-9c16-11ed-a8fc-0242ac120002",1.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -230,11 +236,11 @@ object RegisterModifier {
     val DESTROYED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"destroyed"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE, 2, EquipmentModifier.Rarity.REALLY_BAD)
         .withDurabilityMod(PerLvlI(-50,0,-50))
         .withDescendant(DISREPAIRED)
-        .withToll(VERY_EXPENSIVE_TOLL)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
         
     //basic attack speed modifiers
-    val MANIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"manic"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 3, EquipmentModifier.Rarity.RARE)
+    val MANIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"manic"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 4, EquipmentModifier.Rarity.RARE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",0.35,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -258,8 +264,9 @@ object RegisterModifier {
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",-0.10,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDescendant(ENERGETIC)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val UNWIELDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unwieldy"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 5, EquipmentModifier.Rarity.REALLY_BAD)
+    val UNWIELDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unwieldy"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 4, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,"60303d72-9c16-11ed-a8fc-0242ac120002",-0.25,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -268,7 +275,7 @@ object RegisterModifier {
         .also { regMod.add(it) }
         
     //basic health modifiers
-    val FLOURISHING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"flourishing"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 2, EquipmentModifier.Rarity.EPIC)
+    val FLOURISHING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"flourishing"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 3, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MAX_HEALTH,"603042f4-9c16-11ed-a8fc-0242ac120002",2.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -286,16 +293,14 @@ object RegisterModifier {
             EntityAttributes.GENERIC_MAX_HEALTH,"603042f4-9c16-11ed-a8fc-0242ac120002",0.5,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(HEARTY)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val INFIRM = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"infirm"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 6, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MAX_HEALTH,"603042f4-9c16-11ed-a8fc-0242ac120002",-0.5,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(HEALTHY)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val WIMPY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"wimpy"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 4, EquipmentModifier.Rarity.REALLY_BAD)
+    val WIMPY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"wimpy"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET, 3, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MAX_HEALTH,"603042f4-9c16-11ed-a8fc-0242ac120002",-1.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -308,14 +313,12 @@ object RegisterModifier {
         .withAttributeModifier(
             EntityAttributes.GENERIC_LUCK,"60304c4a-9c16-11ed-a8fc-0242ac120002",1.0,
             EntityAttributeModifier.Operation.ADDITION)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val UNLUCKY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unlucky"), EquipmentModifier.EquipmentModifierTarget.ANY, 3, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_LUCK,"60304c4a-9c16-11ed-a8fc-0242ac120002",-1.0,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(LUCKY)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     
     //basic movement speed modifiers
@@ -325,7 +328,7 @@ object RegisterModifier {
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val SPEEDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"speedy"), ARMOR_BOTTOM, 6, EquipmentModifier.Rarity.UNCOMMON)
+    val SPEEDY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"speedy"), ARMOR_BOTTOM, 7, EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,"603046be-9c16-11ed-a8fc-0242ac120002",0.05,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -338,18 +341,18 @@ object RegisterModifier {
         .withDescendant(SPEEDY)
         .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val SLOW = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"slow"), ARMOR_BOTTOM, 8, EquipmentModifier.Rarity.BAD)
+    val SLOW = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"slow"), ARMOR_BOTTOM, 7, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,"603046be-9c16-11ed-a8fc-0242ac120002",-0.025,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDescendant(QUICK)
-        .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val SLUGGISH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"sluggish"), ARMOR_BOTTOM, 4, EquipmentModifier.Rarity.REALLY_BAD)
+    val SLUGGISH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"sluggish"), ARMOR_BOTTOM, 5, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,"603046be-9c16-11ed-a8fc-0242ac120002",-0.05,
             EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withDescendant(SLOW)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
     //attack range modifiers
@@ -357,7 +360,6 @@ object RegisterModifier {
         .withAttributeModifier(
             ReachEntityAttributes.ATTACK_RANGE,"60304d58-9c16-11ed-a8fc-0242ac120002",1.5,
             EntityAttributeModifier.Operation.ADDITION)
-        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val EXTENSION = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"extension"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 5, EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
@@ -372,14 +374,13 @@ object RegisterModifier {
         .withToll(CHEAP_TOLL)
         .withDescendant(EXTENSION)
         .also { regMod.add(it) }
-    val LESSER_STUBBY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_stubby"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 8, EquipmentModifier.Rarity.BAD)
+    val LESSER_STUBBY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_stubby"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 7, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             ReachEntityAttributes.ATTACK_RANGE,"60304d58-9c16-11ed-a8fc-0242ac120002",-0.25,
             EntityAttributeModifier.Operation.ADDITION)
-        .withToll(CHEAP_TOLL)
         .withDescendant(LESSER_EXTENSION)
         .also { regMod.add(it) }
-    val STUBBY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"stubby"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 8, EquipmentModifier.Rarity.REALLY_BAD)
+    val STUBBY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"stubby"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 4, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             ReachEntityAttributes.ATTACK_RANGE,"60304d58-9c16-11ed-a8fc-0242ac120002",-0.75,
             EntityAttributeModifier.Operation.ADDITION)
@@ -388,7 +389,7 @@ object RegisterModifier {
         .also { regMod.add(it) }
 
     //reach distance modifiers
-    val GRAND_REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"grand_reach"), EquipmentModifier.EquipmentModifierTarget.MINING, 2, EquipmentModifier.Rarity.EPIC)
+    val GRAND_REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"grand_reach"), EquipmentModifier.EquipmentModifierTarget.MINING, 4, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"60304e66-9c16-11ed-a8fc-0242ac120002",2.5,
             EntityAttributeModifier.Operation.ADDITION)
@@ -401,25 +402,25 @@ object RegisterModifier {
         .withToll(EXPENSIVE_TOLL)
         .withDescendant(GRAND_REACH)
         .also { regMod.add(it) }
-    val REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"reach"), EquipmentModifier.EquipmentModifierTarget.MINING, 7, EquipmentModifier.Rarity.UNCOMMON)
+    val REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"reach"), EquipmentModifier.EquipmentModifierTarget.MINING, 6, EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"60304e66-9c16-11ed-a8fc-0242ac120002",1.0,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(GREATER_REACH)
         .also { regMod.add(it) }
-    val LESSER_REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_reach"), EquipmentModifier.EquipmentModifierTarget.MINING)
+    val LESSER_REACH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_reach"), EquipmentModifier.EquipmentModifierTarget.MINING,11)
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"60304e66-9c16-11ed-a8fc-0242ac120002",0.5,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(REACH)
         .also { regMod.add(it) }
-    val LESSER_LIMITING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_limiting"), EquipmentModifier.EquipmentModifierTarget.MINING, 6, EquipmentModifier.Rarity.BAD)
+    val LESSER_LIMITING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"lesser_limiting"), EquipmentModifier.EquipmentModifierTarget.MINING, 5, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"60304e66-9c16-11ed-a8fc-0242ac120002",-0.5,
             EntityAttributeModifier.Operation.ADDITION)
         .withDescendant(LESSER_REACH)
         .also { regMod.add(it) }
-    val LIMITING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"limiting"), EquipmentModifier.EquipmentModifierTarget.MINING, 3, EquipmentModifier.Rarity.REALLY_BAD)
+    val LIMITING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"limiting"), EquipmentModifier.EquipmentModifierTarget.MINING, 2, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
             ReachEntityAttributes.REACH,"60304e66-9c16-11ed-a8fc-0242ac120002",-1.25,
             EntityAttributeModifier.Operation.ADDITION)
@@ -428,23 +429,25 @@ object RegisterModifier {
         .also { regMod.add(it) }
 
     //directly damage modification modifiers
-    val BLUNTING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"blunting"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,3,EquipmentModifier.Rarity.RARE)
+    val BLUNTING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"blunting"), TRINKET_AND_ARMOR_AND_SHIELD,3,EquipmentModifier.Rarity.RARE)
         .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(-.05f))
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val DULLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"dulling"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,6,EquipmentModifier.Rarity.UNCOMMON)
+    val DULLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"dulling"), TRINKET_AND_ARMOR_AND_SHIELD,6,EquipmentModifier.Rarity.UNCOMMON)
         .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(-.025f))
+        .withToll(EXPENSIVE_TOLL)
         .withDescendant(BLUNTING)
         .also { regMod.add(it) }
-    val HARSH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"harsh"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,6,EquipmentModifier.Rarity.BAD)
+    val HARSH = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"harsh"), TRINKET_AND_ARMOR_AND_SHIELD,5,EquipmentModifier.Rarity.BAD)
         .withOnDamaged(ModifierFunctions.DamageMultiplierFunction(.025f))
         .withDescendant(DULLING)
+        .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val REDUCTIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"reductive"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,4,EquipmentModifier.Rarity.RARE)
+    val REDUCTIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"reductive"), TRINKET_AND_ARMOR_AND_SHIELD,4,EquipmentModifier.Rarity.RARE)
         .withOnDamaged(ModifierFunctions.DamageAdderFunction(-.25f))
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val ADDITIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"additive"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,2,EquipmentModifier.Rarity.REALLY_BAD)
+    val ADDITIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"additive"), TRINKET_AND_ARMOR_AND_SHIELD,2,EquipmentModifier.Rarity.REALLY_BAD)
         .withOnDamaged(ModifierFunctions.DamageAdderFunction(.25f))
         .withToll(EXPENSIVE_TOLL)
         .withDescendant(REDUCTIVE)
@@ -496,7 +499,7 @@ object RegisterModifier {
         .also { regMod.add(it) }
     val ENRICHED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"enriched"), PICKAXE,2,EquipmentModifier.Rarity.EPIC)
         .withPostMine(ModifierConsumers.ENRICHED_MINE_CONSUMER)
-        .withToll(VERY_EXPENSIVE_TOLL)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val METALLIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"metallic"), PICKAXE,4,EquipmentModifier.Rarity.RARE)
         .withPostMine(ModifierConsumers.METALLIC_MINE_CONSUMER)
@@ -520,10 +523,12 @@ object RegisterModifier {
         .also { regMod.add(it) }
     val GREATER_CRUMBLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"greater_crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,2,EquipmentModifier.Rarity.REALLY_BAD)
         .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.5f))
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val CRUMBLING = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,5,EquipmentModifier.Rarity.BAD)
         .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.25f))
         .withDescendant(GREATER_CRUMBLING)
+        .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
     fun registerAll(){
