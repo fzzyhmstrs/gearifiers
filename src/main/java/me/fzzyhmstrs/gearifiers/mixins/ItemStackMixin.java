@@ -28,6 +28,9 @@ public class ItemStackMixin {
             Exception e = new Exception();
             e.printStackTrace();
             System.out.println(this.nbt);
+            if (Nbt.getItemStackId((ItemStack) (Object) this) != -1){
+                nbt?.remove(NbtKeys.ITEM_STACK_ID.str())
+            }
             EquipmentModifierHelper.INSTANCE.addRandomModifiers((ItemStack) (Object) this, contextBuilder.build(LootContextTypes.EMPTY));
             System.out.println(this.nbt);
         }
