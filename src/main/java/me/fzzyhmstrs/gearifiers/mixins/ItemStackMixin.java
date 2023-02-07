@@ -1,5 +1,6 @@
 package me.fzzyhmstrs.gearifiers.mixins;
 
+import me.fzzyhmstrs.fzzy_core.nbt_util.Nbt;
 import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys;
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,8 +29,8 @@ public class ItemStackMixin {
             Exception e = new Exception();
             e.printStackTrace();
             System.out.println(this.nbt);
-            if (Nbt.getItemStackId((ItemStack) (Object) this) != -1){
-                nbt?.remove(NbtKeys.ITEM_STACK_ID.str())
+            if (-1 != Nbt.INSTANCE.getItemStackId((ItemStack) (Object) this) && nbt != null){
+                nbt.remove(NbtKeys.ITEM_STACK_ID.str());
             }
             EquipmentModifierHelper.INSTANCE.addRandomModifiers((ItemStack) (Object) this, contextBuilder.build(LootContextTypes.EMPTY));
             System.out.println(this.nbt);
