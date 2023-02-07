@@ -16,7 +16,7 @@
   "icon": "assets/gearifiers/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
+    "main": [
       {
         "adapter": "kotlin",
         "value": "me.fzzyhmstrs.gearifiers.Gearifiers"

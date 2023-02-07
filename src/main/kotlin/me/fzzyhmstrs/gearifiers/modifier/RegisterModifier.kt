@@ -37,7 +37,7 @@ object RegisterModifier {
         }
     }
 
-    private val ARMOR_BOTTOM = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"pickaxe")){
+    private val ARMOR_BOTTOM = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"armor_bottom")){
         override fun isAcceptableItem(stack: ItemStack): Boolean {
             return ARMOR_LEGS.isItemAcceptableOrTagged(stack) || ARMOR_FEET.isItemAcceptableOrTagged(stack)
         }
@@ -160,7 +160,7 @@ object RegisterModifier {
         .withOnDamaged(ModifierFunctions.INDOMITABLE_DAMAGE_FUNCTION)
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.RARE)
+    val BULWARK = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"bulwark"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 4, EquipmentModifier.Rarity.RARE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"603041be-9c16-11ed-a8fc-0242ac120002",1.0,
             EntityAttributeModifier.Operation.ADDITION)
@@ -170,7 +170,7 @@ object RegisterModifier {
         .withDescendant(INDOMITABLE)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val PROTECTIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"protective"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 6, EquipmentModifier.Rarity.UNCOMMON)
+    val PROTECTIVE = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"protective"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 7, EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"603041be-9c16-11ed-a8fc-0242ac120002",0.5,
             EntityAttributeModifier.Operation.ADDITION)
@@ -186,7 +186,7 @@ object RegisterModifier {
         .withDescendant(PROTECTIVE)
         .withToll(CHEAP_TOLL)
         .also { regMod.add(it) }
-    val THIN = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"thin"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,10, EquipmentModifier.Rarity.BAD)
+    val THIN = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"thin"), EquipmentModifier.EquipmentModifierTarget.ARMOR_AND_TRINKET,7, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,"603041be-9c16-11ed-a8fc-0242ac120002",-0.25,
             EntityAttributeModifier.Operation.ADDITION)
