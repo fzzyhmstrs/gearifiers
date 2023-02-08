@@ -91,7 +91,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
         if (item.modifierInitializer != EquipmentModifierHelper) return false
         if (GearifiersConfig.modifiers.enableRerollXpCost){
             val cost = rerollCost(stack1)
-            if (player.experienceLevel < cost) return false
+            if (player.experienceLevel < cost && !player.abilities.creativeMode) return false
         }
         return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
     }
