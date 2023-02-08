@@ -130,6 +130,18 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             }
         }
     }
+    
+    fun writeRawDataToClient(buf:PacketByteBuf){
+        val data = Gson().toJson(rawItemCosts)
+        buf.writeString(data)
+    }
+    
+    fun readRawDataFromServer(buf: PacketByteBuf){
+        ITEM_COSTS.clear()
+        rawItemCosts.clear()
+        val data = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
+        rawItemCosts.putAll(data)
+    }
 
     override fun reload(manager: ResourceManager) {
         loadItemCosts(manager)
