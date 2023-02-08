@@ -26,10 +26,17 @@ import org.slf4j.LoggerFactory
 object Gearifiers: ModInitializer {
     const val MOD_ID = "gearifiers"
     val LOGGER: Logger = LoggerFactory.getLogger("gearifiers")
+    internal val COST_MAP_SYNC = Identifier(MOD_ID,"cost_map_sync")
 
     val REROLL_ALTAR = RerollAltarBlock(FabricBlockSettings.of(Material.STONE, MapColor.DARK_RED).requiresTool().strength(1.5f, 6.0f))
 
     override fun onInitialize() {
+        
+        ServerPlayConnectionEvents.JOIN.register { handler, sender, server -> 
+            val buf = PacketByteBufs.create()
+            ItemCostLoader.writeRawDataToClient(buf)
+            ServerPlayNetworking.send(handler.player,COST_MAP_SYNC,buf)
+        }
 
         Registry.register(Registry.BLOCK, Identifier(MOD_ID, "reroll_altar"), REROLL_ALTAR)
         Registry.register(Registry.ITEM, Identifier(MOD_ID,"reroll_altar"), BlockItem(REROLL_ALTAR, FabricItemSettings().group(ItemGroup.MISC)))
@@ -45,6 +52,10 @@ object GearifiersClient:ClientModInitializer{
 
     override fun onInitializeClient() {
 
+        ClientPlayNetworking.registerGlobalReceiver(Gearifiers.COST_MAP_SYNC){ _, _, buf, _ ->
+            ItemCostLoader.readRawDataFromServer(buf)
+        }
+        
         BlockRenderLayerMap.INSTANCE.putBlock(Gearifiers.REROLL_ALTAR, RenderLayer.getCutout())
 
         RegisterScreen.registerAll()
