@@ -15,6 +15,33 @@ import net.minecraft.util.registry.Registry
 
 object ItemCostLoader: SimpleSynchronousResourceReloadListener {
 
+    /*
+    Vanilla MC equipment to consider:
+    Lapis:
+    leather armor
+    gold armor
+    wood tools
+    stone tools
+       
+    Emerald:
+    chain armor
+    iron armor
+    iron tools
+    gold tools
+    bow
+    crossbow
+    
+    Diamond:
+    diamond armor
+    turtle shell
+    trident
+    diamond tools
+
+    Netherite Scrap:
+    netherite armor
+    netherite tools
+    */
+    
     private val rawItemCosts: HashMultimap<Identifier,String> = HashMultimap.create()
     internal val ITEM_COSTS: MutableMap<Item,Item> = mutableMapOf()
     private val BLANK = Identifier("blank")
