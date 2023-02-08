@@ -27,6 +27,12 @@
         "adapter": "kotlin",
         "value": "me.fzzyhmstrs.gearifiers.GearifiersClient"
       }
+    ],
+    "emi": [
+      {
+        "adapter": "kotlin",
+        "value": "fzzyhmstrs.gearifiers.compat.emi.EmiPlugin"
+      }
     ]
   },
   "mixins": [
