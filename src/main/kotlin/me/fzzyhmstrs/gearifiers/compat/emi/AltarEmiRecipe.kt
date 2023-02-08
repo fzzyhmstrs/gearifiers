@@ -42,6 +42,10 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
         return if (GearifiersConfig.modifiers.enableRerollXpCost){29}else{18}
     }
     
+    override fun supportsRecipeTree(): Boolean{
+        return false
+    }
+    
     override fun addWidgets(widgets: WidgetHolder){
         widgets.addTexture(EmiTexture.PLUS, 27, 2)
 		    widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1)
