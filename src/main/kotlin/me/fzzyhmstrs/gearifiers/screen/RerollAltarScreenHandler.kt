@@ -71,7 +71,11 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     override fun updateResult() {
         val stack = this.input.getStack(0)
         if (stack.isEmpty || !checkForMatch()) {
-            enchants.set(0)
+            if (!stack.isEmpty){
+                enchants.set(rerollCost(stack) * -1)
+            } else {
+                enchants.set(0)
+            }
             output.setStack(0, ItemStack.EMPTY)
         } else {
             enchants.set(rerollCost(stack))
