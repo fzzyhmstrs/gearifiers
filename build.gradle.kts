@@ -70,6 +70,9 @@ dependencies {
     implementation("com.github.LlamaLad7:MixinExtras:$meVersion")
     annotationProcessor("com.github.LlamaLad7:MixinExtras:$meVersion")
     include("com.github.LlamaLad7:MixinExtras:$meVersion")
+    
+    val emiVersion: String by project
+    modImplementation("dev.emi:emi:$emiVersion")
 
 }
 tasks {
