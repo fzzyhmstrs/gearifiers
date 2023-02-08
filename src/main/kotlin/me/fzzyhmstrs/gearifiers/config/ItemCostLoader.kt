@@ -43,11 +43,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     */
     
     private val rawItemCosts: HashMultimap<Identifier,String> = HashMultimap.create()
-    internal val ITEM_COSTS: MutableMap<Item,Item> = mutableMapOf()
+    private val rawOverrideCosts: HashMultimap<Identifier,String> = HashMultimap.create()
+    internal val ITEM_COSTS: HashMultimap<Item,Item> = HashMultimap.create()
     private val BLANK = Identifier("blank")
 
     fun loadItemCosts(resourceManager: ResourceManager){
         rawItemCosts.clear()
+        rawOverrideCosts.clear()
         ITEM_COSTS.clear()
         resourceManager.findResources("reroll_costs") { path -> path.path.endsWith(".json") }
             .forEach { (t, u) ->
@@ -59,7 +61,16 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
         try{
             val reader = resource.reader
             val json = JsonParser.parseReader(reader).asJsonObject
+            val jsonOverride = json.get("override")
+            val override = if (jsonOverride == null){
+                false
+            } else if (!jsonOverride.isJsonPrimitive){
+                false
+            } else {
+                jsonOverride.asBoolean
+            }
             for (el in json.entrySet()){
+                if (el.key == "override") continue
                 if (!el.value.isJsonArray){
                     Gearifiers.LOGGER.warn("Json object [${el.key}] not properly formatted, needs to be a JsonArray, skipping!")
                     continue
@@ -82,18 +93,27 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                     }
                     items.add(el2.asString)
                 }
-                rawItemCosts.putAll(paymentName,items)
+                if (!override){
+                    rawItemCosts.putAll(paymentName,items)
+                } else {
+                    rawOverrideCosts.putAll(paymentName,items)
+                }
             }
         } catch (e: Exception){
             Gearifiers.LOGGER.error("failed to open or read item cost file: $id")
         }
     }
 
-    internal fun getItemCost(item:Item): Item{
+    internal fun itemCostMatches(item: Item, payment: Item): Boolean{
         if (ITEM_COSTS.isEmpty()){
             processItemCostsMap()
         }
-        return ITEM_COSTS.getOrDefault(item, Items.DIAMOND)
+        val list = ITEM_COSTS.get(item)
+        return if (list.isEmpty()){
+            payment == GearifiersConfig.fallbackCost
+        } else {
+            list.contains(payment)
+        }
     }
 
     private fun processItemCostsMap(){
@@ -108,7 +128,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
-                            ITEM_COSTS[it.value()] = costItem
+                            ITEM_COSTS.put(it.value(),costItem)
                         }
                     } else {
                         Gearifiers.LOGGER.warn("Tag $tagId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
@@ -120,7 +140,41 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 val itemId = Identifier.tryParse(targetItemString)
                 if (itemId != null){
                     if (Registry.ITEM.containsId(itemId)){
-                        ITEM_COSTS[Registry.ITEM.get(itemId)] = costItem
+                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
+                    } else {
+                        Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
+                    }
+                } else {
+                    Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
+                }
+            }
+        }
+        for (entry in rawOverrideCosts.entries()){
+            val costItem = Registry.ITEM.get(entry.key)
+            val targetItemString = entry.value
+            if (targetItemString.startsWith('#') && targetItemString.length > 1){
+                val tagId = Identifier.tryParse(targetItemString.substring(1))
+                if (tagId != null){
+                    val tagKey = TagKey.of(Registry.ITEM_KEY,tagId)
+                    val entries = Registry.ITEM.getEntryList(tagKey)
+                    if (entries.isPresent){
+                        val entriesList = entries.get()
+                        entriesList.forEach {
+                            ITEM_COSTS.removeAll(it.value())
+                            ITEM_COSTS.put(it.value(),costItem)
+                        }
+                    } else {
+                        Gearifiers.LOGGER.warn("Tag $tagId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
+                    }
+                } else {
+                    Gearifiers.LOGGER.warn("tag Id $targetItemString referenced under reroll cost ${entry.key} couldn't be parsed as an identifier")
+                }
+            } else {
+                val itemId = Identifier.tryParse(targetItemString)
+                if (itemId != null){
+                    if (Registry.ITEM.containsId(itemId)){
+                        ITEM_COSTS.removeAll(Registry.ITEM.get(itemId))
+                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }
@@ -132,15 +186,18 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     }
     
     fun writeRawDataToClient(buf:PacketByteBuf){
-        val data = Gson().toJson(rawItemCosts)
-        buf.writeString(data)
+        buf.writeString(Gson().toJson(rawItemCosts))
+        buf.writeString(Gson().toJson(rawOverrideCosts))
     }
     
     fun readRawDataFromServer(buf: PacketByteBuf){
         ITEM_COSTS.clear()
         rawItemCosts.clear()
-        val data = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
-        rawItemCosts.putAll(data)
+        rawOverrideCosts.clear()
+        val data1 = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
+        rawItemCosts.putAll(data1)
+        val data2 = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
+        rawOverrideCosts.putAll(data2)
     }
 
     override fun reload(manager: ResourceManager) {
