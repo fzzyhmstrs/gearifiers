@@ -4,6 +4,7 @@ import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
@@ -21,12 +22,18 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
 
     constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, ScreenHandlerContext.EMPTY)
 
+    private val enchants = Property.create()
+    
+    init{
+        addProperty(enchants).set(0)
+    }
+    
     override fun canUse(state: BlockState?): Boolean {
         return true
     }
 
-    override fun canTakeOutput(player: PlayerEntity?, present: Boolean): Boolean {
-        return checkForMatch()
+    override fun canTakeOutput(player: PlayerEntity, present: Boolean): Boolean {
+        return checkForMatch(player)
     }
 
     override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
@@ -48,6 +55,12 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
         val playerWorld = player.world
         if (playerWorld !is ServerWorld) return
         val nbt = stack.orCreateNbt
+        if (!nbt.contains("rerolls")){
+            nbt.putInt("rerolls",1)
+        } else {
+            val prev = nbt.getInt("rerolls")
+            nbt.putInt("rerolls", prev + 1)
+        }
         nbt.remove(NbtKeys.MODIFIERS.str())
         nbt.remove(NbtKeys.ITEM_STACK_ID.str())
         val contextBuilder = LootContext.Builder(playerWorld).random(playerWorld.random).luck(player.luck)
@@ -57,21 +70,37 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     override fun updateResult() {
         val stack = this.input.getStack(0)
         if (stack.isEmpty || !checkForMatch()) {
+            enchants.set(0)
             output.setStack(0, ItemStack.EMPTY)
         } else {
+            enchants.set(rerollCost(stack))
             output.setStack(0, stack.copy())
         }
     }
 
-    private fun checkForMatch(): Boolean{
+    private fun checkForMatch(player: PlayerEntity): Boolean{
         val stack1 = this.input.getStack(0)
         if (stack1.isEmpty) return false
         val item = stack1.item
         if (item !is Modifiable) return false
         if (item.modifierInitializer != EquipmentModifierHelper) return false
-        val itemCost = ItemCostLoader.getItemCost(item)
-        val stack2 = this.input.getStack(1)
-        return stack2.item == itemCost
+        if (GearifiersConfig.modifiers.enableRerollXpCost){
+            val cost = rerollCost(stack1)
+            if (player.experienceLevel < cost) return false
+        }
+        return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
+    }
+    
+    val rerollCost(stack: ItemStack): Int{
+        val nbt = stack.nbt
+        return if (nbt == null){
+            GearifiersConfig.modifiers.firstRerollXpCost
+        } else if (!nbt.contains("rerolls")) {
+            GearifiersConfig.modifiers.firstRerollXpCost
+        } else {
+            val rerolls = nbt.getInt("rerolls")
+            GearifiersConfig.modifiers.firstRerollXpCost + (rerolls * GearifiersConfig.modifiers.addedRerollXpCostPerRoll)
+        }
     }
 
     override fun transferSlot(player: PlayerEntity, index: Int): ItemStack? {
