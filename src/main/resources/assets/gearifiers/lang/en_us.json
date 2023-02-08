@@ -3,6 +3,8 @@
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
 	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
 	"screen.gearifiers.xp_clue_bad": "Not enough experince to reroll...",
+	
+	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
 
 	"equipment.modifier.gearifiers:legendary": "Legendary",
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
