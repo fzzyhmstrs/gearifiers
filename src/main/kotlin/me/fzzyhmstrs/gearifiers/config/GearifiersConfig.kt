@@ -10,13 +10,21 @@ import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
+import net.minecraft.util.Registry
 
 object GearifersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
+    val fallbackCost: Item
     
     init{
-    
+        modifiers = readOrCreate("modifiers_v0.json", base = Gearifiers.MOD_ID) { Modifiers() }
+        val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
+        fallbackCost = if(Registry.ITEM.containsId(fallbackId)){
+            Registry.ITEM.get(fallbackId)
+        } else {
+            Items.DIAMOND
+        }
     }
     
     override fun initConfig(){
@@ -41,6 +49,7 @@ object GearifersConfig: SyncedConfigHelper.SyncedConfig{
         var enableRerollXpCost: Boolean = true
         var firstRerollXpCost: Int = 1
         var addedRerollXpCostPerRoll: Int = 1
+        var defaultRerollPaymentItem: String = "minecraft:diamond"
         
         var enabledModifiers: Map<String,Boolean> = mapOf(
             "gearifiers:legendary" to true,
