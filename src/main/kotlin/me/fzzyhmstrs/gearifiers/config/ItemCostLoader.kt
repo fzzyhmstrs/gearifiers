@@ -115,6 +115,10 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             list.contains(payment)
         }
     }
+    
+    internal fun getItemCosts(item: Item){
+        return ITEM_COSTS.get(item)
+    }
 
     private fun processItemCostsMap(){
         for (entry in rawItemCosts.entries()){
