@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier
 object RegisterModifier {
 
     private val regMod: MutableList<AbstractModifier<*>> = mutableListOf()
+    internal val defaultEnabledMap: MutableMap<String,Boolean> = mutableMapOf()
     
     private val CHEAP_TOLL = ConstantLootNumberProvider.create(3f) // 96% probability
     // private val NORMAL_TOLL = ConstantLootNumberProvider.create(5f) //75% probability
@@ -535,6 +536,8 @@ object RegisterModifier {
 
     fun registerAll(){
         regMod.forEach {
+            val id = it.modifierId
+            defaultEnabledMap[id.toString()] = true
             ModifierRegistry.register(it)
         }
     }
