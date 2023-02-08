@@ -39,6 +39,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
         decrementStack(0)
         decrementStack(1)
+        player.applyEnchantmentCosts(stack, enchants.get())
         this.context.run{world,pos ->
             world.playSound(null,pos,SoundEvents.BLOCK_SMITHING_TABLE_USE,SoundCategory.BLOCKS,1.0f,world.random.nextFloat() * 0.1f + 0.9f)
         }
