@@ -5,6 +5,7 @@
 	"screen.gearifiers.xp_clue_bad": "Not enough experince to reroll...",
 	
 	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
+	"emi.category.gearifiers.reroll_altar.cost_text": "%1$s level(s) + %2$s level(s) per reroll",
 
 	"equipment.modifier.gearifiers:legendary": "Legendary",
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
