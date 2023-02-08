@@ -1,11 +1,13 @@
 {
 	"block.gearifiers.reroll_altar": "Reroll Altar",
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
+	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
+	"screen.gearifiers.xp_clue_bad": "Not enough experince to reroll...",
 
 	"equipment.modifier.gearifiers:legendary": "Legendary",
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
 
-	"equipment.modifier.gearifiers:legendary.desc": "+10% attack speed, +1.5 damage, + 1 armor, +1 health, +5% speed, +25% item durability",
+	"equipment.modifier.gearifiers:legendary.desc": "+10% attack speed, +1.5 damage, +1 armor, +1 health, +5% speed, +25% item durability",
 	"equipment.modifier.gearifiers:vorpal.desc": "+20% attack speed, 2.5% chance to deal 10x damage",
 
 	"equipment.modifier.gearifiers:blunt": "Blunt",
