@@ -1,4 +1,4 @@
-package me.fzzyhmstrs.gearifiers.modifier
+package me.fzzyhmstrs.gearifiers.registry
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes
 import me.fzzyhmstrs.fzzy_core.coding_util.PerLvlI
@@ -6,6 +6,8 @@ import me.fzzyhmstrs.fzzy_core.modifier_util.AbstractModifier
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
+import me.fzzyhmstrs.gearifiers.modifier.ModifierConsumers
+import me.fzzyhmstrs.gearifiers.modifier.ModifierFunctions
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.item.ItemStack
@@ -459,20 +461,20 @@ object RegisterModifier {
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val POISONOUS = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"poisonous"), TRINKET_AND_SHIELD,2,EquipmentModifier.Rarity.RARE)
-        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(120,1))
+        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(120, 1))
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val TOXIC = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"toxic"), TRINKET_AND_SHIELD,5,EquipmentModifier.Rarity.UNCOMMON)
-        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(100,0))
+        .withOnDamaged(ModifierFunctions.PoisonousDamageFunction(100, 0))
         .withToll(EXPENSIVE_TOLL)
         .withDescendant(POISONOUS)
         .also { regMod.add(it) }
     val DESECRATED = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"desecrated"), TRINKET_AND_SHIELD,1,EquipmentModifier.Rarity.EPIC)
-        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(120,1))
+        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(120, 1))
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val UNHOLY = EquipmentModifier(Identifier(Gearifiers.MOD_ID,"unholy"), TRINKET_AND_SHIELD,3,EquipmentModifier.Rarity.RARE)
-        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(100,0))
+        .withOnDamaged(ModifierFunctions.DesecratedDamageFunction(100, 0))
         .withToll(EXPENSIVE_TOLL)
         .withDescendant(DESECRATED)
         .also { regMod.add(it) }

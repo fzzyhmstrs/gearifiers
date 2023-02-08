@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gearifiers:block/reroll_altar",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "gearifiers:block/reroll_altar",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "gearifiers:block/reroll_altar"
+    },
+    "facing=west": {
+      "model": "gearifiers:block/reroll_altar",
+      "y": 90
+    }
+  }
+}

@@ -1,4 +1,7 @@
 {
+	"block.gearifiers.reroll_altar": "Reroll Altar",
+	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
+
 	"equipment.modifier.gearifiers:legendary": "Legendary",
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
 

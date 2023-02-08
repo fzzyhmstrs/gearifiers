@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:red_carpet"
+    },
+	"D": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "item": "minecraft:blackstone"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "#X#",
+    "GDG",
+	"XXX"
+  ],
+  "result": {
+    "item": "gearifiers:reroll_altar"
+  }
+}
