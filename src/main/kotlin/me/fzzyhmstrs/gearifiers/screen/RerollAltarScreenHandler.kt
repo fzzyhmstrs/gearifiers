@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.screen.ForgingScreenHandler
+import net.minecraft.screen.Property
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
@@ -22,7 +23,8 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
 
     constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, ScreenHandlerContext.EMPTY)
 
-    private val enchants = Property.create()
+    internal val enchants = Property.create()
+    private val player = playerInventory.player
     
     init{
         addProperty(enchants).set(0)
@@ -70,7 +72,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
 
     override fun updateResult() {
         val stack = this.input.getStack(0)
-        if (stack.isEmpty || !checkForMatch()) {
+        if (stack.isEmpty || !checkForMatch(player)) {
             if (!stack.isEmpty){
                 enchants.set(rerollCost(stack) * -1)
             } else {
@@ -81,6 +83,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             enchants.set(rerollCost(stack))
             output.setStack(0, stack.copy())
         }
+        sendContentUpdates()
     }
 
     private fun checkForMatch(player: PlayerEntity): Boolean{
@@ -96,7 +99,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
         return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
     }
     
-    val rerollCost(stack: ItemStack): Int{
+    private fun rerollCost(stack: ItemStack): Int{
         val nbt = stack.nbt
         return if (nbt == null){
             GearifiersConfig.modifiers.firstRerollXpCost

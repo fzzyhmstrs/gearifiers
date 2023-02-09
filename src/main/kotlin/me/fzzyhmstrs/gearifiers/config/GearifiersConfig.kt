@@ -8,11 +8,13 @@ import me.fzzyhmstrs.fzzy_core.registry.SyncedConfigRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.item.Item
+import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
-import net.minecraft.util.Registry
+import net.minecraft.util.registry.Registry
 
-object GearifersConfig: SyncedConfigHelper.SyncedConfig{
+object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
     val fallbackCost: Item
@@ -33,11 +35,11 @@ object GearifersConfig: SyncedConfigHelper.SyncedConfig{
     
     override fun writeToClient(buf:PacketByteBuf){
         val gson = GsonBuilder().create()
-        buf.writeString(gson.toJson(items))
+        buf.writeString(gson.toJson(modifiers))
     }
 
     override fun readFromServer(buf:PacketByteBuf){
-        items = gson.fromJson(buf.readString(),Items::class.java)
+        modifiers = gson.fromJson(buf.readString(),Modifiers::class.java)
     }
     
     class Modifiers{

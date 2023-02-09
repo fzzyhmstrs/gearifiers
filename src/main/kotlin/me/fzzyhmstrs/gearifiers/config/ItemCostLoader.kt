@@ -1,12 +1,15 @@
 package me.fzzyhmstrs.gearifiers.config
 
 import com.google.common.collect.HashMultimap
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.command.argument.BlockArgumentParser
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
 import net.minecraft.tag.TagKey
@@ -55,6 +58,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             .forEach { (t, u) ->
                 loadItemCost(t,u)
         }
+        println("loaded reroll costs:")
+        for (entry in rawItemCosts.entries()){
+            println(entry)
+        }
+        println("other maps")
+        println(rawOverrideCosts)
+        println(ITEM_COSTS)
     }
 
     private fun loadItemCost(id: Identifier,resource: Resource){
@@ -101,11 +111,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             }
         } catch (e: Exception){
             Gearifiers.LOGGER.error("failed to open or read item cost file: $id")
+            e.printStackTrace()
         }
     }
 
     internal fun itemCostMatches(item: Item, payment: Item): Boolean{
-        if (ITEM_COSTS.isEmpty()){
+        if (ITEM_COSTS.isEmpty){
+            println("preparing map...")
             processItemCostsMap()
         }
         val list = ITEM_COSTS.get(item)
@@ -115,14 +127,12 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             list.contains(payment)
         }
     }
-    
-    internal fun getItemCosts(item: Item){
-        return ITEM_COSTS.get(item)
-    }
 
     private fun processItemCostsMap(){
+        println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
             val costItem = Registry.ITEM.get(entry.key)
+            println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
@@ -142,6 +152,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 }
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
+                println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
                     if (Registry.ITEM.containsId(itemId)){
                         ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
@@ -187,21 +198,27 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 }
             }
         }
+        println("prepared map:")
+        println(ITEM_COSTS)
     }
     
-    fun writeRawDataToClient(buf:PacketByteBuf){
-        buf.writeString(Gson().toJson(rawItemCosts))
-        buf.writeString(Gson().toJson(rawOverrideCosts))
+    fun writeRawDataToClient(buf: PacketByteBuf){
+        println(">>>>>>>>>>>>> writing to client <<<<<<<<<<<<<<<<")
+        println(rawItemCosts)
+        writeMultimapToBuf(buf, rawItemCosts)
+        writeMultimapToBuf(buf, rawOverrideCosts)
     }
-    
-    fun readRawDataFromServer(buf: PacketByteBuf){
-        ITEM_COSTS.clear()
-        rawItemCosts.clear()
-        rawOverrideCosts.clear()
-        val data1 = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
-        rawItemCosts.putAll(data1)
-        val data2 = Gson().fromJson(buf.readString(),HashMultiMap::class.java)
-        rawOverrideCosts.putAll(data2)
+
+    private fun writeMultimapToBuf(buf: PacketByteBuf, map: HashMultimap<Identifier,String>){
+        buf.writeShort(map.keySet().size)
+        for (key in map.keySet()){
+            buf.writeIdentifier(key)
+            val values = map[key]
+            buf.writeShort(values.size)
+            for (value in values){
+                buf.writeString(value)
+            }
+        }
     }
 
     override fun reload(manager: ResourceManager) {

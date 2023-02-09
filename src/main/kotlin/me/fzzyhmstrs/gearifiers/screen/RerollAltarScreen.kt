@@ -1,12 +1,18 @@
 package me.fzzyhmstrs.gearifiers.screen
 
 import com.mojang.blaze3d.systems.RenderSystem
+import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.gui.screen.ingame.ForgingScreen
+import net.minecraft.client.render.DiffuseLighting
+import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import kotlin.math.abs
+import kotlin.math.max
 
 class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: PlayerInventory, title: net.minecraft.text.Text):
     ForgingScreen<RerollAltarScreenHandler>(handler,playerInventory,title, TEXTURE) {
@@ -24,22 +30,23 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
     override fun drawBackground(matrices: MatrixStack,delta: Float, mouseX: Int, mouseY: Int){
         super.drawBackground(matrices,delta,mouseX,mouseY)
         if (!GearifiersConfig.modifiers.enableRerollXpCost || handler.enchants.get() == 0) return
-        val i = (width - backgrdWidth) / 2
-        val j = (height - backgrdHeight) / 2
-        RenderSystem.restoreProjectionMatrix()
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+        val i = (width - backgroundWidth) / 2
+        val j = (height - backgroundHeight) / 2
+        //RenderSystem.restoreProjectionMatrix()
+        DiffuseLighting.enableGuiDepthLighting()
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, TEXTURE)
-        
+
         var tens: Int
         var ones: Int
         var tensOfst = 1
         var onesOfst = 8
-        var tensImageOfst: Int
+        val tensImageOfst: Int
         var onesImageOfst = 9
         
-        val power = handler.enchants.get()
-        val hOffset = max(0,power - 1)
+        var power = handler.enchants.get()
+        val hOffset = max(0,abs(power) - 1)
         val vOffset: Int
         val numeralOffset: Int
         if(power < 0){
@@ -49,10 +56,11 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
             vOffset = 174
             numeralOffset = 212
         }
+        power = abs(power)
         if (hOffset <= 5){
             this.drawTexture(
                     matrices,
-                    i + 106,
+                    i + 104,
                     j + 29,
                     108 + 16 * (hOffset),
                     vOffset,
@@ -62,10 +70,10 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         } else{
             this.drawTexture(
                     matrices,
-                    i + 106,
+                    i + 104,
                     j + 29,
                     108 + 16 * 6,
-                    174 + 16,
+                    vOffset,
                     16,
                     16
                 )
@@ -90,7 +98,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
             //draw the ones place numeral
                 this.drawTexture(
                     matrices,
-                    i + 106 + onesOfst,
+                    i + 104 + onesOfst,
                     j + 29 + 3, //three additional offset to align the number with the usual position
                     108 + 9 * onesImageOfst, //grab the image off the texture, using the 10 abstract numerals
                     numeralOffset,
@@ -99,7 +107,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
                 )
                 if (tens>0) this.drawTexture(
                     matrices,
-                    i+ 106 + tensOfst,
+                    i+ 104 + tensOfst,
                     j + 29 + 3, //three additional offset to align the number with the usual position
                     108 + 9 * tensImageOfst, //grab the image off the texture, using the 10 abstract numerals
                     numeralOffset,
@@ -110,14 +118,12 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        this.renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
-        drawMouseoverTooltip(matrices, mouseX, mouseY)
-        val i = (width - backgrdWidth) / 2
-        val j = (height - backgrdHeight) / 2
-        val h = mouseX - i - 106
+        val i = (width - backgroundWidth) / 2
+        val j = (height - backgroundHeight) / 2
+        val h = mouseX - i - 104
         val v = mouseY - j - 29
-        val hovered = (u >= 0 && v >= 0 && u < 16 && v < 16)
+        val hovered = (h >= 0 && v >= 0 && h < 16 && v < 16)
         if (hovered){
             val list = if (handler.enchants.get() > 0){
                 listOf(AcText.translatable("screen.gearifiers.xp_clue_good"))
@@ -131,6 +137,6 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
     }
     
     companion object{
-        private val TEXTURE = Identifier(Gearifiers.MOD_ID,"textures/reroll_altar_gui.png")
+        internal val TEXTURE = Identifier(Gearifiers.MOD_ID,"textures/reroll_altar_gui.png")
     }
 }

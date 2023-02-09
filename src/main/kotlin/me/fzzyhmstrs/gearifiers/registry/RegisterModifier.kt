@@ -7,6 +7,7 @@ import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.modifier.ConfigEquipmentModifier
 import me.fzzyhmstrs.gearifiers.modifier.ModifierConsumers
 import me.fzzyhmstrs.gearifiers.modifier.ModifierFunctions
 import net.minecraft.entity.attribute.EntityAttributeModifier
@@ -54,7 +55,7 @@ object RegisterModifier {
         }
     }
     
-    private fun buildModifier(modifierId: Identifier,target: EquipmentModifierTarget,weight: Int = 10,rarity: Rarity = Rarity.COMMON): EquipmentModifier{
+    private fun buildModifier(modifierId: Identifier, target: EquipmentModifier.EquipmentModifierTarget, weight: Int = 10, rarity: EquipmentModifier.Rarity = EquipmentModifier.Rarity.COMMON): EquipmentModifier{
         val key = modifierId.toString()
         if (!GearifiersConfig.modifiers.enabledModifiers.containsKey(key)){
             defaultEnabledMap[key] = true

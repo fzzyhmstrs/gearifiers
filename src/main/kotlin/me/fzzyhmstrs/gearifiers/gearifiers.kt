@@ -1,6 +1,7 @@
 package me.fzzyhmstrs.gearifiers
 
 import me.fzzyhmstrs.gearifiers.block.RerollAltarBlock
+import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
@@ -9,7 +10,11 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.block.MapColor
 import net.minecraft.block.Material
@@ -32,7 +37,7 @@ object Gearifiers: ModInitializer {
 
     override fun onInitialize() {
         
-        ServerPlayConnectionEvents.JOIN.register { handler, sender, server -> 
+        ServerPlayConnectionEvents.JOIN.register { handler, sender, server ->
             val buf = PacketByteBufs.create()
             ItemCostLoader.writeRawDataToClient(buf)
             ServerPlayNetworking.send(handler.player,COST_MAP_SYNC,buf)
@@ -53,7 +58,7 @@ object GearifiersClient:ClientModInitializer{
     override fun onInitializeClient() {
 
         ClientPlayNetworking.registerGlobalReceiver(Gearifiers.COST_MAP_SYNC){ _, _, buf, _ ->
-            ItemCostLoader.readRawDataFromServer(buf)
+            ClientItemCostLoader.readRawDataFromServer(buf)
         }
         
         BlockRenderLayerMap.INSTANCE.putBlock(Gearifiers.REROLL_ALTAR, RenderLayer.getCutout())

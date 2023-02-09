@@ -8,22 +8,35 @@ import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.widget.WidgetHolder
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import net.minecraft.item.Item
 import net.minecraft.util.Identifier
-import net.minecraft.util.Registry
+import net.minecraft.util.registry.Registry
 
 class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe{
 
     private val inputStack = EmiStack.of(input)
     private val costStack = EmiStack.of(cost)
-    private val id = Identifier(Gearifiers.MOD_ID,Registry.ITEM.getId(input).path + "/paid_with/" + Registry.ITEM.getId(cost))
-    private val costText = AcText.translatable("emi.category.gearifiers.reroll_altar.cost_text",GearifiersConfig.modifiers.firstRerollXpCost,GearifiersConfig.modifiers.addedRerollXpCostPerRoll)
-  
+    private val recipeId: Identifier by lazy {
+        prepareId()
+    }
+    private val costText1 = AcText.translatable("emi.category.gearifiers.reroll_altar.cost_text_1").asOrderedText()
+    private val costText2 = AcText.translatable("emi.category.gearifiers.reroll_altar.cost_text_2").asOrderedText()
+    private val rerollText = AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_3")
+
+    private fun prepareId(): Identifier{
+        val itemId1 = Registry.ITEM.getId(input)
+        val itemId2 = Registry.ITEM.getId(cost)
+        return Identifier(Gearifiers.MOD_ID, itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2.namespace + "." + itemId2.path)
+    }
+
+
     override fun getCategory(): EmiRecipeCategory{
         return EmiClientPlugin.ALTAR_CATEGORY
     }
     
     override fun getId(): Identifier{
-        return id
+        return recipeId
     }
     
     override fun getInputs(): List<EmiIngredient>{
@@ -39,7 +52,7 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
     }
     
     override fun getDisplayHeight(): Int{
-        return if (GearifiersConfig.modifiers.enableRerollXpCost){29}else{18}
+        return if (GearifiersConfig.modifiers.enableRerollXpCost){36}else{18}
     }
     
     override fun supportsRecipeTree(): Boolean{
@@ -51,9 +64,12 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
 		    widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1)
 		    widgets.addSlot(inputStack, 0, 0)
 		    widgets.addSlot(costStack, 49, 0)
-		    widgets.addSlot(inputStack, 107, 0).recipeContext(this)
+		    widgets.addSlot(inputStack, 107, 0).recipeContext(this).appendTooltip(rerollText)
         if (GearifiersConfig.modifiers.enableRerollXpCost){
-            widgets.addText(costText,0,19,0x55FF55,true)
+            widgets.add(XpOrbWidget(10,20,GearifiersConfig.modifiers.firstRerollXpCost,"emi.category.gearifiers.reroll_altar.tooltip_1"))
+            widgets.addText(costText1,31,23,0x55FF55,true)
+            widgets.add(XpOrbWidget(41,20,GearifiersConfig.modifiers.addedRerollXpCostPerRoll,"emi.category.gearifiers.reroll_altar.tooltip_2"))
+            widgets.addText(costText2,62,23,0x55FF55,true)
         }
     }
 

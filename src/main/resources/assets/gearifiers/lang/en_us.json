@@ -2,10 +2,14 @@
 	"block.gearifiers.reroll_altar": "Reroll Altar",
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
 	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
-	"screen.gearifiers.xp_clue_bad": "Not enough experince to reroll...",
+	"screen.gearifiers.xp_clue_bad": "Not enough experience to reroll...",
 	
 	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
-	"emi.category.gearifiers.reroll_altar.cost_text": "%1$s level(s) + %2$s level(s) per reroll",
+	"emi.category.gearifiers.reroll_altar.cost_text_1": "+",
+	"emi.category.gearifiers.reroll_altar.cost_text_2": "per reroll",
+	"emi.category.gearifiers.reroll_altar.tooltip_1": "XP levels to reroll the first time",
+	"emi.category.gearifiers.reroll_altar.tooltip_2": "Added XP levels for each reroll after the first",
+	"emi.category.gearifiers.reroll_altar.tooltip_3": "New random modifiers applied",
 
 	"equipment.modifier.gearifiers:legendary": "Legendary",
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
