@@ -49,8 +49,8 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         }
     
         var enableRerollXpCost: Boolean = true
-        var firstRerollXpCost: Int = 1
-        var addedRerollXpCostPerRoll: Int = 1
+        var firstRerollXpCost: Int = 5
+        var addedRerollXpCostPerRoll: Int = 2
         var defaultRerollPaymentItem: String = "minecraft:diamond"
         
         var enabledModifiers: Map<String,Boolean> = mapOf(
