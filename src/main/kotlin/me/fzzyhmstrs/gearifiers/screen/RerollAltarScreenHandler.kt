@@ -64,10 +64,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             val prev = nbt.getInt("rerolls")
             nbt.putInt("rerolls", prev + 1)
         }
-        nbt.remove(NbtKeys.MODIFIERS.str())
-        nbt.remove(NbtKeys.ITEM_STACK_ID.str())
-        val contextBuilder = LootContext.Builder(playerWorld).random(playerWorld.random).luck(player.luck)
-        EquipmentModifierHelper.addRandomModifiers(stack,contextBuilder.build(LootContextTypes.EMPTY))
+        EquipmentModifierHelper.rerollModifiers(stack,playerWorld,player)
     }
 
     override fun updateResult() {
