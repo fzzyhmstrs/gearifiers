@@ -12,6 +12,9 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents.ModifyEntries
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -20,10 +23,11 @@ import net.minecraft.block.MapColor
 import net.minecraft.block.Material
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.item.BlockItem
-import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemGroups
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -43,8 +47,15 @@ object Gearifiers: ModInitializer {
             ServerPlayNetworking.send(handler.player,COST_MAP_SYNC,buf)
         }
 
-        Registry.register(Registry.BLOCK, Identifier(MOD_ID, "reroll_altar"), REROLL_ALTAR)
-        Registry.register(Registry.ITEM, Identifier(MOD_ID,"reroll_altar"), BlockItem(REROLL_ALTAR, FabricItemSettings().group(ItemGroup.MISC)))
+        Registry.register(Registries.BLOCK, Identifier(MOD_ID, "reroll_altar"), REROLL_ALTAR)
+        Registry.register(Registries.ITEM, Identifier(MOD_ID,"reroll_altar"), BlockItem(REROLL_ALTAR, FabricItemSettings()))
+
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+            .register(ModifyEntries { entries: FabricItemGroupEntries ->
+                entries.add(
+                    REROLL_ALTAR.asItem()
+                )
+            })
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(ItemCostLoader)
 

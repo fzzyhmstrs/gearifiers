@@ -1,13 +1,13 @@
 package me.fzzyhmstrs.gearifiers.compat
 
 import com.google.common.collect.HashMultimap
-import com.google.gson.Gson
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.minecraft.item.Item
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.tag.TagKey
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 object ClientItemCostLoader {
 
@@ -26,14 +26,14 @@ object ClientItemCostLoader {
     private fun processItemCostsMap(){
         //println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
-            val costItem = Registry.ITEM.get(entry.key)
+            val costItem = Registries.ITEM.get(entry.key)
             //println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(Registry.ITEM_KEY,tagId)
-                    val entries = Registry.ITEM.getEntryList(tagKey)
+                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
+                    val entries = Registries.ITEM.getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -49,8 +49,8 @@ object ClientItemCostLoader {
                 val itemId = Identifier.tryParse(targetItemString)
                 //println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
-                    if (Registry.ITEM.containsId(itemId)){
-                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
+                    if (Registries.ITEM.containsId(itemId)){
+                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }
@@ -60,13 +60,13 @@ object ClientItemCostLoader {
             }
         }
         for (entry in rawOverrideCosts.entries()){
-            val costItem = Registry.ITEM.get(entry.key)
+            val costItem = Registries.ITEM.get(entry.key)
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(Registry.ITEM_KEY,tagId)
-                    val entries = Registry.ITEM.getEntryList(tagKey)
+                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
+                    val entries = Registries.ITEM.getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -82,9 +82,9 @@ object ClientItemCostLoader {
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
                 if (itemId != null){
-                    if (Registry.ITEM.containsId(itemId)){
-                        ITEM_COSTS.removeAll(Registry.ITEM.get(itemId))
-                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
+                    if (Registries.ITEM.containsId(itemId)){
+                        ITEM_COSTS.removeAll(Registries.ITEM.get(itemId))
+                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }

@@ -4,7 +4,7 @@ import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
 import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.block.BlockState
-import net.minecraft.block.OreBlock
+import net.minecraft.block.ExperienceDroppingBlock
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
@@ -13,11 +13,12 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.tag.BlockTags
-import net.minecraft.tag.TagKey
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.BlockTags
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 object ModifierConsumers {
@@ -83,7 +84,7 @@ object ModifierConsumers {
         
     val ANTHRACITIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
-            if (state.block is OreBlock){
+            if (state.block is ExperienceDroppingBlock){
                 if (world.random.nextFloat() < 0.04){
                     val coals = world.random.nextInt(3) + 1
                     val coalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(Items.COAL,coals))
@@ -92,9 +93,9 @@ object ModifierConsumers {
             }
         }
         
-    private val METALS_TAG: TagKey<Item> = TagKey.of(Registry.ITEM_KEY, Identifier("gearifiers","basic_metals"))
+    private val METALS_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier("gearifiers","basic_metals"))
     private val METALS: List<Item> by lazy{
-        val opt =  Registry.ITEM.getEntryList(
+        val opt =  Registries.ITEM.getEntryList(
             METALS_TAG)
         if (opt.isPresent){
             opt.get().stream().map { entry -> entry.value() }.toList()
@@ -105,7 +106,7 @@ object ModifierConsumers {
     
     val METALLIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
-            if (state.block is OreBlock){
+            if (state.block is ExperienceDroppingBlock){
                 if (world.random.nextFloat() < 0.03){
                     val metals = world.random.nextInt(3) + 1
                     val metalItem = METALS[world.random.nextInt(METALS.size)]
@@ -115,9 +116,9 @@ object ModifierConsumers {
             }
         }
         
-    private val GEMS_TAG: TagKey<Item> = TagKey.of(Registry.ITEM_KEY,Identifier("gearifiers","basic_gems"))
+    private val GEMS_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM,Identifier("gearifiers","basic_gems"))
     private val GEMS: List<Item> by lazy{
-        val opt =  Registry.ITEM.getEntryList(
+        val opt =  Registries.ITEM.getEntryList(
             GEMS_TAG)
         if (opt.isPresent){
             opt.get().stream().map { entry -> entry.value() }.toList()
@@ -128,7 +129,7 @@ object ModifierConsumers {
 
     val ENRICHED_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
-            if (state.block is OreBlock){
+            if (state.block is ExperienceDroppingBlock){
                 if (world.random.nextFloat() < 0.03){
                     val gems = world.random.nextInt(3) + 1
                     val gemItem = GEMS[world.random.nextInt(GEMS.size)]

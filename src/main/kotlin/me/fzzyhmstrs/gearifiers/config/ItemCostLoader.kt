@@ -10,11 +10,12 @@ import net.minecraft.command.argument.BlockArgumentParser
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
-import net.minecraft.tag.TagKey
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 object ItemCostLoader: SimpleSynchronousResourceReloadListener {
 
@@ -90,7 +91,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                     Gearifiers.LOGGER.warn("Couldn't parse payment item id [${el.key}], skipping!")
                     continue
                 }
-                if (!Registry.ITEM.containsId(paymentName)){
+                if (!Registries.ITEM.containsId(paymentName)){
                     Gearifiers.LOGGER.warn("Item id [${el.key}] not found in the Item Registry, skipping!")
                     continue
                 }
@@ -131,14 +132,14 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     private fun processItemCostsMap(){
         //println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
-            val costItem = Registry.ITEM.get(entry.key)
+            val costItem = Registries.ITEM.get(entry.key)
             //println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(Registry.ITEM_KEY,tagId)
-                    val entries = Registry.ITEM.getEntryList(tagKey)
+                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
+                    val entries = Registries.ITEM.getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -154,8 +155,8 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 val itemId = Identifier.tryParse(targetItemString)
                 //println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
-                    if (Registry.ITEM.containsId(itemId)){
-                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
+                    if (Registries.ITEM.containsId(itemId)){
+                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }
@@ -165,13 +166,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             }
         }
         for (entry in rawOverrideCosts.entries()){
-            val costItem = Registry.ITEM.get(entry.key)
+            val costItem = Registries.ITEM.get(entry.key)
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(Registry.ITEM_KEY,tagId)
-                    val entries = Registry.ITEM.getEntryList(tagKey)
+                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
+                    val entries = Registries.ITEM.getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -187,9 +188,9 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
                 if (itemId != null){
-                    if (Registry.ITEM.containsId(itemId)){
-                        ITEM_COSTS.removeAll(Registry.ITEM.get(itemId))
-                        ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
+                    if (Registries.ITEM.containsId(itemId)){
+                        ITEM_COSTS.removeAll(Registries.ITEM.get(itemId))
+                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }

@@ -42,7 +42,7 @@
     "fabricloader": ">=0.14.11",
     "fabric": "*",
     "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0",
-    "minecraft": ">=1.19",
+    "minecraft": ">=1.19.3",
     "java": ">=17"
   }
 }

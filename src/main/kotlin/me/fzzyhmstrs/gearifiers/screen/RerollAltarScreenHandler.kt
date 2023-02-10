@@ -108,7 +108,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
         }
     }
 
-    override fun transferSlot(player: PlayerEntity, index: Int): ItemStack? {
+    override fun quickMove(player: PlayerEntity, index: Int): ItemStack? {
         var itemStack = ItemStack.EMPTY
         val slot = slots[index]
         if (slot.hasStack()) {

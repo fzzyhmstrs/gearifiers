@@ -6,13 +6,11 @@ import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.gson
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreate
 import me.fzzyhmstrs.fzzy_core.registry.SyncedConfigRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
@@ -22,8 +20,8 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     init{
         modifiers = readOrCreate("modifiers_v0.json", base = Gearifiers.MOD_ID) { Modifiers() }
         val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
-        fallbackCost = if(Registry.ITEM.containsId(fallbackId)){
-            Registry.ITEM.get(fallbackId)
+        fallbackCost = if(Registries.ITEM.containsId(fallbackId)){
+            Registries.ITEM.get(fallbackId)
         } else {
             Items.DIAMOND
         }

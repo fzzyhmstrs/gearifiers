@@ -10,8 +10,8 @@ import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.item.Item
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe{
 
@@ -25,8 +25,8 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
     private val rerollText = AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_3")
 
     private fun prepareId(): Identifier{
-        val itemId1 = Registry.ITEM.getId(input)
-        val itemId2 = Registry.ITEM.getId(cost)
+        val itemId1 = Registries.ITEM.getId(input)
+        val itemId2 = Registries.ITEM.getId(cost)
         return Identifier(Gearifiers.MOD_ID, itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2.namespace + "." + itemId2.path)
     }
 
