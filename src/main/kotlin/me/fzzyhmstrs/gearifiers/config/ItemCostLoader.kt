@@ -58,13 +58,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             .forEach { (t, u) ->
                 loadItemCost(t,u)
         }
-        println("loaded reroll costs:")
+        /*println("Loaded Gearifiers reroll costs:")
         for (entry in rawItemCosts.entries()){
             println(entry)
-        }
-        println("other maps")
-        println(rawOverrideCosts)
-        println(ITEM_COSTS)
+        }*/
+        //println("other maps")
+        //println(rawOverrideCosts)
+        //println(ITEM_COSTS)
     }
 
     private fun loadItemCost(id: Identifier,resource: Resource){
@@ -117,7 +117,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
 
     internal fun itemCostMatches(item: Item, payment: Item): Boolean{
         if (ITEM_COSTS.isEmpty){
-            println("preparing map...")
+            //println("preparing map...")
             processItemCostsMap()
         }
         val list = ITEM_COSTS.get(item)
@@ -129,10 +129,10 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     }
 
     private fun processItemCostsMap(){
-        println(rawItemCosts)
+        //println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
             val costItem = Registry.ITEM.get(entry.key)
-            println("cost item: $costItem")
+            //println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
@@ -152,7 +152,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 }
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
-                println("parsing targetItemString $targetItemString into identifier $itemId")
+                //println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
                     if (Registry.ITEM.containsId(itemId)){
                         ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
@@ -198,13 +198,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 }
             }
         }
-        println("prepared map:")
-        println(ITEM_COSTS)
+        //println("prepared map:")
+        //println(ITEM_COSTS)
     }
     
     fun writeRawDataToClient(buf: PacketByteBuf){
-        println(">>>>>>>>>>>>> writing to client <<<<<<<<<<<<<<<<")
-        println(rawItemCosts)
+        //println(">>>>>>>>>>>>> writing to client <<<<<<<<<<<<<<<<")
+        //println(rawItemCosts)
         writeMultimapToBuf(buf, rawItemCosts)
         writeMultimapToBuf(buf, rawOverrideCosts)
     }

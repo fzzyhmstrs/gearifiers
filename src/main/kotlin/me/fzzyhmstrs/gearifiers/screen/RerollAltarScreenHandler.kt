@@ -122,7 +122,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
                 if (!insertItem(itemStack2, 3, 39, true)) {
                     return ItemStack.EMPTY
                 }
-                println("quick transferring")
+                //println("quick transferring")
                 slot.onQuickTransfer(itemStack2, itemStack)
             } else if (index == 0 || index == 1) {
                 if (!insertItem(itemStack2, 3, 39, false)) {
@@ -134,8 +134,8 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
                     return ItemStack.EMPTY
                 }
             }
-            println(itemStack)
-            println(itemStack2)
+            //println(itemStack)
+            //println(itemStack2)
             if (itemStack2.isEmpty) {
                 slot.stack = ItemStack.EMPTY
             } else {
@@ -144,8 +144,8 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             if (itemStack2.count == itemStack.count) {
                 return ItemStack.EMPTY
             }
-            println("take iteming")
-            onTakeOutput(player, itemStack)
+            //println("take iteming")
+            slot.onTakeItem(player, itemStack2)
         }
         return itemStack
     }

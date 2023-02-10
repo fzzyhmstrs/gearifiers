@@ -24,10 +24,10 @@ object ClientItemCostLoader {
     }
 
     private fun processItemCostsMap(){
-        println(rawItemCosts)
+        //println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
             val costItem = Registry.ITEM.get(entry.key)
-            println("cost item: $costItem")
+            //println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
@@ -47,7 +47,7 @@ object ClientItemCostLoader {
                 }
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
-                println("parsing targetItemString $targetItemString into identifier $itemId")
+                //println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
                     if (Registry.ITEM.containsId(itemId)){
                         ITEM_COSTS.put(Registry.ITEM.get(itemId),costItem)
@@ -93,18 +93,18 @@ object ClientItemCostLoader {
                 }
             }
         }
-        println("prepared map:")
-        println(ITEM_COSTS)
+        //println("prepared map:")
+        //println(ITEM_COSTS)
     }
 
     fun readRawDataFromServer(buf: PacketByteBuf){
         ITEM_COSTS.clear()
         rawItemCosts.clear()
         rawOverrideCosts.clear()
-        println(">>>>>>>>>>>>> reading from server <<<<<<<<<<<<<<<<")
+        //println(">>>>>>>>>>>>> reading from server <<<<<<<<<<<<<<<<")
         readMultimapFromBuf(buf, rawItemCosts)
         readMultimapFromBuf(buf, rawOverrideCosts)
-        println(rawItemCosts)
+        //println(rawItemCosts)
     }
 
     private fun readMultimapFromBuf(buf: PacketByteBuf,map: HashMultimap<Identifier,String>){
