@@ -30,14 +30,10 @@ public abstract class ItemStackMixin {
     private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
         if (!world.isClient && getItem() instanceof Modifiable){
             LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
-            Exception e = new Exception();
-            e.printStackTrace();
-            System.out.println(this.nbt);
             if (-1 != Nbt.INSTANCE.getItemStackId((ItemStack) (Object) this) && nbt != null){
                 nbt.remove(NbtKeys.ITEM_STACK_ID.str());
             }
             EquipmentModifierHelper.INSTANCE.addRandomModifiers((ItemStack) (Object) this, contextBuilder.build(LootContextTypes.EMPTY));
-            System.out.println(this.nbt);
         }
     }
 
