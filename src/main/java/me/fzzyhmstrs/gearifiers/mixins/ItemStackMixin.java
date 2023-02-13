@@ -1,9 +1,11 @@
 package me.fzzyhmstrs.gearifiers.mixins;
 
+import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable;
 import me.fzzyhmstrs.fzzy_core.nbt_util.Nbt;
 import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys;
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextTypes;
@@ -18,13 +20,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemStack.class)
-public class ItemStackMixin {
+public abstract class ItemStackMixin {
 
     @Shadow private @Nullable NbtCompound nbt;
 
+    @Shadow public abstract Item getItem();
+
     @Inject(method = "onCraft", at = @At("HEAD"))
     private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
-        if (!world.isClient){
+        if (!world.isClient && getItem() instanceof Modifiable){
             LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
             Exception e = new Exception();
             e.printStackTrace();
