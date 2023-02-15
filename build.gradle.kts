@@ -17,6 +17,10 @@ repositories {
         url = uri("https://maven.terraformersmc.com/")
     }
     maven {
+        name = "REI"
+        url = uri("https://maven.shedaniel.me")
+    }
+    maven {
         name = "Ladysnake Libs"
         url = uri("https://ladysnake.jfrog.io/artifactory/mods")
     }
@@ -49,6 +53,11 @@ dependencies {
     val fabricKotlinVersion: String by project
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
 
+    val reiVersion: String by project
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:$reiVersion")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion")
+    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion")
+    
     val fcVersion: String by project
     modImplementation(":fzzy_core-$fcVersion"){
         exclude("net.fabricmc.fabric-api")
