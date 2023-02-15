@@ -1,6 +1,6 @@
 package me.fzzyhmstrs.gearifiers.compat.rei
 
-
+import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
