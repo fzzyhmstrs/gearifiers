@@ -33,6 +33,12 @@
         "adapter": "kotlin",
         "value": "me.fzzyhmstrs.gearifiers.compat.emi.EmiClientPlugin"
       }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.gearifiers.compat.rei.ReiPlugin"
+      }
     ]
   },
   "mixins": [
