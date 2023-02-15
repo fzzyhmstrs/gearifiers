@@ -4,6 +4,8 @@
 	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
 	"screen.gearifiers.xp_clue_bad": "Not enough experience to reroll...",
 	
+	"recipe.reroll_altar": "Modifier Rerolling",
+	
 	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
 	"emi.category.gearifiers.reroll_altar.cost_text_1": "+",
 	"emi.category.gearifiers.reroll_altar.cost_text_2": "per reroll",
