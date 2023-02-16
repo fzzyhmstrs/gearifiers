@@ -8,8 +8,8 @@ import me.shedaniel.rei.api.common.util.EntryIngredients
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 import java.util.*
 
 class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableList<EntryIngredient>, location: Optional<Identifier>):
@@ -43,8 +43,8 @@ class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableL
         }
         
         private fun getRecipeId(input: Item, cost: Item): Optional<Identifier>{
-            val itemId1 = Registries.ITEM.getId(input)
-            val itemId2 = Registries.ITEM.getId(cost)
+            val itemId1 = Registry.ITEM.getId(input)
+            val itemId2 = Registry.ITEM.getId(cost)
             return Optional.ofNullable(Identifier(Gearifiers.MOD_ID,itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2.namespace + "." + itemId2.path))  
         }
     }

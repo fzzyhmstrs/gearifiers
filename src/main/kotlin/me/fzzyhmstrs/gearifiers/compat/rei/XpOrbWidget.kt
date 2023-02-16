@@ -50,7 +50,7 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
     }
 
     override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
         DrawableHelper.drawTexture(
@@ -68,7 +68,7 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
 
         if (cost < 7) return
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
         DrawableHelper.drawTexture(
@@ -83,7 +83,7 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
             256
         )
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
         DrawableHelper.drawTexture(

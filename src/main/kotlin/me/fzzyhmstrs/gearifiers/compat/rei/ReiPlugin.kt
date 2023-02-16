@@ -9,7 +9,7 @@ import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import net.minecraft.registry.Registries
+import net.minecraft.util.registry.Registry
 
 
 object ReiPlugin: REIClientPlugin {
@@ -22,7 +22,7 @@ object ReiPlugin: REIClientPlugin {
     }
 
     override fun registerDisplays(registry: DisplayRegistry) {
-        for (key in Registries.ITEM.entrySet){
+        for (key in Registry.ITEM.entrySet){
             val item = key.value
             if (item !is Modifiable) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
