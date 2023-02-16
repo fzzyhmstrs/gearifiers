@@ -2,11 +2,14 @@
 
 package me.fzzyhmstrs.gearifiers.compat.rei
 
-import me.shedaniel.math.Rectangle
+import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
+import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
+import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import net.minecraft.registry.Registries
 
 
 object ReiPlugin: REIClientPlugin {
@@ -25,7 +28,7 @@ object ReiPlugin: REIClientPlugin {
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             if (costs.isEmpty()){
-                registry.add(RerollAltarDisplay(item,GearifiersConfig.fallbackCost))
+                registry.add(RerollAltarDisplay(item, GearifiersConfig.fallbackCost))
             } else {
                 for (cost in costs){
                     registry.add(RerollAltarDisplay(item,cost))

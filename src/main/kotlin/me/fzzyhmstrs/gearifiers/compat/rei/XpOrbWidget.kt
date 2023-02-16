@@ -1,19 +1,21 @@
-package me.fzzyhmstrs.gearifiers.compat.emi
+package me.fzzyhmstrs.gearifiers.compat.rei
 
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.emi.emi.EmiPort
-import dev.emi.emi.api.widget.TextureWidget
-import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.screen.RerollAltarScreen
+import me.shedaniel.math.Dimension
+import me.shedaniel.math.Point
+import me.shedaniel.math.Rectangle
+import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds
 import net.minecraft.client.gui.DrawableHelper
-import net.minecraft.client.gui.tooltip.TooltipComponent
+import net.minecraft.client.gui.Element
+import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
-import kotlin.math.max
 import kotlin.math.min
 
-class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): TextureWidget(RerollAltarScreen.TEXTURE,x,y,16,16,determineOffset(cost),174 ) {
+class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int): WidgetWithBounds() {
 
-    private val tooltipComponent = mutableListOf(TooltipComponent.of(AcText.translatable(tooltipKey).asOrderedText()))
+    private val bounds = Rectangle(Point(x,y), Dimension(16,16))
+    private val offset = determineOffset(cost)
     private var tens: Int
     private var ones: Int
 
@@ -43,18 +45,32 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
             onesImageOfst = ones - 1
         }
     }
-
-    override fun getTooltip(mouseX: Int, mouseY: Int): MutableList<TooltipComponent> {
-        return tooltipComponent
+    override fun children(): MutableList<out Element> {
+        return mutableListOf()
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
+    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
+        DrawableHelper.drawTexture(
+            matrices,
+            x,
+            y,
+            offset.toFloat(),
+            174f,
+            16,
+            16,
+            256,
+            256
+        )
+
+
         if (cost < 7) return
 
-        EmiPort.setPositionTexShader()
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, texture)
+        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
         DrawableHelper.drawTexture(
             matrices,
             x + onesOfst,
@@ -67,9 +83,9 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
             256
         )
 
-        EmiPort.setPositionTexShader()
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, texture)
+        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
         DrawableHelper.drawTexture(
             matrices,
             x + tensOfst,
@@ -83,10 +99,13 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
         )
     }
 
+    override fun getBounds(): Rectangle {
+        return bounds
+    }
+
     companion object{
         private fun determineOffset(cost: Int): Int{
             return if(cost > 0) {(108 + 16 * min(6, cost - 1))} else { 108 + (16 * 7)}
         }
     }
-
 }

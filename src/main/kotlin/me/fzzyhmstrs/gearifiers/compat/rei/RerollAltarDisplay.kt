@@ -4,17 +4,20 @@ import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import me.shedaniel.rei.api.common.util.EntryIngredients
 import me.shedaniel.rei.api.common.util.EntryStacks
+import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import java.util.*
 
-class ImbuingTableDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableList<EntryIngredient>, location: Optional<Identifier>):
+class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableList<EntryIngredient>, location: Optional<Identifier>):
     BasicDisplay(inputs, outputs, location) {
 
     constructor(input: Item, cost: Item): this(
-        getRecipeInputEntries(input,cost)
-        getRecipeOutputEntries(input)
+        getRecipeInputEntries(input,cost),
+        getRecipeOutputEntries(input),
         getRecipeId(input,cost))
         
     override fun getInputEntries(): MutableList<EntryIngredient> {
@@ -25,7 +28,7 @@ class ImbuingTableDisplay(inputs: MutableList<EntryIngredient>, outputs: Mutable
         return outputs
     }
 
-    override fun getCategoryIdentifier(): CategoryIdentifier<*> {
+    override fun getCategoryIdentifier(): CategoryIdentifier<RerollAltarDisplay> {
         return CategoryIdentifier.of(Identifier(Gearifiers.MOD_ID, "rerolling"))
     }
 
