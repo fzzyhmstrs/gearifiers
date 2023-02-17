@@ -122,9 +122,23 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
         }
         val list = ITEM_COSTS.get(item)
         return if (list.isEmpty()){
-            payment == GearifiersConfig.fallbackCost
+            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost){
+                payment == getRepairIngredient(item, payment) {pymt -> pymt == GearifiersConfig.fallbackCost}
+            } else {
+                payment == GearifiersConfig.fallbackCost
+            }
         } else {
-            list.contains(payment)
+            if (repairIngredientOverrideDefinedCosts){
+                payment == getRepairIngredient(item, payment) {pymt -> list.contains(pymt)}
+            } else {
+                list.contains(payment)
+            }
+        }
+    }
+    
+    private fun getRepairIngredient(item: Item,payment: Item, fallback: Predicate<Item>){
+        if (item is ArmorItem){
+            
         }
     }
 
