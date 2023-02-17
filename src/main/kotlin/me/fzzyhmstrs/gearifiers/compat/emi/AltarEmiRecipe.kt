@@ -10,13 +10,13 @@ import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.item.Item
+import net.minecraft.recipe.Ingredient
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
-class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe{
+class AltarEmiRecipe(private val input: Item, private val cost: EmiIngredient): EmiRecipe{
 
     private val inputStack = EmiStack.of(input)
-    private val costStack = EmiStack.of(cost)
     private val recipeId: Identifier by lazy {
         prepareId()
     }
@@ -26,8 +26,14 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
 
     private fun prepareId(): Identifier{
         val itemId1 = Registry.ITEM.getId(input)
-        val itemId2 = Registry.ITEM.getId(cost)
-        return Identifier(Gearifiers.MOD_ID, itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2.namespace + "." + itemId2.path)
+        var itemId2 = ""
+        val ids = cost.emiStacks.stream().map { stack -> stack.id }
+        ids.forEach{
+            itemId2 += "/"
+            itemId2 += (it.namespace + "." + it.path)
+
+        }
+        return Identifier(Gearifiers.MOD_ID, itemId1.namespace + "." + itemId1.path + "/paid_with" + itemId2)
     }
 
 
@@ -40,7 +46,7 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
     }
     
     override fun getInputs(): List<EmiIngredient>{
-        return listOf(inputStack,costStack)
+        return listOf(inputStack,cost)
     }
     
     override fun getOutputs(): List<EmiStack>{
@@ -63,7 +69,7 @@ class AltarEmiRecipe(private val input: Item, private val cost: Item): EmiRecipe
         widgets.addTexture(EmiTexture.PLUS, 27, 2)
 		    widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1)
 		    widgets.addSlot(inputStack, 0, 0)
-		    widgets.addSlot(costStack, 49, 0)
+		    widgets.addSlot(cost, 49, 0)
 		    widgets.addSlot(inputStack, 107, 0).recipeContext(this).appendTooltip(rerollText)
         if (GearifiersConfig.modifiers.enableRerollXpCost){
             widgets.add(XpOrbWidget(10,20,GearifiersConfig.modifiers.firstRerollXpCost,"emi.category.gearifiers.reroll_altar.tooltip_1"))

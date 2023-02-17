@@ -3,7 +3,10 @@ package me.fzzyhmstrs.gearifiers.compat
 import com.google.common.collect.HashMultimap
 import com.google.gson.Gson
 import me.fzzyhmstrs.gearifiers.Gearifiers
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
+import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.tag.TagKey
 import net.minecraft.util.Identifier
@@ -20,7 +23,40 @@ object ClientItemCostLoader {
         if (ITEM_COSTS.isEmpty){
             processItemCostsMap()
         }
-        return ITEM_COSTS.get(item)
+        val set = ITEM_COSTS.get(item)
+        return if (set.isEmpty()) {
+            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost) {
+                val list = getRepairIngredient(item)
+                if (list.isEmpty()){
+                    setOf(GearifiersConfig.fallbackCost)
+                } else {
+                    setOf(*list.toTypedArray())
+                }
+            } else {
+                setOf(GearifiersConfig.fallbackCost)
+            }
+        } else {
+            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts) {
+                val list = getRepairIngredient(item)
+                if (list.isEmpty()){
+                    set
+                } else {
+                    setOf(*list.toTypedArray())
+                }
+            } else {
+                set
+            }
+        }
+    }
+
+    private fun getRepairIngredient(item: Item): List<Item>{
+        if (item is ArmorItem){
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+        }
+        if (item is ToolItem){
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+        }
+        return listOf()
     }
 
     private fun processItemCostsMap(){

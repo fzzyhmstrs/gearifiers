@@ -15,7 +15,7 @@ import java.util.*
 class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableList<EntryIngredient>, location: Optional<Identifier>):
     BasicDisplay(inputs, outputs, location) {
 
-    constructor(input: Item, cost: Item): this(
+    constructor(input: Item, cost: Set<Item>): this(
         getRecipeInputEntries(input,cost),
         getRecipeOutputEntries(input),
         getRecipeId(input,cost))
@@ -34,18 +34,26 @@ class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableL
 
     companion object{
 
-        private fun getRecipeInputEntries(input: Item, cost: Item): MutableList<EntryIngredient>{
-            return mutableListOf(EntryIngredients.of(input),EntryIngredients.of(cost))
+        private fun getRecipeInputEntries(input: Item, cost: Set<Item>): MutableList<EntryIngredient>{
+            val builder = EntryIngredient.builder()
+            cost.stream().map { item -> builder.add(EntryStacks.of(item)) }
+            return mutableListOf(EntryIngredients.of(input),builder.build())
         }
 
         private fun getRecipeOutputEntries(input: Item): MutableList<EntryIngredient>{
             return mutableListOf(EntryIngredients.of(input))
         }
         
-        private fun getRecipeId(input: Item, cost: Item): Optional<Identifier>{
+        private fun getRecipeId(input: Item, cost: Set<Item>): Optional<Identifier>{
             val itemId1 = Registry.ITEM.getId(input)
-            val itemId2 = Registry.ITEM.getId(cost)
-            return Optional.ofNullable(Identifier(Gearifiers.MOD_ID,itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2.namespace + "." + itemId2.path))  
+            var itemId2 = ""
+            cost.forEach {
+                itemId2 += "/"
+                itemId2 += Registry.ITEM.getId(it).namespace + "." + Registry.ITEM.getId(it).path
+            }
+
+
+            return Optional.ofNullable(Identifier(Gearifiers.MOD_ID,itemId1.namespace + "." + itemId1.path + "/paid_with/" + itemId2))
         }
     }
 }

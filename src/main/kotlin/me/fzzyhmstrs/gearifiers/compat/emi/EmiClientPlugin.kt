@@ -3,6 +3,7 @@ package me.fzzyhmstrs.gearifiers.compat.emi
 import dev.emi.emi.api.EmiPlugin
 import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.recipe.EmiRecipeCategory
+import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
@@ -30,13 +31,8 @@ object EmiClientPlugin: EmiPlugin {
             if (item !is Modifiable) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
-            if (costs.isEmpty()){
-                registry.addRecipe(AltarEmiRecipe(item,GearifiersConfig.fallbackCost))
-            } else {
-                for (cost in costs){
-                    registry.addRecipe(AltarEmiRecipe(item,cost))
-                }
-            }
+            val ingredient = EmiIngredient.of(costs.stream().map { cost -> EmiStack.of(cost) }.toList())
+            registry.addRecipe(AltarEmiRecipe(item,ingredient))
         }
     }
 }
