@@ -27,13 +27,7 @@ object ReiPlugin: REIClientPlugin {
             if (item !is Modifiable) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
-            if (costs.isEmpty()){
-                registry.add(RerollAltarDisplay(item, GearifiersConfig.fallbackCost))
-            } else {
-                for (cost in costs){
-                    registry.add(RerollAltarDisplay(item,cost))
-                }
-            }
+                registry.add(RerollAltarDisplay(item, costs))
         }
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.gson
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreate
+import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreateUpdated
 import me.fzzyhmstrs.fzzy_core.registry.SyncedConfigRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.minecraft.item.Item
@@ -132,7 +133,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         )
     }
     
-    class ModifiersV0:: SyncedConfigHelper.OldClass<Modifiers>{
+    class ModifiersV0: SyncedConfigHelper.OldClass<Modifiers>{
         
         override fun generateNewClass(): Modifiers {
             val modifiers = Modifiers()
@@ -140,9 +141,11 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             modifiers.firstRerollXpCost = firstRerollXpCost
             modifiers.addedRerollXpCostPerRoll = addedRerollXpCostPerRoll
             modifiers.defaultRerollPaymentItem = defaultRerollPaymentItem
+            val mutableMap: MutableMap<String,Boolean> = modifiers.enabledModifiers.toMutableMap()
             for (entry in enabledModifiers){
-                modifiers.enabledModifiers[entry.key] = entry.value
+                mutableMap[entry.key] = entry.value
             }
+            modifiers.enabledModifiers = mutableMap
             return modifiers
         }
         

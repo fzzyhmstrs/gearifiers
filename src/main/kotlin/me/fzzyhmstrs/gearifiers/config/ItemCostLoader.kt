@@ -7,8 +7,10 @@ import com.google.gson.JsonParser
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.command.argument.BlockArgumentParser
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
@@ -16,6 +18,7 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
+import java.util.function.Predicate
 
 object ItemCostLoader: SimpleSynchronousResourceReloadListener {
 
@@ -124,23 +127,37 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
         val list = ITEM_COSTS.get(item)
         return if (list.isEmpty()){
             if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost){
-                payment == getRepairIngredient(item, payment) {pymt -> pymt == GearifiersConfig.fallbackCost}
+                val list2 = getRepairIngredient(item)
+                if (list2.isEmpty()){
+                    payment == GearifiersConfig.fallbackCost
+                } else {
+                    list2.contains(payment)
+                }
             } else {
                 payment == GearifiersConfig.fallbackCost
             }
         } else {
-            if (repairIngredientOverrideDefinedCosts){
-                payment == getRepairIngredient(item, payment) {pymt -> list.contains(pymt)}
+            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts){
+                val list3 = getRepairIngredient(item)
+                if (list3.isEmpty()){
+                    list.contains(payment)
+                } else {
+                    list3.contains(payment)
+                }
             } else {
                 list.contains(payment)
             }
         }
     }
     
-    private fun getRepairIngredient(item: Item,payment: Item, fallback: Predicate<Item>){
+    private fun getRepairIngredient(item: Item): List<Item>{
         if (item is ArmorItem){
-            
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
         }
+        if (item is ToolItem){
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+        }
+        return listOf()
     }
 
     private fun processItemCostsMap(){
