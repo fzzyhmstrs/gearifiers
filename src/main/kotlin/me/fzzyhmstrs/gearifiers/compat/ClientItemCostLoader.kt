@@ -51,10 +51,10 @@ object ClientItemCostLoader {
 
     private fun getRepairIngredient(item: Item): List<Item>{
         if (item is ArmorItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registry.ITEM.get(id) }.toList()
         }
         if (item is ToolItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registry.ITEM.get(id) }.toList()
         }
         return listOf()
     }
