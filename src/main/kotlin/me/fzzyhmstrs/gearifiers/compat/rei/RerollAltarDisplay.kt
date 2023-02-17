@@ -36,7 +36,7 @@ class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableL
 
         private fun getRecipeInputEntries(input: Item, cost: Set<Item>): MutableList<EntryIngredient>{
             val builder = EntryIngredient.builder()
-            cost.stream().map { item -> builder.add(EntryStacks.of(item)) }
+            cost.forEach { item -> builder.add(EntryStacks.of(item)) }
             return mutableListOf(EntryIngredients.of(input),builder.build())
         }
 

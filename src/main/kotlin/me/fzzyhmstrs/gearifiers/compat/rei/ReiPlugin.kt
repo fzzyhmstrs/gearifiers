@@ -27,7 +27,7 @@ object ReiPlugin: REIClientPlugin {
             if (item !is Modifiable) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
-                registry.add(RerollAltarDisplay(item, costs))
+            registry.add(RerollAltarDisplay(item, costs))
         }
     }
 }
