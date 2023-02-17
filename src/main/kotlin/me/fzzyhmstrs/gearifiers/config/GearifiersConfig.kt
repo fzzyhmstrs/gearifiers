@@ -20,11 +20,12 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     val fallbackCost: Item
     
     init{
-        modifiers = readOrCreate("modifiers_v0.json", base = Gearifiers.MOD_ID) { Modifiers() }
+        modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
         val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
         fallbackCost = if(Registry.ITEM.containsId(fallbackId)){
             Registry.ITEM.get(fallbackId)
         } else {
+            Gearifiers.LOGGER.warn("Couldn't locate configured fallback material $fallbackId, using Diamonds!")
             Items.DIAMOND
         }
     }
@@ -51,6 +52,8 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         var enableRerollXpCost: Boolean = true
         var firstRerollXpCost: Int = 5
         var addedRerollXpCostPerRoll: Int = 2
+        var useRepairIngredientAsRerollCost: Boolean = false
+        var repairIngredientOverrideDefinedCosts: Boolean = false
         var defaultRerollPaymentItem: String = "minecraft:diamond"
         
         var enabledModifiers: Map<String,Boolean> = mapOf(
@@ -129,6 +132,27 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:greater_crumbling" to true,
             "gearifiers:crumbling" to true
         )
+    }
+    
+    class ModifiersV0:: SyncedConfigHelper.OldClass<Modifiers>{
+        
+        override fun generateNewClass(): Modifiers {
+            val modifiers = Modifiers()
+            modifiers.enableRerollXpCost = enableRerollXpCost
+            modifiers.firstRerollXpCost = firstRerollXpCost
+            modifiers.addedRerollXpCostPerRoll = addedRerollXpCostPerRoll
+            modifiers.defaultRerollPaymentItem = defaultRerollPaymentItem
+            for (entry in enabledModifiers){
+                modifiers.enabledModifiers[entry.key] = entry.value
+            }
+            return modifiers
+        }
+        
+        var enableRerollXpCost: Boolean = true
+        var firstRerollXpCost: Int = 5
+        var addedRerollXpCostPerRoll: Int = 2
+        var defaultRerollPaymentItem: String = "minecraft:diamond"
+        var enabledModifiers: Map<String,Boolean> = mapOf()
     }
     
 }
