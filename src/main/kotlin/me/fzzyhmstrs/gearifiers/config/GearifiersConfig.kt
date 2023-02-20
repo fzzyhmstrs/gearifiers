@@ -51,14 +51,14 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         fun isItemBlackListed(stack: ItemStack): Boolean{
             val item = stack.item
-            val id = Registries.ITEM.getId(item)
+            val id = Registry.ITEM.getId(item)
             if (namespaceBlackList.contains(id.namespace)) return true
             if (individualItemBlackList.contains(id.toString())) return true
             return false
         }
 
         fun isItemBlackListed(item: Item): Boolean{
-            val id = Registries.ITEM.getId(item)
+            val id = Registry.ITEM.getId(item)
             if (namespaceBlackList.contains(id.namespace)) return true
             if (individualItemBlackList.contains(id.toString())) return true
             return false
