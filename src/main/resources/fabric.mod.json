@@ -49,6 +49,8 @@
     "fabric": "*",
     "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0",
     "minecraft": ">=1.19.3",
-    "java": ">=17"
+    "java": ">=17",
+    "gear_core": ">=0.1.1+1.19.3",
+    "fzzy_core": ">=0.1.0+1.19.3"
   }
 }

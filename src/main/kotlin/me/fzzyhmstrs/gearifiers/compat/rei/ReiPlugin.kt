@@ -25,6 +25,7 @@ object ReiPlugin: REIClientPlugin {
         for (key in Registries.ITEM.entrySet){
             val item = key.value
             if (item !is Modifiable) continue
+            if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             registry.add(RerollAltarDisplay(item, costs))

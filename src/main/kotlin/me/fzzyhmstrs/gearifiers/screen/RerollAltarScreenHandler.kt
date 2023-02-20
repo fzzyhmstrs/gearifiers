@@ -1,17 +1,14 @@
 package me.fzzyhmstrs.gearifiers.screen
 
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
-import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.loot.context.LootContext
-import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.screen.ForgingScreenHandler
 import net.minecraft.screen.Property
 import net.minecraft.screen.ScreenHandlerContext
@@ -86,6 +83,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     private fun checkForMatch(player: PlayerEntity): Boolean{
         val stack1 = this.input.getStack(0)
         if (stack1.isEmpty) return false
+        if (GearifiersConfig.blackList.isItemBlackListed((stack1))) return false
         val item = stack1.item
         if (item !is Modifiable) return false
         if (item.modifierInitializer != EquipmentModifierHelper) return false
