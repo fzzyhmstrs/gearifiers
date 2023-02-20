@@ -10,6 +10,7 @@ import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
@@ -18,10 +19,12 @@ import net.minecraft.util.registry.Registry
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
+    val blackList: BlackList
     val fallbackCost: Item
     
     init{
         modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
+        blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
         val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
         fallbackCost = if(Registry.ITEM.containsId(fallbackId)){
             Registry.ITEM.get(fallbackId)
@@ -42,6 +45,28 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     override fun readFromServer(buf:PacketByteBuf){
         modifiers = gson.fromJson(buf.readString(),Modifiers::class.java)
+    }
+
+    class BlackList{
+
+        fun isItemBlackListed(stack: ItemStack): Boolean{
+            val item = stack.item
+            val id = Registries.ITEM.getId(item)
+            if (namespaceBlackList.contains(id.namespace)) return true
+            if (individualItemBlackList.contains(id.toString())) return true
+            return false
+        }
+
+        fun isItemBlackListed(item: Item): Boolean{
+            val id = Registries.ITEM.getId(item)
+            if (namespaceBlackList.contains(id.namespace)) return true
+            if (individualItemBlackList.contains(id.toString())) return true
+            return false
+        }
+
+        var namespaceBlackList: List<String> = listOf()
+        var individualItemBlackList: List<String> = listOf()
+
     }
     
     class Modifiers{

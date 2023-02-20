@@ -1,6 +1,8 @@
 package me.fzzyhmstrs.gearifiers.mixins;
 
+import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable;
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper;
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +25,7 @@ public class EntityMixin {
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;", at = @At("HEAD"))
     private void gearifiers_dropStackAddModifiers(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir){
-        if (!world.isClient){
+        if (!world.isClient && stack.getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed(stack)){
             LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random);
             if (((Entity)(Object)this) instanceof PlayerEntity player){
                 contextBuilder.luck(player.getLuck());

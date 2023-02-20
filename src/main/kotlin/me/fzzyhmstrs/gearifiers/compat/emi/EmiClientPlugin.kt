@@ -29,6 +29,7 @@ object EmiClientPlugin: EmiPlugin {
         for (key in Registry.ITEM.entrySet){
             val item = key.value
             if (item !is Modifiable) continue
+            if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
             if (item.modifierInitializer != EquipmentModifierHelper) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             val ingredient = EmiIngredient.of(costs.stream().map { cost -> EmiStack.of(cost) }.toList())
