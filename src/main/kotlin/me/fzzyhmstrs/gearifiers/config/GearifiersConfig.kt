@@ -19,7 +19,7 @@ import net.minecraft.util.registry.Registry
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
-    val blackList: BlackList
+    var blackList: BlackList
     val fallbackCost: Item
     
     init{
@@ -41,10 +41,12 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     override fun writeToClient(buf:PacketByteBuf){
         val gson = GsonBuilder().create()
         buf.writeString(gson.toJson(modifiers))
+        buf.writeString(gson.toJson(blackList))
     }
 
     override fun readFromServer(buf:PacketByteBuf){
         modifiers = gson.fromJson(buf.readString(),Modifiers::class.java)
+        blackList = gson.fromJson(buf.readString(),BlackList::class.java)
     }
 
     class BlackList{
