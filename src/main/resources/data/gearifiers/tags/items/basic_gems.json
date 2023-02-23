@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:redstone_dust",
+    "minecraft:emerald",
+    "minecraft:prismarine_crystals",
+    "minecraft:lapis_lazuli",
+    "minecraft:amethyst_shard",
+    {
+      "required": false,
+      "id": "amethyst_imbuement:citrine"
+    },
+    {
+      "required": false,
+      "id": "amethyst_imbuement:danburite"
+    },
+    {
+      "required": false,
+      "id": "amethyst_imbuement:smoky_quartz"
+    },
+    {
+      "required": false,
+      "id": "amethyst_imbuement:imbued_quartz"
+    },
+    {
+      "required": false,
+      "id": "amethyst_imbuement:imbued_lapis"
+    }
+  ]
+}
