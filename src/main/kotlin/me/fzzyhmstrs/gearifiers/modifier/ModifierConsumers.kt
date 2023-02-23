@@ -107,7 +107,7 @@ object ModifierConsumers {
     val METALLIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is ExperienceDroppingBlock){
-                if (world.random.nextFloat() < 0.03){
+                if (world.random.nextFloat() < 0.04 && METALS.isNotEmpty()){
                     val metals = world.random.nextInt(3) + 1
                     val metalItem = METALS[world.random.nextInt(METALS.size)]
                     val metalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(metalItem,metals))
@@ -130,7 +130,7 @@ object ModifierConsumers {
     val ENRICHED_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is ExperienceDroppingBlock){
-                if (world.random.nextFloat() < 0.03){
+                if (world.random.nextFloat() < 0.03 && GEMS.isNotEmpty()){
                     val gems = world.random.nextInt(3) + 1
                     val gemItem = GEMS[world.random.nextInt(GEMS.size)]
                     val gemEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(gemItem,gems))
