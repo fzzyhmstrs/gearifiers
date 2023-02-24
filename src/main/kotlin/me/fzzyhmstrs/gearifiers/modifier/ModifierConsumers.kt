@@ -2,6 +2,7 @@ package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.block.BlockState
 import net.minecraft.block.OreBlock
@@ -27,7 +28,7 @@ object ModifierConsumers {
             if (target == null) return@ToolConsumer
             val damageSource = target.recentDamageSource ?: return@ToolConsumer
             val recentDamage = target.damageTracker.mostRecentDamage?.damage ?: return@ToolConsumer
-            if (user.world.random.nextFloat() < 0.025){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.vorpalChance){
                 target.isInvulnerable = false
                 target.damage(damageSource,recentDamage * 9f)
             }
@@ -36,7 +37,7 @@ object ModifierConsumers {
     val DEMONIC_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
-            if (user.world.random.nextFloat() < 0.3333333f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.demonicChance){
                 EffectQueue.addStatusToQueue(target,StatusEffects.WEAKNESS,50,1)
             }
         }
@@ -44,28 +45,28 @@ object ModifierConsumers {
     val MANIC_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
-            if (user.world.random.nextFloat() < 0.3333333f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.manicChance){
                 EffectQueue.addStatusToQueue(target,StatusEffects.HASTE,60,1)
             }
         }
 
     val JARRING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < 0.2f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.jarringChance){
                 EffectQueue.addStatusToQueue(user,StatusEffects.SLOWNESS,50,1)
             }
         }
 
     val CLANGING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < 0.2f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.clangingChance){
                 EffectQueue.addStatusToQueue(user,StatusEffects.WEAKNESS,50,1)
             }
         }
 
     val DOUBLE_EDGED_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < 0.25f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.doubleEdgedChance){
                 user.damage(DamageSource.GENERIC,1.0f)
             }
         }
@@ -73,7 +74,7 @@ object ModifierConsumers {
     val SPLITTING_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.isIn(BlockTags.LOGS)){
-                if (world.random.nextFloat() < 0.1){
+                if (world.random.nextFloat() < GearifiersConfig.chances.splittingChance){
                     val sticks = world.random.nextInt(3) + 1
                     val stickEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(Items.STICK,sticks))
                     world.spawnEntity(stickEntity)
@@ -84,7 +85,7 @@ object ModifierConsumers {
     val ANTHRACITIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is OreBlock){
-                if (world.random.nextFloat() < 0.04){
+                if (world.random.nextFloat() < GearifiersConfig.chances.anthraciticChance){
                     val coals = world.random.nextInt(3) + 1
                     val coalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(Items.COAL,coals))
                     world.spawnEntity(coalEntity)
@@ -106,7 +107,7 @@ object ModifierConsumers {
     val METALLIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is OreBlock){
-                if (world.random.nextFloat() < 0.04 && METALS.isNotEmpty()){
+                if (world.random.nextFloat() < GearifiersConfig.chances.metallicChance && METALS.isNotEmpty()){
                     val metals = world.random.nextInt(3) + 1
                     val metalItem = METALS[world.random.nextInt(METALS.size)]
                     val metalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(metalItem,metals))
@@ -129,7 +130,7 @@ object ModifierConsumers {
     val ENRICHED_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is OreBlock){
-                if (world.random.nextFloat() < 0.03 && GEMS.isNotEmpty()){
+                if (world.random.nextFloat() < GearifiersConfig.chances.enrichedChance && GEMS.isNotEmpty()){
                     val gems = world.random.nextInt(3) + 1
                     val gemItem = GEMS[world.random.nextInt(GEMS.size)]
                     val gemEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(gemItem,gems))
