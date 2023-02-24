@@ -2,6 +2,7 @@ package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
@@ -15,10 +16,10 @@ object ModifierFunctions {
 
     val INDOMITABLE_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
-            if (user.world.random.nextFloat() < 0.15f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
                 EffectQueue.addStatusToQueue(user, StatusEffects.REGENERATION,80,0)
             }
-            if (user.world.random.nextFloat() < 0.15f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
                 EffectQueue.addStatusToQueue(user, StatusEffects.RESISTANCE,80,0)
             }
             amount
@@ -26,7 +27,7 @@ object ModifierFunctions {
 
     val SHIELDING_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
-            if (user.world.random.nextFloat() < 0.025f){
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.shieldingChance){
                 user.world.playSound(null,user.blockPos,SoundEvents.ITEM_SHIELD_BLOCK,SoundCategory.PLAYERS,1.0f, 0.8f + user.world.random.nextFloat() * 0.4f)
                 0f
             } else {

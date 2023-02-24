@@ -17,11 +17,13 @@ import net.minecraft.util.Identifier
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
+    var chances: Chances
     var blackList: BlackList
     val fallbackCost: Item
     
     init{
         modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
+        chances = readOrCreate("chances_v0.json", base = Gearifiers.MOD_ID) { Chances() }
         blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
         val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
         fallbackCost = if(Registries.ITEM.containsId(fallbackId)){
@@ -39,11 +41,13 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     override fun writeToClient(buf:PacketByteBuf){
         val gson = GsonBuilder().create()
         buf.writeString(gson.toJson(modifiers))
+        buf.writeString(gson.toJson(chances))
         buf.writeString(gson.toJson(blackList))
     }
 
     override fun readFromServer(buf:PacketByteBuf){
         modifiers = gson.fromJson(buf.readString(),Modifiers::class.java)
+        chances = gson.fromJson(buf.readString(),Chances::class.java)
         blackList = gson.fromJson(buf.readString(),BlackList::class.java)
     }
 
@@ -66,6 +70,23 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         var namespaceBlackList: List<String> = listOf()
         var individualItemBlackList: List<String> = listOf()
+
+    }
+
+    class Chances{
+
+        var vorpalChance: Float = 0.025f
+        var demonicChance: Float = 0.3333333f
+        var manicChance: Float = 0.3333333f
+        var jarringChance: Float = 0.2f
+        var clangingChance: Float = 0.2f
+        var doubleEdgedChance: Float = 0.25f
+        var splittingChance: Float = 0.1f
+        var anthraciticChance: Float = 0.04f
+        var metallicChance: Float = 0.04f
+        var enrichedChance: Float = 0.03f
+        var indomitableChance: Float = 0.15f
+        var shieldingChance: Float = 0.025f
 
     }
     

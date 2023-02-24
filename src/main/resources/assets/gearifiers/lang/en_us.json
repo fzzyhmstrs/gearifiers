@@ -17,7 +17,7 @@
 	"equipment.modifier.gearifiers:vorpal": "Vorpal",
 
 	"equipment.modifier.gearifiers:legendary.desc": "+10% attack speed, +1.5 damage, +1 armor, +1 health, +5% speed, +25% item durability",
-	"equipment.modifier.gearifiers:vorpal.desc": "+20% attack speed, 2.5% chance to deal 10x damage",
+	"equipment.modifier.gearifiers:vorpal.desc": "+20% attack speed, small chance to deal 10x damage",
 
 	"equipment.modifier.gearifiers:blunt": "Blunt",
 	"equipment.modifier.gearifiers:demonic": "Demonic",
