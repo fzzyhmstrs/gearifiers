@@ -80,8 +80,7 @@ object ModifierCommand {
         )
     }
 
-    private fun checkAndApplyModifierToStack(context: CommandContext<ServerCommandSource>, function: CommandApplier, successKey: String): Int{
-        val modifierResult = context.getArgument("modifier",Identifier::class.java)
+    private fun checkAndApplyModifierToStack(modifierResult: Identifier,context: CommandContext<ServerCommandSource>, function: CommandApplier, successKey: String): Int{
         val player = context.source.player
         if (player == null){
             context.source.sendError(AcText.translatable("commands.gearifiers.failed.no_player"))
@@ -135,7 +134,9 @@ object ModifierCommand {
     }
 
     private fun addModifier(context: CommandContext<ServerCommandSource>): Int{
+        val modifierResult = context.getArgument("modifier",Identifier::class.java)
         return checkAndApplyModifierToStack(
+            modifierResult,
             context,
             {id,stack,_ ->
                 if (EquipmentModifierHelper.addModifier(id,stack)) {
@@ -154,7 +155,9 @@ object ModifierCommand {
     }
 
     private fun removeModifier(context: CommandContext<ServerCommandSource>): Int{
+        val modifierResult = context.getArgument("modifier",Identifier::class.java)
         return checkAndApplyModifierToStack(
+            modifierResult,
             context,
             {id,stack,_ ->
                 val nbt = stack.nbt
@@ -183,6 +186,7 @@ object ModifierCommand {
 
     private fun removeAllModifiers(context: CommandContext<ServerCommandSource>): Int{
         return checkAndApplyModifierToStack(
+            Identifier("empty"),
             context,
             {_, stack,_ ->
                 removeNonPersistentModifiers(stack)
@@ -212,6 +216,7 @@ object ModifierCommand {
 
     private fun rerollModifiers(context: CommandContext<ServerCommandSource>): Int{
         return checkAndApplyModifierToStack(
+            Identifier("empty"),
             context,
             {_,stack, player ->
                 EquipmentModifierHelper.rerollModifiers(stack,player.getWorld(),player)
@@ -226,6 +231,7 @@ object ModifierCommand {
 
     private fun addRandomModifiers(context: CommandContext<ServerCommandSource>, luckBoost: Int = 0): Int{
         return checkAndApplyModifierToStack(
+            Identifier("empty"),
             context,
             {_,stack, player ->
                 EquipmentModifierHelper.addRandomModifiers(stack,
