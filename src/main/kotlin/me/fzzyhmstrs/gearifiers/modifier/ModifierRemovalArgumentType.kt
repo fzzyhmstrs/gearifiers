@@ -48,6 +48,20 @@ class ModifierRemovalArgumentType(private val ids: List<Identifier>): ArgumentTy
                     return CommandSource.suggestIdentifiers(mods,builder)
                 }
             }
+        } else if (source is ClientCommandSource){
+            val player = source.client.player
+            if (player != null){
+                val mods = if (!player.mainHandStack.isEmpty){
+                    EquipmentModifierHelper.getModifiers(player.mainHandStack)
+                } else if (!player.offHandStack.isEmpty){
+                    EquipmentModifierHelper.getModifiers(player.offHandStack)
+                } else {
+                    listOf()
+                }
+                if (mods.isNotEmpty()){
+                    return CommandSource.suggestIdentifiers(mods,builder)
+                }
+            }
         }
         return CommandSource.suggestIdentifiers(ids,builder)
     }
