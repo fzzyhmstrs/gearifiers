@@ -65,7 +65,7 @@ object ModifierCommand {
                     )
                 )
                 .then(CommandManager.literal("removeAll")
-                    .executes {context -> removeAllModifiers(context)}
+                    .executes {context -> removeAllModifiers(context) }
                 )
                 .then(CommandManager.literal("reroll")
                     .executes {context -> rerollModifiers(context) }
@@ -214,7 +214,12 @@ object ModifierCommand {
         return checkAndApplyModifierToStack(
             context,
             {_,stack, player ->
-                EquipmentModifierHelper.rerollModifiers(stack,player.getWorld(),player)
+                try {
+                    EquipmentModifierHelper.rerollModifiers(stack, player.getWorld(), player)
+                } catch (e:Exception){
+                    e.printStackTrace()
+                    return@checkAndApplyModifierToStack 0
+                }
                 if (stack.damage > stack.maxDamage){
                     stack.damage = stack.maxDamage - 1
                 }
