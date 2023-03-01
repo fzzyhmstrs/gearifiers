@@ -27,14 +27,23 @@ public abstract class ItemStackMixin {
 
     @Shadow public abstract Item getItem();
 
+    @Shadow public abstract int getDamage();
+
+    @Shadow public abstract int getMaxDamage();
+
+    @Shadow public abstract void setDamage(int damage);
+
     @Inject(method = "onCraft", at = @At("HEAD"))
     private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
         if (!world.isClient && getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed((ItemStack) (Object) this)){
-            LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
+            //LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
             if (-1 != Nbt.INSTANCE.getItemStackId((ItemStack) (Object) this) && nbt != null){
                 nbt.remove(NbtKeys.ITEM_STACK_ID.str());
             }
-            EquipmentModifierHelper.INSTANCE.addRandomModifiers((ItemStack) (Object) this, contextBuilder.build(LootContextTypes.EMPTY));
+            EquipmentModifierHelper.INSTANCE.rerollModifiers((ItemStack) (Object) this,(ServerWorld) world, player);
+            if (this.getDamage() > this.getMaxDamage()){
+                this.setDamage(this.getMaxDamage() - 1);
+            }
         }
     }
 

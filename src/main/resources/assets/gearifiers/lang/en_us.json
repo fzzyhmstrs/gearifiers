@@ -3,7 +3,21 @@
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
 	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
 	"screen.gearifiers.xp_clue_bad": "Not enough experience to reroll...",
-	
+
+	"commands.gearifiers.failed.invalid_id": "Identifier [%s] not a valid equipment modifier",
+	"commands.gearifiers.failed.not_modifiable": "%s isn't a modifiable item",
+	"commands.gearifiers.failed.no_player": "Modifier command needs a player source to execute properly",
+	"commands.gearifiers.failed.no_stacks": "Modifier command needs an item in one of the players hands to execute properly",
+	"commands.gearifiers.failed.failed_to_add": "Modifier [%s] couldn't be added to %2$s",
+	"commands.gearifiers.failed.failed_to_remove": "Modifier [%s] couldn't be removed from %2$s",
+	"commands.gearifiers.failed.persistent": "Modifier [%s] is persistent, so isn't removable",
+
+	"commands.gearifiers.success.add": "Added modifier [%1$s] to %2$s",
+	"commands.gearifiers.success.remove": "Removed modifier [%1$s] from %2$s",
+	"commands.gearifiers.success.remove_all": "Removed all non-persistent modifiers from %s",
+	"commands.gearifiers.success.reroll": "Rerolled modifiers on %s",
+	"commands.gearifiers.success.add_random": "New random modifiers added to %s",
+
 	"recipe.reroll_altar": "Modifier Rerolling",
 	
 	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
