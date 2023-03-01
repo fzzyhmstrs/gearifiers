@@ -3,6 +3,7 @@ package me.fzzyhmstrs.gearifiers
 import me.fzzyhmstrs.gearifiers.block.RerollAltarBlock
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
+import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import me.fzzyhmstrs.gearifiers.registry.RegisterScreen
@@ -41,7 +42,7 @@ object Gearifiers: ModInitializer {
 
     override fun onInitialize() {
         
-        ServerPlayConnectionEvents.JOIN.register { handler, sender, server ->
+        ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             val buf = PacketByteBufs.create()
             ItemCostLoader.writeRawDataToClient(buf)
             ServerPlayNetworking.send(handler.player,COST_MAP_SYNC,buf)
@@ -61,6 +62,8 @@ object Gearifiers: ModInitializer {
 
         RegisterHandler.registerAll()
         RegisterModifier.registerAll()
+
+        ModifierCommand.registerAll()
     }
 }
 

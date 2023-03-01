@@ -18,6 +18,9 @@ public class LootTableMixin {
         original.forEach(stack -> {
             if (!GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed(stack)) {
                 EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, context);
+                if (stack.getDamage() > stack.getMaxDamage()){
+                    stack.setDamage(stack.getMaxDamage() - 1);
+                }
             }
         });
         return original;

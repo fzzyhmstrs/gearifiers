@@ -31,6 +31,9 @@ public class EntityMixin {
                 contextBuilder.luck(player.getLuck());
             }
             EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, contextBuilder.build(LootContextTypes.EMPTY));
+            if (stack.getDamage() > stack.getMaxDamage()){
+                stack.setDamage(stack.getMaxDamage() - 1);
+            }
         }
     }
 

@@ -62,6 +62,9 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             nbt.putInt("rerolls", prev + 1)
         }
         EquipmentModifierHelper.rerollModifiers(stack,playerWorld,player)
+        if (stack.damage > stack.maxDamage) {
+            stack.damage = stack.maxDamage - 1
+        }
     }
 
     override fun updateResult() {
