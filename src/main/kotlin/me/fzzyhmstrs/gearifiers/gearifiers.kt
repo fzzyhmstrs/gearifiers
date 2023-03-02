@@ -19,7 +19,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.block.MapColor
 import net.minecraft.block.Material
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemGroup
 import net.minecraft.resource.ResourceType
@@ -56,6 +58,10 @@ object Gearifiers: ModInitializer {
 }
 
 object GearifiersClient:ClientModInitializer{
+
+    fun getPlayer(): PlayerEntity?{
+        return MinecraftClient.getInstance().player
+    }
 
     override fun onInitializeClient() {
 
