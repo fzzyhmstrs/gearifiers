@@ -53,7 +53,6 @@ class ModifierRemovalArgumentType(private val ids: List<Identifier>): ArgumentTy
                 }
             }
         } else if (source is ClientCommandSource){
-            println("blep")
             val player = GearifiersClient.getPlayer()
             if (player != null){
                 val mods = if (!player.mainHandStack.isEmpty){
