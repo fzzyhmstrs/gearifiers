@@ -36,9 +36,6 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     }
 
     override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
-
-        println(enchants.get())
-        println(rerollCost(stack))
         player.applyEnchantmentCosts(stack, enchants.get())
         decrementStack(0)
         decrementStack(1)
