@@ -19,7 +19,9 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import java.util.function.Function
 import java.util.function.Supplier
 
 object ModifierCommand {
@@ -61,7 +63,7 @@ object ModifierCommand {
                 )
                 .then(CommandManager.literal("remove")
                     .then(CommandManager.argument("modifier",ModifierRemovalArgumentType(modifierList))
-                        .executes { context -> removeModifier(context) }
+                        .executes { context -> removeModifier(context)  }
                     )
                 )
                 .then(CommandManager.literal("removeAll")
@@ -71,16 +73,16 @@ object ModifierCommand {
                     .executes {context -> rerollModifiers(context) }
                 )
                 .then(CommandManager.literal("addRandom")
-                    .executes {context -> addRandomModifiers(context) }
                     .then(CommandManager.argument("luckBoost", IntegerArgumentType.integer(0))
                         .executes {context -> addRandomModifiers(context, IntegerArgumentType.getInteger(context,"luckBoost"))}
                     )
+                    .executes {context -> addRandomModifiers(context) }
                 )
 
         )
     }
 
-    private fun checkAndApplyModifierToStack(modifierResult: Identifier,context: CommandContext<ServerCommandSource>, function: CommandApplier, successKey: String): Int{
+    private fun checkAndApplyModifierToStack(modifierResult: Identifier, context: CommandContext<ServerCommandSource>, function: CommandApplier, successText: Function<ItemStack,Text>): Int{
         val player = context.source.player
         if (player == null){
             context.source.sendError(AcText.translatable("commands.gearifiers.failed.no_player"))
@@ -103,11 +105,7 @@ object ModifierCommand {
                     0
                 } else {
                     context.source.sendFeedback(
-                        AcText.translatable(
-                            successKey,
-                            modifierResult,
-                            stack2.toHoverableText()
-                        ), true
+                        successText.apply(player.offHandStack), true
                     )
                     1
                 }
@@ -122,11 +120,7 @@ object ModifierCommand {
                 0
             } else {
                 context.source.sendFeedback(
-                    AcText.translatable(
-                        successKey,
-                        modifierResult,
-                        stack1.toHoverableText()
-                    ), true
+                    successText.apply(player.mainHandStack), true
                 )
                 1
             }
@@ -149,7 +143,12 @@ object ModifierCommand {
                     0
                 }
             },
-            "commands.gearifiers.success.add"
+            { stack ->
+                AcText.translatable(
+                    "commands.gearifiers.success.add",
+                    modifierResult,
+                    stack.toHoverableText(),)
+            }
         )
 
     }
@@ -163,7 +162,7 @@ object ModifierCommand {
                 val nbt = stack.nbt
                 if (nbt != null) {
                     val stackId = Nbt.getItemStackId(stack)
-                    return@checkAndApplyModifierToStack if (stackId != -1L) {
+                    if (stackId != -1L) {
                         val mod = EquipmentModifierHelper.getModifierByType(id)
                         if (mod == null || mod.isPersistent()){
                             context.source.sendError(AcText.translatable("commands.gearifiers.failed.persistent",id))
@@ -176,11 +175,23 @@ object ModifierCommand {
                         context.source.sendError(AcText.translatable("commands.gearifiers.failed.failed_to_remove",id,stack.toHoverableText()))
                         0
                     }
+                } else {
+                    context.source.sendError(
+                        AcText.translatable(
+                            "commands.gearifiers.failed.failed_to_remove",
+                            id,
+                            stack.toHoverableText()
+                        )
+                    )
+                    0
                 }
-                context.source.sendError(AcText.translatable("commands.gearifiers.failed.failed_to_remove",id,stack.toHoverableText()))
-                0
             },
-            "commands.gearifiers.success.remove"
+            { stack ->
+                AcText.translatable(
+                    "commands.gearifiers.success.remove",
+                    modifierResult,
+                    stack.toHoverableText())
+            }
         )
     }
 
@@ -191,7 +202,11 @@ object ModifierCommand {
             {_, stack,_ ->
                 removeNonPersistentModifiers(stack)
             },
-            "commands.gearifiers.success.remove_all"
+            { stack ->
+                AcText.translatable(
+                    "commands.gearifiers.success.remove_all",
+                    stack.toHoverableText())
+            }
         )
     }
 
@@ -211,6 +226,10 @@ object ModifierCommand {
                 }
             }
         }
+        val item = stack.item
+        if (item is Modifiable){
+            item.modifierInitializer.initializeModifiers(stack,nbt, listOf())
+        }
         return 1
     }
 
@@ -225,7 +244,11 @@ object ModifierCommand {
                 }
                 1
             },
-            "commands.gearifiers.success.reroll"
+            { stack ->
+                AcText.translatable(
+                    "commands.gearifiers.success.reroll",
+                    stack.toHoverableText())
+            }
         )
     }
 
@@ -242,7 +265,11 @@ object ModifierCommand {
                 }
                 1
             },
-            "commands.gearifiers.success.add_random"
+            { stack ->
+                AcText.translatable(
+                    "commands.gearifiers.success.add_random",
+                    stack.toHoverableText())
+            }
         )
     }
 
