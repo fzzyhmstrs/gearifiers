@@ -22,7 +22,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.block.MapColor
 import net.minecraft.block.Material
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemGroups
 import net.minecraft.registry.Registries
@@ -41,7 +43,7 @@ object Gearifiers: ModInitializer {
     val REROLL_ALTAR = RerollAltarBlock(FabricBlockSettings.of(Material.STONE, MapColor.DARK_RED).requiresTool().strength(1.5f, 6.0f))
 
     override fun onInitialize() {
-        
+
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             val buf = PacketByteBufs.create()
             ItemCostLoader.writeRawDataToClient(buf)
@@ -69,12 +71,16 @@ object Gearifiers: ModInitializer {
 
 object GearifiersClient:ClientModInitializer{
 
+    fun getPlayer(): PlayerEntity?{
+        return MinecraftClient.getInstance().player
+    }
+
     override fun onInitializeClient() {
 
         ClientPlayNetworking.registerGlobalReceiver(Gearifiers.COST_MAP_SYNC){ _, _, buf, _ ->
             ClientItemCostLoader.readRawDataFromServer(buf)
         }
-        
+
         BlockRenderLayerMap.INSTANCE.putBlock(Gearifiers.REROLL_ALTAR, RenderLayer.getCutout())
 
         RegisterScreen.registerAll()
