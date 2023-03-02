@@ -8,6 +8,10 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
+import me.fzzyhmstrs.gearifiers.Gearifiers
+import me.fzzyhmstrs.gearifiers.GearifiersClient
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientCommandSource
 import net.minecraft.command.CommandSource
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Identifier
@@ -49,7 +53,8 @@ class ModifierRemovalArgumentType(private val ids: List<Identifier>): ArgumentTy
                 }
             }
         } else if (source is ClientCommandSource){
-            val player = source.client.player
+            println("blep")
+            val player = GearifiersClient.getPlayer()
             if (player != null){
                 val mods = if (!player.mainHandStack.isEmpty){
                     EquipmentModifierHelper.getModifiers(player.mainHandStack)
@@ -58,9 +63,9 @@ class ModifierRemovalArgumentType(private val ids: List<Identifier>): ArgumentTy
                 } else {
                     listOf()
                 }
-                if (mods.isNotEmpty()){
-                    return CommandSource.suggestIdentifiers(mods,builder)
-                }
+
+                return CommandSource.suggestIdentifiers(mods,builder)
+
             }
         }
         return CommandSource.suggestIdentifiers(ids,builder)
