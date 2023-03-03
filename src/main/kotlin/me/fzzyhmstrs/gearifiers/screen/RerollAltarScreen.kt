@@ -123,7 +123,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         val j = (height - backgroundHeight) / 2
         val h = mouseX - i - 104
         val v = mouseY - j - 29
-        val hovered = (h >= 0 && v >= 0 && h < 16 && v < 16)
+        val hovered = (h >= 0 && v >= 0 && h < 32 && v < 16)
         if (hovered){
             val list = if (handler.enchants.get() > 0){
                 listOf(AcText.translatable("screen.gearifiers.xp_clue_good"))

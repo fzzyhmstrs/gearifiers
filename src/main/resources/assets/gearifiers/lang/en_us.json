@@ -2,7 +2,7 @@
 	"block.gearifiers.reroll_altar": "Reroll Altar",
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
 	"screen.gearifiers.xp_clue_good": "Experience levels to reroll",
-	"screen.gearifiers.xp_clue_bad": "Not enough experience to reroll...",
+	"screen.gearifiers.xp_clue_bad": "Not enough experience to reroll, or this item is blacklisted...",
 
 	"commands.gearifiers.failed.invalid_id": "Identifier [%s] not a valid equipment modifier",
 	"commands.gearifiers.failed.not_modifiable": "%s isn't a modifiable item",
