@@ -9,6 +9,7 @@ import net.minecraft.block.OreBlock
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -46,7 +47,17 @@ object ModifierConsumers {
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
             if (user.world.random.nextFloat() < GearifiersConfig.chances.manicChance){
-                EffectQueue.addStatusToQueue(target,StatusEffects.HASTE,60,1)
+                if (user.hasStatusEffect(StatusEffects.HASTE)){
+                    val effect = user.getStatusEffect(StatusEffects.HASTE)
+                    val amp = effect?.amplifier?:0
+                    val duration = effect?.duration?:0
+                    if (duration > 0){
+                        val duration2 = if(duration < 60) {60} else {duration}
+                        user.addStatusEffect(StatusEffectInstance(StatusEffects.HASTE,duration2,amp + 1))
+                    }
+                } else {
+                    EffectQueue.addStatusToQueue(user, StatusEffects.HASTE, 60, 0)
+                }
             }
         }
 
