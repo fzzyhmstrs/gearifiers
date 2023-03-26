@@ -30,7 +30,7 @@ object EmiClientPlugin: EmiPlugin {
             val item = key.value
             if (item !is Modifiable) continue
             if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
-            if (item.modifierInitializer != EquipmentModifierHelper) continue
+            if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             val ingredient = EmiIngredient.of(costs.stream().map { cost -> EmiStack.of(cost) }.toList())
             registry.addRecipe(AltarEmiRecipe(item,ingredient))

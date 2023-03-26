@@ -26,7 +26,7 @@ object ReiPlugin: REIClientPlugin {
             val item = key.value
             if (item !is Modifiable) continue
             if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
-            if (item.modifierInitializer != EquipmentModifierHelper) continue
+            if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             registry.add(RerollAltarDisplay(item, costs))
         }

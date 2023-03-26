@@ -97,7 +97,7 @@ object ModifierCommand {
                 0
             } else {
                 val item = stack2.item
-                if (item !is Modifiable || item.modifierInitializer != EquipmentModifierHelper) {
+                if (item !is Modifiable || !item.canBeModifiedBy(EquipmentModifierHelper.getType())) {
                     context.source.sendError(AcText.translatable("commands.gearifiers.failed.not_modifiable",stack2.toHoverableText()))
                     return 0
                 }
@@ -112,7 +112,7 @@ object ModifierCommand {
             }
         } else {
             val item = stack1.item
-            if (item !is Modifiable || item.modifierInitializer != EquipmentModifierHelper) {
+            if (item !is Modifiable || !item.canBeModifiedBy(EquipmentModifierHelper.getType())) {
                 context.source.sendError(AcText.translatable("commands.gearifiers.failed.not_modifiable",stack1.toHoverableText()))
                 return 0
             }
@@ -217,9 +217,9 @@ object ModifierCommand {
         for (id in modList){
             val mod = EquipmentModifierHelper.getModifierByType(id) ?: continue
             if (mod.isPersistent()) continue
-            Nbt.removeNbtFromList(NbtKeys.MODIFIERS.str(),nbt) { nbtEl: NbtCompound ->
-                if (nbtEl.contains(NbtKeys.MODIFIER_ID.str())){
-                    val chk = Identifier(nbtEl.getString(NbtKeys.MODIFIER_ID.str()))
+            Nbt.removeNbtFromList(EquipmentModifierHelper.getType().getModifiersKey(),nbt) { nbtEl: NbtCompound ->
+                if (nbtEl.contains(EquipmentModifierHelper.getType().getModifierIdKey())){
+                    val chk = Identifier(nbtEl.getString(EquipmentModifierHelper.getType().getModifierIdKey()))
                     chk == id
                 } else {
                     false
@@ -227,8 +227,8 @@ object ModifierCommand {
             }
         }
         val item = stack.item
-        if (item is Modifiable){
-            item.modifierInitializer.initializeModifiers(stack,nbt, listOf())
+        if (item is Modifiable && item.canBeModifiedBy(EquipmentModifierHelper.getType())){
+            EquipmentModifierHelper.getType().initializeModifiers(stack,nbt, listOf())
         }
         return 1
     }
