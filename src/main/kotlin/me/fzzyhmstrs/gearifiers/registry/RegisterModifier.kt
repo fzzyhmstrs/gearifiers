@@ -472,20 +472,20 @@ object RegisterModifier {
         .also { regMod.add(it) }
 
     //misc bad modifiers
-    val DOUBLE_EDGED = buildModifier(Identifier(Gearifiers.MOD_ID,"double_edged"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+    val DOUBLE_EDGED = buildModifier(Identifier(Gearifiers.MOD_ID,"double_edged"), EquipmentModifier.EquipmentModifierTarget.TOOL,3,EquipmentModifier.Rarity.BAD)
         .withPostHit(ModifierConsumers.DOUBLE_EDGED_HIT_CONSUMER)
         .also { regMod.add(it) }
-    val JARRING = buildModifier(Identifier(Gearifiers.MOD_ID,"jarring"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+    val JARRING = buildModifier(Identifier(Gearifiers.MOD_ID,"jarring"), EquipmentModifier.EquipmentModifierTarget.TOOL,3,EquipmentModifier.Rarity.BAD)
         .withPostHit(ModifierConsumers.JARRING_HIT_CONSUMER)
         .also { regMod.add(it) }
-    val CLANGING = buildModifier(Identifier(Gearifiers.MOD_ID,"clanging"), EquipmentModifier.EquipmentModifierTarget.TOOL,5,EquipmentModifier.Rarity.BAD)
+    val CLANGING = buildModifier(Identifier(Gearifiers.MOD_ID,"clanging"), EquipmentModifier.EquipmentModifierTarget.TOOL,3,EquipmentModifier.Rarity.BAD)
         .withPostHit(ModifierConsumers.CLANGING_HIT_CONSUMER)
         .also { regMod.add(it) }
-    val GREATER_CRUMBLING = buildModifier(Identifier(Gearifiers.MOD_ID,"greater_crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,2,EquipmentModifier.Rarity.REALLY_BAD)
+    val GREATER_CRUMBLING = buildModifier(Identifier(Gearifiers.MOD_ID,"greater_crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,3,EquipmentModifier.Rarity.REALLY_BAD)
         .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.5f))
-        .withToll(EXPENSIVE_TOLL)
+        .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    val CRUMBLING = buildModifier(Identifier(Gearifiers.MOD_ID,"crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,5,EquipmentModifier.Rarity.BAD)
+    val CRUMBLING = buildModifier(Identifier(Gearifiers.MOD_ID,"crumbling"), EquipmentModifier.EquipmentModifierTarget.BREAKABLE,4,EquipmentModifier.Rarity.BAD)
         .withOnDamaged(ModifierFunctions.CrumblingDamageFunction(0.25f))
         .withDescendant(GREATER_CRUMBLING)
         .withToll(EXPENSIVE_TOLL)
