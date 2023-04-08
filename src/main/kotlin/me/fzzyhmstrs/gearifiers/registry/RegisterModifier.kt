@@ -5,8 +5,10 @@ package me.fzzyhmstrs.gearifiers.registry
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes
 import me.fzzyhmstrs.fzzy_core.coding_util.PerLvlI
 import me.fzzyhmstrs.fzzy_core.modifier_util.AbstractModifier
-import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
+import me.fzzyhmstrs.fzzy_core.trinket_util.TrinketChecker
+import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
+import me.fzzyhmstrs.gear_core.trinkets.TrinketsUtil
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.modifier.ConfigEquipmentModifier
@@ -492,6 +494,9 @@ object RegisterModifier {
         .also { regMod.add(it) }
 
     fun registerAll(){
+        if (TrinketChecker.trinketsLoaded){
+            TrinketsUtil.registerTrinketPredicate {nbt -> nbt.contains("Name") && nbt.getString("Name").contains(Gearifiers.MOD_ID)}
+        }
         regMod.forEach {
             val id = it.modifierId
             defaultEnabledMap[id.toString()] = true
