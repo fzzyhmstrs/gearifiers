@@ -76,9 +76,8 @@ dependencies {
     include("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion")
 
     val meVersion: String by project
-    implementation("com.github.LlamaLad7:MixinExtras:$meVersion")
-    annotationProcessor("com.github.LlamaLad7:MixinExtras:$meVersion")
-    include("com.github.LlamaLad7:MixinExtras:$meVersion")
+    implementation("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
+    annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
     
     val emiVersion: String by project
     modImplementation("dev.emi:emi:$emiVersion")
