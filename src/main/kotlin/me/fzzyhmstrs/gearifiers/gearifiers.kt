@@ -5,6 +5,7 @@ import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
+import me.fzzyhmstrs.gearifiers.registry.RegisterItem
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import me.fzzyhmstrs.gearifiers.registry.RegisterScreen
 import net.fabricmc.api.ClientModInitializer
@@ -39,19 +40,28 @@ object Gearifiers: ModInitializer {
     val REROLL_ALTAR = RerollAltarBlock(FabricBlockSettings.of(Material.STONE, MapColor.DARK_RED).requiresTool().strength(1.5f, 6.0f))
 
     override fun onInitialize() {
-        
+
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             val buf = PacketByteBufs.create()
             ItemCostLoader.writeRawDataToClient(buf)
             ServerPlayNetworking.send(handler.player,COST_MAP_SYNC,buf)
         }
+
         Registry.register(Registry.BLOCK, Identifier(MOD_ID, "reroll_altar"), REROLL_ALTAR)
-        Registry.register(Registry.ITEM, Identifier(MOD_ID,"reroll_altar"), BlockItem(REROLL_ALTAR, FabricItemSettings().group(ItemGroup.MISC)))
+        Registry.register(Registry.ITEM, Identifier(MOD_ID,"reroll_altar"), BlockItem(REROLL_ALTAR, FabricItemSettings()))
+
+        /*ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL)
+            .register(ModifyEntries { entries: FabricItemGroupEntries ->
+                entries.add(
+                    REROLL_ALTAR.asItem()
+                )
+            })*/
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(ItemCostLoader)
 
         RegisterHandler.registerAll()
         RegisterModifier.registerAll()
+        RegisterItem.registerAll()
 
         ModifierCommand.registerAll()
     }
@@ -68,7 +78,7 @@ object GearifiersClient:ClientModInitializer{
         ClientPlayNetworking.registerGlobalReceiver(Gearifiers.COST_MAP_SYNC){ _, _, buf, _ ->
             ClientItemCostLoader.readRawDataFromServer(buf)
         }
-        
+
         BlockRenderLayerMap.INSTANCE.putBlock(Gearifiers.REROLL_ALTAR, RenderLayer.getCutout())
 
         RegisterScreen.registerAll()
