@@ -93,8 +93,7 @@ object RegisterModifier {
         .withPostHit(ModifierConsumers.VORPAL_HIT_CONSUMER)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    
-    //basic damage modification for weapons
+
     val DEMONIC = buildModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 3, EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,0.15, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
@@ -107,12 +106,13 @@ object RegisterModifier {
         .withPostHit(ModifierConsumers.DEMONIC_HIT_CONSUMER)
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
+
+    //basic damage modification for weapons
     val UNGODLY_SHARP = buildModifier(Identifier(Gearifiers.MOD_ID,"ungodly_sharp"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 3,EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,2.0, EntityAttributeModifier.Operation.ADDITION)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
-        .withDescendant(DEMONIC)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val RAZOR_SHARP = buildModifier(Identifier(Gearifiers.MOD_ID,"razor_sharp"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 6,EquipmentModifier.Rarity.RARE)

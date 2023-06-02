@@ -5,6 +5,7 @@ import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
+import me.fzzyhmstrs.gearifiers.registry.RegisterItem
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import me.fzzyhmstrs.gearifiers.registry.RegisterScreen
 import net.fabricmc.api.ClientModInitializer
@@ -27,6 +28,7 @@ import net.minecraft.client.render.RenderLayer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemGroups
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.resource.ResourceType
@@ -59,11 +61,16 @@ object Gearifiers: ModInitializer {
                     REROLL_ALTAR.asItem()
                 )
             })
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
+            .register(ModifyEntries { entries: FabricItemGroupEntries ->
+                entries.addAll(RegisterItem.regItem.values.stream().map { item -> ItemStack(item) }.toList())
+            })
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(ItemCostLoader)
 
         RegisterHandler.registerAll()
         RegisterModifier.registerAll()
+        RegisterItem.registerAll()
 
         ModifierCommand.registerAll()
     }
