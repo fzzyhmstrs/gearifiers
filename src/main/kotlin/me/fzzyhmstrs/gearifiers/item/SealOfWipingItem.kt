@@ -31,7 +31,7 @@ class SealOfWipingItem(settings: Settings): ModifierAffectingItem(settings) {
                 break
             }
         }
-        if (fail) TypedActionResult.fail(modifierAffectingItem)
+        if (fail) return TypedActionResult.fail(modifierAffectingItem)
         modifierAffectingItem.decrement(modifierAffectingItem.count)
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))
         user.sendToolBreakStatus(hand)
