@@ -6,8 +6,8 @@ import dev.emi.emi.api.render.EmiTexture
 import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.widget.WidgetHolder
-import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
+import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.item.Item
 import net.minecraft.recipe.Ingredient

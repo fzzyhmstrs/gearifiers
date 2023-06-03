@@ -4,10 +4,7 @@ import me.fzzyhmstrs.gearifiers.block.RerollAltarBlock
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
-import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
-import me.fzzyhmstrs.gearifiers.registry.RegisterItem
-import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
-import me.fzzyhmstrs.gearifiers.registry.RegisterScreen
+import me.fzzyhmstrs.gearifiers.registry.*
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -62,7 +59,7 @@ object Gearifiers: ModInitializer {
         RegisterHandler.registerAll()
         RegisterModifier.registerAll()
         RegisterItem.registerAll()
-
+        RegisterLoot.registerAll()
         ModifierCommand.registerAll()
     }
 }

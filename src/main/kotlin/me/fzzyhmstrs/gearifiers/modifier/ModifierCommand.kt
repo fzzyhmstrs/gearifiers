@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.fzzy_core.nbt_util.Nbt
-import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry

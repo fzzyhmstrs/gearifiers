@@ -20,7 +20,7 @@ class WhetstoneItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
-
+        if(!RegisterModifier.SHARP.target.isStackAcceptable(stack)) return TypedActionResult.fail(modifierAffectingItem)
         EquipmentModifierHelper.addModifier(RegisterModifier.SHARP.modifierId,stack)
         modifierAffectingItem.decrement(modifierAffectingItem.count)
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))

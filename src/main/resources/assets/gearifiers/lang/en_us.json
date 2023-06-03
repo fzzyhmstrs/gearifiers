@@ -3,7 +3,7 @@
 	"item.gearifiers.repair_kit.flavor": "Repairs the gear held in your offhand like an anvil",
 	"item.gearifiers.repair_kit.uses": "Uses left: %1$s",
 	"item.gearifiers.seal_of_awakening": "Seal of Awakening",
-	"item.gearifiers.seal_of_awakening.flavor": "Adds a random good modifier to your offhand item",
+	"item.gearifiers.seal_of_awakening.flavor": "Adds a weighted random good modifier to your offhand item",
 	"item.gearifiers.seal_of_chaos": "Seal of Chaos",
 	"item.gearifiers.seal_of_chaos.flavor": "Adds any random modifier to your offhand item",
 	"item.gearifiers.seal_of_cleansing": "Seal of Cleansing",

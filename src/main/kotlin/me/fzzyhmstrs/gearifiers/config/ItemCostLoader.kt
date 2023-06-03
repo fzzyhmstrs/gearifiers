@@ -1,15 +1,11 @@
 package me.fzzyhmstrs.gearifiers.config
 
 import com.google.common.collect.HashMultimap
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
-import net.minecraft.command.argument.BlockArgumentParser
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
-import net.minecraft.item.Items
 import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.resource.Resource

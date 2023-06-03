@@ -7,9 +7,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
-import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import net.minecraft.command.CommandSource
-import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Identifier
 import java.util.concurrent.CompletableFuture
 

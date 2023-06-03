@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+      "item": "gearifiers:seal_of_awakening"
+    },
+    "S": {
+      "item": "minecraft:sponge"
+    },
+    "B": {
+      "item": "gearifiers:seal_of_cleansing"
+    }
+  },
+  "pattern": [
+    "ASB"
+  ],
+  "result": {
+    "item": "gearifiers:seal_of_wiping"
+  }
+}

@@ -1,7 +1,7 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
-import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
+import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.block.BlockState
