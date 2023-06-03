@@ -1,15 +1,28 @@
 package me.fzzyhmstrs.gearifiers.item
 
+import me.fzzyhmstrs.fzzy_core.coding_util.AcText
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 class RepairKitItem(settings: Settings): ModifierAffectingItem(settings) {
+
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        val nbt = stack.nbt?:return
+        val uses = nbt.getInt("repair_uses")
+        val usesLeft = 8-uses
+        tooltip.add(AcText.translatable("item.gearifiers.repair_kit.uses",usesLeft).formatted(Formatting.GRAY))
+    }
+
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val stack = user.getStackInHand(hand)
         val stack2 = user.getStackInHand(if(hand == Hand.MAIN_HAND) Hand.OFF_HAND else Hand.MAIN_HAND)
