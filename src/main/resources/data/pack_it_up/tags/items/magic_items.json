@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "gearifiers:repair_kit",
+    "gearifiers:seal_of_awakening",
+    "gearifiers:seal_of_chaos",
+    "gearifiers:seal_of_cleansing",
+    "gearifiers:seal_of_legends",
+    "gearifiers:seal_of_transferal",
+    "gearifiers:seal_of_wiping",
+    "gearifiers:whetstone"
+  ]
+}
