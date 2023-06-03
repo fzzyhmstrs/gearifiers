@@ -30,6 +30,7 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
             for (modifier in list){
                 nbtList.add(NbtString.of(modifier.toString()))
             }
+            modifierAffectingItem.orCreateNbt.put("modifier_list",nbtList)
             EquipmentModifierHelper.removeAllModifiers(stack)
             world.playSound(null,user.blockPos, SoundEvents.ENTITY_EVOKER_PREPARE_ATTACK,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
             return TypedActionResult.success(modifierAffectingItem)
@@ -43,6 +44,6 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))
         user.sendToolBreakStatus(hand)
         world.playSound(null,user.blockPos, SoundEvents.ENTITY_EVOKER_CAST_SPELL,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
-        return TypedActionResult.pass(modifierAffectingItem)
+        return TypedActionResult.success(modifierAffectingItem)
     }
 }

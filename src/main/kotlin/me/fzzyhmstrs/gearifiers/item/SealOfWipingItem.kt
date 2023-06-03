@@ -1,6 +1,5 @@
 package me.fzzyhmstrs.gearifiers.item
 
-import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -11,7 +10,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-class SealOfLegendsItem(settings: Settings): ModifierAffectingItem(settings) {
+class SealOfWipingItem(settings: Settings): ModifierAffectingItem(settings) {
     override fun modifyOnUse(
         stack: ItemStack,
         modifierAffectingItem: ItemStack,
@@ -20,18 +19,24 @@ class SealOfLegendsItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
-        val list = EquipmentModifierHelper.getTargetsForItem(stack).stream().filter { it.rarity.beneficial &&( it.rarity == EquipmentModifier.Rarity.LEGENDARY || it.rarity == EquipmentModifier.Rarity.EPIC) }.toList()
-        var success = false
-        var tries = 0
-        while(!success && tries < 10){
-            success = EquipmentModifierHelper.addModifier(list[world.random.nextInt(list.size)].modifierId,stack)
-            tries++
+
+        val list = EquipmentModifierHelper.getModifiers(stack)
+        if (list.isEmpty()) return TypedActionResult.fail(modifierAffectingItem)
+        var fail = true
+        for (modId in list){
+            val mod = EquipmentModifierHelper.getModifierByType(modId)?:continue
+            if (!mod.rarity.beneficial) {
+                EquipmentModifierHelper.removeModifier(modId, stack)
+                fail = false
+                break
+            }
         }
+        if (fail) TypedActionResult.fail(modifierAffectingItem)
         modifierAffectingItem.decrement(modifierAffectingItem.count)
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))
         user.sendToolBreakStatus(hand)
-        world.playSound(null,user.blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
-        world.playSound(null,user.blockPos, SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
+        world.playSound(null,user.blockPos, SoundEvents.BLOCK_FIRE_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
+        world.playSound(null,user.blockPos, SoundEvents.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
         return TypedActionResult.success(modifierAffectingItem)
     }
 }

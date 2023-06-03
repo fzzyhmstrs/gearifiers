@@ -40,19 +40,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         if (payments.isNotEmpty()){
             val payment = payments.elementAt(0)
             RenderSystem.disableDepthTest()
-            itemRenderer.renderInGuiWithOverrides(ItemStack(payment),i+76,j+47)
-            RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 0.75f)
-            RenderSystem.setShaderTexture(0, TEXTURE)
-            this.drawTexture(
-                matrices,
-                i + 76,
-                j + 47,
-                76,
-                47,
-                16,
-                16
-            )
+            itemRenderer.renderInGuiWithOverrides(ItemStack(payment),i+76,j+47-18)
             RenderSystem.enableDepthTest()
         }
 

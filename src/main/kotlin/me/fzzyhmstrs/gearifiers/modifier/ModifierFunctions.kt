@@ -8,7 +8,6 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ItemStack
-import net.minecraft.item.ToolItem
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 

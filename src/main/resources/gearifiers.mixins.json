@@ -3,10 +3,10 @@
   "package": "me.fzzyhmstrs.gearifiers.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "ItemStackMixin",
     "EntityMixin",
-    "LootTableMixin",
-    "LivingEntityAccessor"
+    "ItemStackMixin",
+    "LivingEntityAccessor",
+    "LootTableMixin"
   ],
   "injectors": {
     "defaultRequire": 1

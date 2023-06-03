@@ -2,7 +2,6 @@ package me.fzzyhmstrs.gearifiers.block
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.screen.RerollAltarScreenHandler
-import net.minecraft.block.AnvilBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.ShapeContext

@@ -1,9 +1,8 @@
 package me.fzzyhmstrs.gearifiers.compat.rei
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.compat.rei.RerollAltarDisplay
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.Renderer

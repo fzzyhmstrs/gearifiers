@@ -55,6 +55,6 @@ class RepairKitItem(settings: Settings): ModifierAffectingItem(settings) {
             nbt.putInt("repair_uses",uses + 1)
         }
 
-        return TypedActionResult.pass(modifierAffectingItem)
+        return TypedActionResult.success(modifierAffectingItem)
     }
 }

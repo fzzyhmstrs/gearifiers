@@ -23,7 +23,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     
     init{
         modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
-        chances = readOrCreateUpdated("chances_v1.json","chances_v0.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {ChancesV0()})
+        chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
         blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
         val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
         fallbackCost = if(Registries.ITEM.containsId(fallbackId)){
@@ -73,7 +73,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     }
 
-    class Chances{
+    class Chances: SyncedConfigHelper.OldClass<Chances>{
 
         var vorpalChance: Float = 0.025f
         var demonicChance: Float = 0.3333333f
@@ -87,7 +87,13 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         var enrichedChance: Float = 0.03f
         var indomitableChance: Float = 0.15f
         var shieldingChance: Float = 0.025f
-
+        var commonLoot: Float = 0.125f
+        var uncommonLoot: Float = 0.075f
+        var rareLoot: Float = 0.04f
+        var epicLoot: Float = 0.02f
+        override fun generateNewClass(): Chances {
+            return this
+        }
     }
     
     class Modifiers{
@@ -179,39 +185,6 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:greater_crumbling" to true,
             "gearifiers:crumbling" to true
         )
-    }
-
-    class ChancesV0: SyncedConfigHelper.OldClass<Chances>{
-
-        var vorpalChance: Float = 0.025f
-        var demonicChance: Float = 0.3333333f
-        var manicChance: Float = 0.25f
-        var jarringChance: Float = 0.2f
-        var clangingChance: Float = 0.2f
-        var doubleEdgedChance: Float = 0.25f
-        var splittingChance: Float = 0.1f
-        var anthraciticChance: Float = 0.04f
-        var metallicChance: Float = 0.04f
-        var enrichedChance: Float = 0.03f
-        var indomitableChance: Float = 0.15f
-        var shieldingChance: Float = 0.025f
-
-        override fun generateNewClass(): Chances {
-            val chances = Chances()
-            chances.vorpalChance = vorpalChance
-            chances.demonicChance = demonicChance
-            chances.jarringChance = jarringChance
-            chances.clangingChance = clangingChance
-            chances.doubleEdgedChance = doubleEdgedChance
-            chances.splittingChance = splittingChance
-            chances.anthraciticChance = anthraciticChance
-            chances.metallicChance = metallicChance
-            chances.enrichedChance = enrichedChance
-            chances.indomitableChance = indomitableChance
-            chances.shieldingChance = shieldingChance
-            return chances
-        }
-
     }
     
     class ModifiersV0: SyncedConfigHelper.OldClass<Modifiers>{

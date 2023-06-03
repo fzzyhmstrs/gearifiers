@@ -8,7 +8,6 @@ import me.fzzyhmstrs.gearifiers.screen.RerollAltarScreen
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.tooltip.TooltipComponent
 import net.minecraft.client.util.math.MatrixStack
-import kotlin.math.max
 import kotlin.math.min
 
 class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): TextureWidget(RerollAltarScreen.TEXTURE,x,y,16,16,determineOffset(cost),174 ) {

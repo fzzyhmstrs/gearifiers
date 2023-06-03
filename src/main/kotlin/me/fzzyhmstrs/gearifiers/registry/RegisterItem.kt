@@ -19,6 +19,7 @@ object RegisterItem {
     val SEAL_OF_CLEANSING = SealOfCleansingItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON)).also { regItem["seal_of_cleansing"] = it }
     val SEAL_OF_LEGENDS = SealOfLegendsItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_legends"] = it }
     val SEAL_OF_TRANSFERAL = SealOfTransferalItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_transferal"] = it }
+    val SEAL_OF_WIPING = SealOfWipingItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_wiping"] = it }
     val WHETSTONE = WhetstoneItem(FabricItemSettings().maxCount(1)).also { regItem["whetstone"] = it }
 
     fun registerAll(){
