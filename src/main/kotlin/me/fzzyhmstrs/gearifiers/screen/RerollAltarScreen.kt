@@ -3,12 +3,14 @@ package me.fzzyhmstrs.gearifiers.screen
 import com.mojang.blaze3d.systems.RenderSystem
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
+import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.gui.screen.ingame.ForgingScreen
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import kotlin.math.abs
@@ -32,6 +34,28 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         if (!GearifiersConfig.modifiers.enableRerollXpCost || handler.enchants.get() == 0) return
         val i = (width - backgroundWidth) / 2
         val j = (height - backgroundHeight) / 2
+
+        val item = handler.getRerollItem()
+        val payments = ClientItemCostLoader.getItemCosts(item.item)
+        if (payments.isNotEmpty()){
+            val payment = payments.elementAt(0)
+            RenderSystem.disableDepthTest()
+            itemRenderer.renderInGuiWithOverrides(ItemStack(payment),i+76,j+47)
+            RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 0.75f)
+            RenderSystem.setShaderTexture(0, TEXTURE)
+            this.drawTexture(
+                matrices,
+                i + 76,
+                j + 47,
+                76,
+                47,
+                16,
+                16
+            )
+            RenderSystem.enableDepthTest()
+        }
+
         //RenderSystem.restoreProjectionMatrix()
         DiffuseLighting.enableGuiDepthLighting()
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
@@ -44,7 +68,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         var onesOfst = 8
         val tensImageOfst: Int
         var onesImageOfst = 9
-        
+
         var power = handler.enchants.get()
         val hOffset = max(0,abs(power) - 1)
         val vOffset: Int

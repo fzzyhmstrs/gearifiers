@@ -25,8 +25,7 @@ class WhetstoneItem(settings: Settings): ModifierAffectingItem(settings) {
         modifierAffectingItem.decrement(modifierAffectingItem.count)
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))
         user.sendToolBreakStatus(hand)
-        world.playSound(null,user.blockPos, SoundEvents.BLOCK_FIRE_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
-        world.playSound(null,user.blockPos, SoundEvents.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
+        world.playSound(null,user.blockPos, SoundEvents.BLOCK_GRINDSTONE_USE,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
         return TypedActionResult.pass(modifierAffectingItem)
     }
 }

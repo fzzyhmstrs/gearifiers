@@ -26,6 +26,10 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
     init{
         addProperty(enchants).set(0)
     }
+
+    fun getRerollItem(): ItemStack{
+        return input.getStack(0)
+    }
     
     override fun canUse(state: BlockState?): Boolean {
         return true
