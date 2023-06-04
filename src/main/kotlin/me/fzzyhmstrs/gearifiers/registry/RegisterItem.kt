@@ -15,8 +15,9 @@ object RegisterItem {
 
     val REPAIR_KIT = RepairKitItem(FabricItemSettings().maxCount(1)).also { regItem["repair_kit"] = it }
     val SEAL_OF_AWAKENING = SealOfAwakeningItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON)).also { regItem["seal_of_awakening"] = it }
-    val SEAL_OF_CHAOS = SealOfChaosItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON)).also { regItem["seal_of_chaos"] = it }
+    val SEAL_OF_CHAOS = SealOfChaosItem(FabricItemSettings().maxCount(1).rarity(Rarity.RARE)).also { regItem["seal_of_chaos"] = it }
     val SEAL_OF_CLEANSING = SealOfCleansingItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON)).also { regItem["seal_of_cleansing"] = it }
+    val SEAL_OF_FATE = SealOfFateItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON)).also { regItem["seal_of_fate"] = it }
     val SEAL_OF_LEGENDS = SealOfLegendsItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_legends"] = it }
     val SEAL_OF_TRANSFERAL = SealOfTransferalItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_transferal"] = it }
     val SEAL_OF_WIPING = SealOfWipingItem(FabricItemSettings().maxCount(1).rarity(Rarity.EPIC)).withGlint().also { regItem["seal_of_wiping"] = it }

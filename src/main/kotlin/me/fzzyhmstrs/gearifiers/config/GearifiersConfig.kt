@@ -96,8 +96,8 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         }
 
         fun fallbackItem(): Item{
-            return if(Registry.ITEM.containsId(fallbackId)){
-                Registry.ITEM.get(fallbackId)
+            return if(Registries.ITEM.containsId(fallbackId)){
+                Registries.ITEM.get(fallbackId)
             } else {
                 Items.DIAMOND
             }
