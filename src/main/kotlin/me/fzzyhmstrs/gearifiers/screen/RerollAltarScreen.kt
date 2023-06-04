@@ -37,7 +37,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
 
         val item = handler.getRerollItem()
         val payments = ClientItemCostLoader.getItemCosts(item.item)
-        if (payments.isNotEmpty()){
+        if (payments.isNotEmpty() && !GearifiersConfig.blackList.isItemBlackListed(item)){
             val payment = payments.elementAt(0)
             RenderSystem.disableDepthTest()
             itemRenderer.renderInGuiWithOverrides(ItemStack(payment),i+76,j+47-18)

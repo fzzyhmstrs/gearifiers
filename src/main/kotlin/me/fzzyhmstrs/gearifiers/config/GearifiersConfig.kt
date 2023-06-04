@@ -21,19 +21,11 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     var modifiers: Modifiers
     var chances: Chances
     var blackList: BlackList
-    val fallbackCost: Item
     
     init{
         modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
         chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
         blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
-        val fallbackId = Identifier(modifiers.defaultRerollPaymentItem)
-        fallbackCost = if(Registry.ITEM.containsId(fallbackId)){
-            Registry.ITEM.get(fallbackId)
-        } else {
-            Gearifiers.LOGGER.warn("Couldn't locate configured fallback material $fallbackId, using Diamonds!")
-            Items.DIAMOND
-        }
     }
     
     override fun initConfig(){
@@ -88,18 +80,31 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         var metallicChance: Float = 0.04f
         var enrichedChance: Float = 0.03f
         var indomitableChance: Float = 0.15f
-        var shieldingChance: Float = 0.025f
-        var commonLoot: Float = 0.125f
-        var uncommonLoot: Float = 0.075f
+        var shieldingChance: Float = 0.0125f
+        var commonLoot: Float = 0.10f
+        var uncommonLoot: Float = 0.06f
         var rareLoot: Float = 0.04f
         var epicLoot: Float = 0.02f
         override fun generateNewClass(): Chances {
+            this.shieldingChance = 0.0125f
             return this
         }
     }
     
     class Modifiers{
-        
+
+        private val fallbackId: Identifier by lazy {
+            Identifier(defaultRerollPaymentItem)
+        }
+
+        fun fallbackItem(): Item{
+            return if(Registry.ITEM.containsId(fallbackId)){
+                Registry.ITEM.get(fallbackId)
+            } else {
+                Items.DIAMOND
+            }
+        }
+
         fun isModifierEnabled(id: Identifier): Boolean{
             return enabledModifiers[id.toString()]?:false
         }

@@ -21,6 +21,8 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
+import kotlin.math.max
+import kotlin.math.min
 
 object ModifierConsumers {
 
@@ -39,7 +41,7 @@ object ModifierConsumers {
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
             if (user.world.random.nextFloat() < GearifiersConfig.chances.demonicChance){
-                EffectQueue.addStatusToQueue(target,StatusEffects.WEAKNESS,50,1)
+                target.addStatusEffect(StatusEffectInstance( StatusEffects.WEAKNESS,50,1))
             }
         }
 
@@ -53,10 +55,10 @@ object ModifierConsumers {
                     val duration = effect?.duration?:0
                     if (duration > 0){
                         val duration2 = if(duration < 60) {60} else {duration}
-                        user.addStatusEffect(StatusEffectInstance(StatusEffects.HASTE,duration2,amp + 1))
+                        user.addStatusEffect(StatusEffectInstance(StatusEffects.HASTE,duration2,min(5,amp + 1)))
                     }
                 } else {
-                    EffectQueue.addStatusToQueue(user, StatusEffects.HASTE, 60, 0)
+                    user.addStatusEffect(StatusEffectInstance(StatusEffects.HASTE, 60, 0))
                 }
             }
         }
@@ -64,14 +66,14 @@ object ModifierConsumers {
     val JARRING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
             if (user.world.random.nextFloat() < GearifiersConfig.chances.jarringChance){
-                EffectQueue.addStatusToQueue(user,StatusEffects.SLOWNESS,50,1)
+                user.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS,50,1))
             }
         }
 
     val CLANGING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
             if (user.world.random.nextFloat() < GearifiersConfig.chances.clangingChance){
-                EffectQueue.addStatusToQueue(user,StatusEffects.WEAKNESS,50,1)
+                user.addStatusEffect(StatusEffectInstance(StatusEffects.WEAKNESS,50,1))
             }
         }
 

@@ -8,6 +8,8 @@
 	"item.gearifiers.seal_of_chaos.flavor": "Adds any random modifier to your offhand item",
 	"item.gearifiers.seal_of_cleansing": "Seal of Cleansing",
 	"item.gearifiers.seal_of_cleansing.flavor": "Removes all modifiers from your offhand item",
+	"item.gearifiers.seal_of_fate": "Seal of Fate",
+	"item.gearifiers.seal_of_fate.flavor": "Rerolls the modifiers on your offhand item",
 	"item.gearifiers.seal_of_legends": "Seal of Legends",
 	"item.gearifiers.seal_of_legends.flavor": "Adds a random legendary or epic modifier to your offhand item",
 	"item.gearifiers.seal_of_transferal": "Seal of Transferal",

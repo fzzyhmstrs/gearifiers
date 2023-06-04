@@ -124,12 +124,12 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost){
                 val list2 = getRepairIngredient(item)
                 if (list2.isEmpty()){
-                    payment == GearifiersConfig.fallbackCost
+                    payment == GearifiersConfig.modifiers.fallbackItem()
                 } else {
                     list2.contains(payment)
                 }
             } else {
-                payment == GearifiersConfig.fallbackCost
+                payment == GearifiersConfig.modifiers.fallbackItem()
             }
         } else {
             if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts){

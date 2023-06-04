@@ -28,12 +28,12 @@ object ClientItemCostLoader {
             if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost) {
                 val list = getRepairIngredient(item)
                 if (list.isEmpty()){
-                    setOf(GearifiersConfig.fallbackCost)
+                    setOf(GearifiersConfig.modifiers.fallbackItem())
                 } else {
                     setOf(*list.toTypedArray())
                 }
             } else {
-                setOf(GearifiersConfig.fallbackCost)
+                setOf(GearifiersConfig.modifiers.fallbackItem())
             }
         } else {
             if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts) {
