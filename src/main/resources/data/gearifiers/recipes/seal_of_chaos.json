@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+      "item": "gearifiers:seal_of_fate"
+    },
+    "S": {
+      "item": "minecraft:blaze_powder"
+    },
+    "B": {
+      "item": "gearifiers:seal_of_fate"
+    }
+  },
+  "pattern": [
+    "ASB"
+  ],
+  "result": {
+    "item": "gearifiers:seal_of_chaos"
+  }
+}

@@ -6,6 +6,7 @@ import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
@@ -16,10 +17,10 @@ object ModifierFunctions {
     val INDOMITABLE_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
             if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
-                EffectQueue.addStatusToQueue(user, StatusEffects.REGENERATION,80,0)
+                user.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION,80,0))
             }
             if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
-                EffectQueue.addStatusToQueue(user, StatusEffects.RESISTANCE,80,0)
+                user.addStatusEffect(StatusEffectInstance(StatusEffects.RESISTANCE,80,0))
             }
             amount
         }
@@ -42,9 +43,7 @@ object ModifierFunctions {
             source: DamageSource,
             amount: Float
         ): Float {
-            if(attacker != null){
-                EffectQueue.addStatusToQueue(attacker, StatusEffects.POISON,dur,amp)
-            }
+            attacker?.addStatusEffect(StatusEffectInstance(StatusEffects.POISON,dur,amp))
             return amount
         }
     }
@@ -57,9 +56,7 @@ object ModifierFunctions {
             source: DamageSource,
             amount: Float
         ): Float {
-            if(attacker != null){
-                EffectQueue.addStatusToQueue(attacker, StatusEffects.WITHER,dur,amp)
-            }
+            attacker?.addStatusEffect(StatusEffectInstance(StatusEffects.WITHER,dur,amp))
             return amount
         }
     }
