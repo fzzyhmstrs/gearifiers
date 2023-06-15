@@ -1,6 +1,8 @@
 package me.fzzyhmstrs.gearifiers.config
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.gson
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreate
@@ -15,6 +17,7 @@ import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import java.io.File
 
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
@@ -23,7 +26,25 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
     var blackList: BlackList
     
     init{
-        modifiers = readOrCreateUpdated("modifiers_v1.json","modifiers_v0.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { ModifiersV0() })
+        try {
+            val (dir, dirCreated) = SyncedConfigHelper.makeDir("", Gearifiers.MOD_ID)
+            if (dirCreated) {
+                val f = File(dir, "modifiers_v1.json")
+                if (f.exists()) {
+                    val tempModifiers = JsonParser.parseString(f.readLines().joinToString(""))
+                    if (tempModifiers is JsonObject) {
+                        if (tempModifiers.has("fallbackId\$delegate")) {
+                            tempModifiers.remove("fallbackId\$delegate")
+                            f.writeText(gson.toJson(tempModifiers))
+                        }
+                    }
+                }
+            }
+        } catch (e:Exception){
+            e.printStackTrace()
+        }
+
+        modifiers = readOrCreateUpdated("modifiers_v2.json","modifiers_v1.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
         chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
         blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
     }
@@ -91,13 +112,10 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         }
     }
     
-    class Modifiers{
-
-        private val fallbackId: Identifier by lazy {
-            Identifier(defaultRerollPaymentItem)
-        }
+    class Modifiers: SyncedConfigHelper.OldClass<Modifiers>{
 
         fun fallbackItem(): Item{
+            val fallbackId = Identifier(defaultRerollPaymentItem)
             return if(Registry.ITEM.containsId(fallbackId)){
                 Registry.ITEM.get(fallbackId)
             } else {
@@ -192,28 +210,9 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:greater_crumbling" to true,
             "gearifiers:crumbling" to true
         )
-    }
-    
-    class ModifiersV0: SyncedConfigHelper.OldClass<Modifiers>{
-        
+
         override fun generateNewClass(): Modifiers {
-            val modifiers = Modifiers()
-            modifiers.enableRerollXpCost = enableRerollXpCost
-            modifiers.firstRerollXpCost = firstRerollXpCost
-            modifiers.addedRerollXpCostPerRoll = addedRerollXpCostPerRoll
-            modifiers.defaultRerollPaymentItem = defaultRerollPaymentItem
-            val mutableMap: MutableMap<String,Boolean> = modifiers.enabledModifiers.toMutableMap()
-            for (entry in enabledModifiers){
-                mutableMap[entry.key] = entry.value
-            }
-            modifiers.enabledModifiers = mutableMap
-            return modifiers
+            return this
         }
-        
-        var enableRerollXpCost: Boolean = true
-        var firstRerollXpCost: Int = 5
-        var addedRerollXpCostPerRoll: Int = 2
-        var defaultRerollPaymentItem: String = "minecraft:diamond"
-        var enabledModifiers: Map<String,Boolean> = mapOf()
     }
 }
