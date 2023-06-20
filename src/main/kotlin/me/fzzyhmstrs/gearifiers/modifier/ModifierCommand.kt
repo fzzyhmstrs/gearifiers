@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.command.CommandManager
@@ -22,6 +23,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import java.util.function.Function
 import java.util.function.Supplier
+import kotlin.math.max
 
 object ModifierCommand {
 
@@ -104,7 +106,7 @@ object ModifierCommand {
                     0
                 } else {
                     context.source.sendFeedback(
-                        successText.apply(player.offHandStack), true
+                        { successText.apply(player.offHandStack) }, true
                     )
                     1
                 }
@@ -119,7 +121,7 @@ object ModifierCommand {
                 0
             } else {
                 context.source.sendFeedback(
-                    successText.apply(player.mainHandStack), true
+                    { successText.apply(player.mainHandStack) }, true
                 )
                 1
             }
@@ -237,7 +239,7 @@ object ModifierCommand {
             Identifier("empty"),
             context,
             {_,stack, player ->
-                EquipmentModifierHelper.rerollModifiers(stack,player.getWorld(),player)
+                EquipmentModifierHelper.rerollModifiers(stack,context.source.world,player)
                 if (stack.damage > stack.maxDamage){
                     stack.damage = stack.maxDamage - 1
                 }
@@ -256,8 +258,10 @@ object ModifierCommand {
             Identifier("empty"),
             context,
             {_,stack, player ->
-                EquipmentModifierHelper.addRandomModifiers(stack,
-                    LootContext.Builder(player.getWorld()).random(player.random).luck(player.luck + luckBoost).build(LootContextTypes.EMPTY)
+                EquipmentModifierHelper.addRandomModifiers(
+                    stack,
+                    LootContext.Builder(LootContextParameterSet.Builder(context.source.world).luck(player.luck).build(LootContextTypes.EMPTY)).random(
+                        context.source.world.random.nextLong().takeIf { it != 0L }?:1L).build(null)
                 )
                 if (stack.damage > stack.maxDamage){
                     stack.damage = stack.maxDamage - 1

@@ -19,7 +19,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.block.MapColor
-import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.entity.player.PlayerEntity
@@ -39,7 +38,7 @@ object Gearifiers: ModInitializer {
     val LOGGER: Logger = LoggerFactory.getLogger("gearifiers")
     internal val COST_MAP_SYNC = Identifier(MOD_ID,"cost_map_sync")
 
-    val REROLL_ALTAR = RerollAltarBlock(FabricBlockSettings.of(Material.STONE, MapColor.DARK_RED).requiresTool().strength(1.5f, 6.0f))
+    val REROLL_ALTAR = RerollAltarBlock(FabricBlockSettings.create().mapColor(MapColor.DARK_RED).requiresTool().strength(1.5f, 6.0f))
 
     override fun onInitialize() {
 

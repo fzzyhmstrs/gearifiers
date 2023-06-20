@@ -4,6 +4,7 @@ import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider
 import net.minecraft.server.world.ServerWorld
@@ -14,6 +15,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
+import kotlin.math.max
 
 class SealOfAwakeningItem(settings: Settings): ModifierAffectingItem(settings) {
 
@@ -28,7 +30,10 @@ class SealOfAwakeningItem(settings: Settings): ModifierAffectingItem(settings) {
     ): TypedActionResult<ItemStack> {
         if (world !is ServerWorld) return TypedActionResult.pass(modifierAffectingItem)
         val list = EquipmentModifierHelper.getTargetsForItem(stack).stream().filter { it.rarity.beneficial }.toList()
-        val context = LootContext.Builder(world).random(world.random).luck(user.luck).build(LootContextTypes.EMPTY)
+        val parameters = LootContextParameterSet.Builder(world).luck(user.luck).build(LootContextTypes.EMPTY)
+        val seed = world.random.nextLong().takeIf { it != 0L }?:1L
+        val contextBuilder = LootContext.Builder(parameters).random(seed)
+        val context = contextBuilder.build(null)
         val result: MutableList<Identifier> = mutableListOf()
         do{
             var tollRemaining = (DEFAULT_MODIFIER_TOLL.nextFloat(context) + context.luck).toInt()

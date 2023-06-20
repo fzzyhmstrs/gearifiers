@@ -6,7 +6,7 @@ import me.shedaniel.math.Dimension
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Element
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
@@ -49,12 +49,10 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
         return mutableListOf()
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
-        DrawableHelper.drawTexture(
-            matrices,
+        context.drawTexture(
+            RerollAltarScreen.TEXTURE,
             x,
             y,
             offset.toFloat(),
@@ -68,11 +66,9 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
 
         if (cost < 7) return
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
-        DrawableHelper.drawTexture(
-            matrices,
+        context.drawTexture(
+            RerollAltarScreen.TEXTURE,
             x + onesOfst,
             y + 3,
             (108f+9*onesImageOfst),
@@ -83,11 +79,9 @@ class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int)
             256
         )
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, RerollAltarScreen.TEXTURE)
-        DrawableHelper.drawTexture(
-            matrices,
+        context.drawTexture(
+            RerollAltarScreen.TEXTURE,
             x + tensOfst,
             y + 3,
             (108f+9*tensImageOfst),

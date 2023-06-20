@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import dev.emi.emi.api.widget.TextureWidget
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.screen.RerollAltarScreen
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.tooltip.TooltipComponent
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
@@ -47,15 +47,13 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
         return tooltipComponent
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
         if (cost < 7) return
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, texture)
-        DrawableHelper.drawTexture(
-            matrices,
+        context.drawTexture(
+            texture,
             x + onesOfst,
             y + 3,
             (108f+9*onesImageOfst),
@@ -66,11 +64,9 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
             256
         )
 
-        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, texture)
-        DrawableHelper.drawTexture(
-            matrices,
+        context.drawTexture(
+            texture,
             x + tensOfst,
             y + 3,
             (108f+9*tensImageOfst),

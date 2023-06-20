@@ -5,6 +5,7 @@ import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.DiffuseLighting
 import net.minecraft.client.render.GameRenderer
@@ -24,15 +25,15 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         titleY = 14
     }
 
-    override fun drawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
+    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) {
         RenderSystem.disableBlend()
-        super.drawForeground(matrices, mouseX, mouseY)
+        super.drawForeground(context, mouseX, mouseY)
     }
     
-    override fun drawBackground(matrices: MatrixStack,delta: Float, mouseX: Int, mouseY: Int){
+    override fun drawBackground(context: DrawContext,delta: Float, mouseX: Int, mouseY: Int){
         RenderSystem.setShaderTexture(0, TEXTURE)
-        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
-        drawInvalidRecipeArrow(matrices, x, y)
+        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight)
+        drawInvalidRecipeArrow(context, x, y)
         if (!GearifiersConfig.modifiers.enableRerollXpCost || handler.enchants.get() == 0) return
         val i = (width - backgroundWidth) / 2
         val j = (height - backgroundHeight) / 2
@@ -42,7 +43,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         if (payments.isNotEmpty() && !GearifiersConfig.blackList.isItemBlackListed(item)){
             val payment = payments.elementAt(0)
             RenderSystem.disableDepthTest()
-            itemRenderer.renderInGuiWithOverrides(matrices,ItemStack(payment),i+76,j+47-18)
+            context.drawItemInSlot(textRenderer,ItemStack(payment),i+76,j+47-18)
             RenderSystem.enableDepthTest()
         }
 
@@ -72,8 +73,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         }
         power = abs(power)
         if (hOffset <= 5){
-            drawTexture(
-                    matrices,
+            context.drawTexture(TEXTURE,
                     i + 104,
                     j + 29,
                     108 + 16 * (hOffset),
@@ -82,8 +82,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
                     16
                 )
         } else{
-            drawTexture(
-                    matrices,
+            context.drawTexture(TEXTURE,
                     i + 104,
                     j + 29,
                     108 + 16 * 6,
@@ -110,8 +109,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
                 onesImageOfst = ones - 1
             }
             //draw the ones place numeral
-                drawTexture(
-                    matrices,
+                context.drawTexture(TEXTURE,
                     i + 104 + onesOfst,
                     j + 29 + 3, //three additional offset to align the number with the usual position
                     108 + 9 * onesImageOfst, //grab the image off the texture, using the 10 abstract numerals
@@ -119,8 +117,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
                     9,
                     9
                 )
-                if (tens>0) drawTexture(
-                    matrices,
+                if (tens>0) context.drawTexture(TEXTURE,
                     i+ 104 + tensOfst,
                     j + 29 + 3, //three additional offset to align the number with the usual position
                     108 + 9 * tensImageOfst, //grab the image off the texture, using the 10 abstract numerals
@@ -131,10 +128,10 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         }
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(matrices)
-        super.render(matrices, mouseX, mouseY, delta)
-        drawMouseoverTooltip(matrices, mouseX, mouseY)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(context)
+        super.render(context, mouseX, mouseY, delta)
+        drawMouseoverTooltip(context, mouseX, mouseY)
         val i = (width - backgroundWidth) / 2
         val j = (height - backgroundHeight) / 2
         val h = mouseX - i - 104
@@ -148,7 +145,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
             } else {
                 listOf()
             }
-            this.renderTooltip(matrices, list, mouseX, mouseY)
+            context.drawTooltip(textRenderer,list, mouseX, mouseY)
         }
     }
     
@@ -156,12 +153,12 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         internal val TEXTURE = Identifier(Gearifiers.MOD_ID,"textures/reroll_altar_gui.png")
     }
 
-    fun drawInvalidRecipeArrow(matrices: MatrixStack?, x: Int, y: Int) {
+    fun drawInvalidRecipeArrow(context: DrawContext, x: Int, y: Int) {
             if ((handler.getSlot(0).hasStack() || handler.getSlot(1)
                     .hasStack()) && !handler.getSlot(2)
                     .hasStack()
             ) {
-                drawTexture(matrices, x + 99, y + 45, backgroundWidth, 0, 28, 21)
+                context.drawTexture(TEXTURE, x + 99, y + 45, backgroundWidth, 0, 28, 21)
             }
     }
 }
