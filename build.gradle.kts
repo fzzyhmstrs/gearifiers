@@ -80,7 +80,8 @@ dependencies {
     annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
     
     val emiVersion: String by project
-    modImplementation("dev.emi:emi:$emiVersion")
+    modCompileOnly ("dev.emi:emi-fabric:${emiVersion}:api")
+    modLocalRuntime ("dev.emi:emi-fabric:${emiVersion}")
 
 }
 tasks {
