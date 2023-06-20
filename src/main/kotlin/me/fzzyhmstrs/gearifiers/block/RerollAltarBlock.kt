@@ -31,7 +31,7 @@ class RerollAltarBlock(settings: Settings): Block(settings) {
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState? {
-        val dir = ctx.playerFacing
+        val dir = ctx.horizontalPlayerFacing
         return super.getPlacementState(ctx)?.with(FACING,dir.opposite)
     }
 

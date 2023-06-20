@@ -1,12 +1,12 @@
 package me.fzzyhmstrs.gearifiers.compat.emi
 
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.emi.emi.EmiPort
 import dev.emi.emi.api.widget.TextureWidget
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.screen.RerollAltarScreen
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.tooltip.TooltipComponent
+import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import kotlin.math.min
 
@@ -51,7 +51,7 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
         super.render(matrices, mouseX, mouseY, delta)
         if (cost < 7) return
 
-        EmiPort.setPositionTexShader()
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, texture)
         DrawableHelper.drawTexture(
@@ -66,7 +66,7 @@ class XpOrbWidget(x: Int, y: Int, private val cost: Int, tooltipKey: String): Te
             256
         )
 
-        EmiPort.setPositionTexShader()
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, texture)
         DrawableHelper.drawTexture(

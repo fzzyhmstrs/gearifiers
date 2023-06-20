@@ -81,7 +81,7 @@ object ModifierConsumers {
     val DOUBLE_EDGED_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
             if (user.world.random.nextFloat() < GearifiersConfig.chances.doubleEdgedChance){
-                user.damage(DamageSource.GENERIC,1.0f)
+                user.damage(user.damageSources.generic(),1.0f)
             }
         }
         

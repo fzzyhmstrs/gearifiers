@@ -5,41 +5,82 @@ import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
-import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.CraftingResultInventory
+import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.SimpleInventory
+import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
-import net.minecraft.screen.ForgingScreenHandler
+import net.minecraft.item.ToolItem
 import net.minecraft.screen.Property
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.screen.slot.Slot
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
-class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, context: ScreenHandlerContext): ForgingScreenHandler(RegisterHandler.REROLL_ALTAR_HANDLER,syncId, playerInventory, context) {
+class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, val context: ScreenHandlerContext): ScreenHandler(RegisterHandler.REROLL_ALTAR_HANDLER,syncId) {
 
     constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, ScreenHandlerContext.EMPTY)
 
     internal val enchants = Property.create()
-    private val player = playerInventory.player
+    private val world: World? = null
+    protected val input: Inventory = object : SimpleInventory(2) {
+        override fun markDirty() {
+            super.markDirty()
+            this@RerollAltarScreenHandler.onContentChanged(this)
+        }
+    }
+    protected val output = CraftingResultInventory()
+    protected val player: PlayerEntity = playerInventory.player
     
     init{
         addProperty(enchants).set(0)
+        var i: Int
+        addSlot(Slot(input, 0, 27, 47))
+        addSlot(Slot(input, 1, 76, 47))
+        addSlot(object : Slot(output, 0, 134, 47) {
+            override fun canInsert(stack: ItemStack): Boolean {
+                return false
+            }
+
+            override fun canTakeItems(playerEntity: PlayerEntity): Boolean {
+                return this@RerollAltarScreenHandler.canTakeOutput(playerEntity, hasStack())
+            }
+
+            override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
+                this@RerollAltarScreenHandler.onTakeOutput(player, stack)
+            }
+        })
+
+        i = 0
+        while (i < 3) {
+            for (j in 0..8) {
+                addSlot(Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18))
+            }
+            ++i
+        }
+        i = 0
+        while (i < 9) {
+            this.addSlot(Slot(playerInventory, i, 8 + i * 18, 142))
+            ++i
+        }
+
     }
 
     fun getRerollItem(): ItemStack{
         return input.getStack(0)
     }
-    
-    override fun canUse(state: BlockState?): Boolean {
-        return true
-    }
 
-    override fun canTakeOutput(player: PlayerEntity, present: Boolean): Boolean {
+    fun canTakeOutput(player: PlayerEntity, present: Boolean): Boolean {
         return checkForMatch(player)
     }
 
-    override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
+    fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
         player.applyEnchantmentCosts(stack, enchants.get())
         decrementStack(0)
         decrementStack(1)
@@ -47,6 +88,13 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             world.playSound(null,pos,SoundEvents.BLOCK_SMITHING_TABLE_USE,SoundCategory.BLOCKS,1.0f,world.random.nextFloat() * 0.1f + 0.9f)
         }
         reroll(player, stack)
+    }
+
+    override fun onContentChanged(inventory: Inventory) {
+        super.onContentChanged(inventory)
+        if (inventory === input) {
+            updateResult()
+        }
     }
 
     private fun decrementStack(slot: Int) {
@@ -71,7 +119,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
         }
     }
 
-    override fun updateResult() {
+    private fun updateResult() {
         val stack = this.input.getStack(0)
         if (stack.isEmpty || !checkForMatch(player)) {
             if (!stack.isEmpty){
@@ -150,6 +198,20 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, co
             slot.onTakeItem(player, itemStack2)
         }
         return itemStack
+    }
+
+    override fun canUse(player: PlayerEntity?): Boolean {
+        return context.get(
+            { _, pos: BlockPos ->
+                player!!.squaredDistanceTo(
+                    pos.x.toDouble() + 0.5, pos.y.toDouble() + 0.5, pos.z.toDouble() + 0.5
+                ) <= 64.0
+            }, true
+        )
+    }
+
+    private fun isUsableAsAddition(stack: ItemStack): Boolean {
+        return !(stack.isDamageable || stack.item is ToolItem || stack.item is ArmorItem)
     }
 
 }
