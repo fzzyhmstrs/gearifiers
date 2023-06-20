@@ -90,6 +90,16 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
         reroll(player, stack)
     }
 
+    override fun onClosed(player: PlayerEntity?) {
+        super.onClosed(player)
+        context.run { world: World?, pos: BlockPos? ->
+            dropInventory(
+                player,
+                input
+            )
+        }
+    }
+
     override fun onContentChanged(inventory: Inventory) {
         super.onContentChanged(inventory)
         if (inventory === input) {
