@@ -40,6 +40,9 @@ repositories {
     flatDir {
         dirs("F:\\Documents\\Mod Libraries\\fc\\build\\libs")
     }
+    flatDir {
+        dirs("F:\\Documents\\Mod Development\\reach-entity-attributes\\build\\libs")
+    }
 }
 dependencies {
     val minecraftVersion: String by project
@@ -68,12 +71,12 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
     }
 
-    //reach attribute lib
+    //reach attribute lib, refactor again if 1.20 version officially released
     val reachVersion: String by project
-    modImplementation("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion"){
+    modImplementation(":reach-entity-attributes:$reachVersion"){
         exclude("net.fabricmc.fabric-api")
     }
-    include("com.jamieswhiteshirt:reach-entity-attributes:$reachVersion")
+    include(":reach-entity-attributes:$reachVersion")
 
     val meVersion: String by project
     implementation("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
