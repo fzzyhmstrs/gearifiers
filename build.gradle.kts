@@ -35,13 +35,13 @@ repositories {
         url = uri("https://jitpack.io")
     }
     flatDir {
-        dirs("F:\\Documents\\Mod Libraries\\gc\\build\\libs")
+        dirs("E:\\Documents\\Mod Libraries\\gc\\build\\libs")
     }
     flatDir {
-        dirs("F:\\Documents\\Mod Libraries\\fc\\build\\libs")
+        dirs("E:\\Documents\\Mod Libraries\\fc\\build\\libs")
     }
     flatDir {
-        dirs("F:\\Documents\\Mod Development\\reach-entity-attributes\\build\\libs")
+        dirs("E:\\Documents\\Mod Development\\reach-entity-attributes\\build\\libs")
     }
 }
 dependencies {
