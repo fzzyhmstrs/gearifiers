@@ -27,10 +27,10 @@ class ModifierArgumentType(private val ids: List<Identifier>): ArgumentType<Iden
 
     }
 
-    override fun <S> listSuggestions(
-        context: CommandContext<S>,
-        builder: SuggestionsBuilder
-    ): CompletableFuture<Suggestions> {
+    override fun <S : Any?> listSuggestions(
+        context: CommandContext<S>?,
+        builder: SuggestionsBuilder?
+    ): CompletableFuture<Suggestions>? {
         return CommandSource.suggestIdentifiers(ids,builder)
     }
 }
