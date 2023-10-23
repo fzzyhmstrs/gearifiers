@@ -28,6 +28,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, ScreenHandlerContext.EMPTY)
 
     internal val enchants = Property.create()
+    internal val items = Property.create()
     private val world: World? = null
     protected val input: Inventory = object : SimpleInventory(2) {
         override fun markDirty() {
@@ -40,6 +41,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     
     init{
         addProperty(enchants).set(0)
+        addProperty(items).set(1)
         var i: Int
         addSlot(Slot(input, 0, 27, 47))
         addSlot(Slot(input, 1, 76, 47))
@@ -83,7 +85,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
         player.applyEnchantmentCosts(stack, enchants.get())
         decrementStack(0)
-        decrementStack(1)
+        decrementStack(1, items.get())
         this.context.run{world,pos ->
             world.playSound(null,pos,SoundEvents.BLOCK_SMITHING_TABLE_USE,SoundCategory.BLOCKS,1.0f,world.random.nextFloat() * 0.1f + 0.9f)
         }
@@ -107,7 +109,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
         }
     }
 
-    private fun decrementStack(slot: Int) {
+    private fun decrementStack(slot: Int, amount: Int = 1) {
         val itemStack = input.getStack(slot)
         itemStack.decrement(1)
         input.setStack(slot, itemStack)
@@ -134,12 +136,14 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
         if (stack.isEmpty || !checkForMatch(player)) {
             if (!stack.isEmpty){
                 enchants.set(rerollCost(stack) * -1)
+                items.set(itemCost(stack))
             } else {
                 enchants.set(0)
             }
             output.setStack(0, ItemStack.EMPTY)
         } else {
             enchants.set(rerollCost(stack))
+            items.set(itemCost(stack))
             output.setStack(0, stack.copy())
         }
         sendContentUpdates()
@@ -156,6 +160,8 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
             val cost = rerollCost(stack1)
             if (player.experienceLevel < cost && !player.abilities.creativeMode) return false
         }
+        val stack2 = this.input.getStack(1)
+        if (itemCost(stack1) > stack2.count) return false
         return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
     }
     
@@ -168,6 +174,18 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
         } else {
             val rerolls = nbt.getInt("rerolls")
             GearifiersConfig.modifiers.firstRerollXpCost + (rerolls * GearifiersConfig.modifiers.addedRerollXpCostPerRoll)
+        }
+    }
+
+    private fun itemCost(stack: ItemStack): Int{
+        val nbt = stack.nbt
+        return if (nbt == null){
+            1
+        } else if (!nbt.contains("rerolls")) {
+            1
+        } else {
+            val rerolls = nbt.getInt("rerolls")
+            GearifiersConfig.modifiers.getItemCountNeeded(rerolls)
         }
     }
 

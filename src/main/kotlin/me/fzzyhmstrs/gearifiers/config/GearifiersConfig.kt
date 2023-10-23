@@ -135,6 +135,10 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         fun isModifierEnabled(id: Identifier): Boolean{
             return enabledModifiers[id.toString()]?:false
         }
+
+        fun getItemCountNeeded(rerolls: Int): Int{
+            return 1 + (rerolls * paymentItemCountIncreasePerLevel).toInt()
+        }
     
         var enableRerollXpCost: Boolean = true
         var firstRerollXpCost: Int = 5
@@ -142,6 +146,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         var useRepairIngredientAsRerollCost: Boolean = false
         var repairIngredientOverrideDefinedCosts: Boolean = false
         var defaultRerollPaymentItem: String = "minecraft:diamond"
+        var paymentItemCountIncreasePerLevel: Double = 0.0
         
         var enabledModifiers: Map<String,Boolean> = mapOf(
             "gearifiers:legendary" to true,

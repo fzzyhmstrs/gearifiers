@@ -1,16 +1,22 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
+import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.entity.projectile.PersistentProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
+import net.minecraft.world.World
+import java.time.Duration
+import kotlin.text.Typography.amp
 
 object ModifierFunctions {
 
@@ -34,7 +40,44 @@ object ModifierFunctions {
                 amount
             }
         }
-        
+
+    val EXPLOSIVE_ATTACK_FUNCTION: EquipmentModifier.DamageFunction =
+        EquipmentModifier.DamageFunction{ _, user, _, source, amount ->
+            if (user.world.random.nextFloat() < 0.33f) {
+                val projectile = source.source as? PersistentProjectileEntity ?: return@DamageFunction amount
+                user.world.createExplosion(
+                    projectile,
+                    projectile.x,
+                    projectile.y,
+                    projectile.z,
+                    1f,
+                    World.ExplosionSourceType.NONE
+                )
+            }
+            amount
+        }
+
+    val VAMPIRIC_ATTACK_FUNCTION: EquipmentModifier.DamageFunction =
+        EquipmentModifier.DamageFunction{ _, user, _, _, amount ->
+            user.heal(amount * 0.075f)
+            amount
+        }
+
+    class DemonBarbedAttackFunction(multiplier: Float = 1f): BaseFunctions.RangedAttackFunction(multiplier){
+        override fun test(
+            stack: ItemStack,
+            user: LivingEntity,
+            attacker: LivingEntity?,
+            source: DamageSource,
+            amount: Float
+        ): Float {
+            attacker?.addStatusEffect(StatusEffectInstance(StatusEffects.WEAKNESS,100,1))
+            if (user.world.random.nextFloat() < 0.25f)
+                attacker?.addStatusEffect(StatusEffectInstance(StatusEffects.BLINDNESS,100))
+            return super.test(stack, user, attacker, source, amount)
+        }
+    }
+
     class PoisonousDamageFunction(private val dur: Int, private val amp: Int): EquipmentModifier.DamageFunction{
         override fun test(
             stack: ItemStack,
@@ -83,30 +126,6 @@ object ModifierFunctions {
                 }
             }
             return amount
-        }
-    }
-
-    class DamageMultiplierFunction(private val multiplier: Float): EquipmentModifier.DamageFunction{
-        override fun test(
-            stack: ItemStack,
-            user: LivingEntity,
-            attacker: LivingEntity?,
-            source: DamageSource,
-            amount: Float
-        ): Float {
-            return amount * (1f + multiplier)
-        }
-    }
-
-    class DamageAdderFunction(private val adder: Float): EquipmentModifier.DamageFunction{
-        override fun test(
-            stack: ItemStack,
-            user: LivingEntity,
-            attacker: LivingEntity?,
-            source: DamageSource,
-            amount: Float
-        ): Float {
-            return amount + adder
         }
     }
 }

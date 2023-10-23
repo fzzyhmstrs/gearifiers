@@ -11,40 +11,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ItemStack.class)
-public abstract class ItemStackMixin {
-
-    @Shadow public abstract Item getItem();
-
-    @Shadow public abstract int getDamage();
-
-    @Shadow public abstract int getMaxDamage();
-
-    @Shadow public abstract void setDamage(int damage);
-
-    @Shadow public abstract NbtCompound getOrCreateNbt();
-
-    @Shadow public abstract @Nullable NbtCompound getNbt();
+@Mixin(Item.class)
+public class ItemMixin {
 
     @Inject(method = "onCraft", at = @At("TAIL"))
-    private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
-        if (!world.isClient && getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed((ItemStack) (Object) this)){
+    private void gearifiers_onCraftAddModifiers(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci){
+        if (!world.isClient && this instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed((Item) (Object) this)){
             if (!GearifiersConfig.INSTANCE.getBlackList().isScreenHandlerBlackListed(player)) {
                 //LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
-                NbtCompound nbt = getNbt();
+                NbtCompound nbt = stack.getNbt();
                 if (nbt == null || !nbt.getBoolean("addedViaCraft")) {
-                    EquipmentModifierHelper.INSTANCE.rerollModifiers((ItemStack) (Object) this, (ServerWorld) world, player);
-                    if (this.getDamage() > this.getMaxDamage()) {
-                        this.setDamage(this.getMaxDamage() - 1);
+                    EquipmentModifierHelper.INSTANCE.rerollModifiers(stack, (ServerWorld) world, player);
+                    if (stack.getDamage() > stack.getMaxDamage()) {
+                        stack.setDamage(stack.getMaxDamage() - 1);
                     }
-                    getOrCreateNbt().putBoolean("addedViaCraft",true);
+                    stack.getOrCreateNbt().putBoolean("addedViaCraft",true);
                 }
             }
         }
