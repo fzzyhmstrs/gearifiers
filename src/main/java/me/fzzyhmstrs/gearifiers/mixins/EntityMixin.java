@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,23 +22,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityMixin {
 
-    @Shadow public World world;
+    @Shadow private World world;
 
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;", at = @At("HEAD"))
     private void gearifiers_dropStackAddModifiers(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir){
-        if (!world.isClient && stack.getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed(stack)){
-            LootContextParameterSet.Builder parameters = new LootContextParameterSet.Builder((ServerWorld) world);
-            if (((Entity)(Object)this) instanceof PlayerEntity player){
-                parameters.luck(player.getLuck());
-            }
-            LootContextParameterSet finalParameters = parameters.build(LootContextTypes.EMPTY);
-            long seed = world.random.nextLong();
-            if (seed == 0L) seed = 1L;
-            LootContext.Builder contextBuilder = new LootContext.Builder(finalParameters).random(seed);
-            EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, contextBuilder.build(null));
-            if (stack.getDamage() > stack.getMaxDamage()){
-                stack.setDamage(stack.getMaxDamage() - 1);
+        if (!((Object)this instanceof PlayerEntity)) {
+            NbtCompound nbt = stack.getNbt();
+            if (nbt == null || !nbt.getBoolean("addedViaDrop")) {
+                if (!world.isClient && stack.getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed(stack)) {
+                    LootContextParameterSet.Builder parameters = new LootContextParameterSet.Builder((ServerWorld) world);
+                    if (((Entity) (Object) this) instanceof PlayerEntity player) {
+                        parameters.luck(player.getLuck());
+                    }
+                    LootContextParameterSet finalParameters = parameters.build(LootContextTypes.EMPTY);
+                    long seed = world.random.nextLong();
+                    if (seed == 0L) seed = 1L;
+                    LootContext.Builder contextBuilder = new LootContext.Builder(finalParameters).random(seed);
+                    EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, contextBuilder.build(null));
+                    if (stack.getDamage() > stack.getMaxDamage()) {
+                        stack.setDamage(stack.getMaxDamage() - 1);
+                    }
+                    stack.getOrCreateNbt().putBoolean("addedViaDrop", true);
+                }
             }
         }
     }

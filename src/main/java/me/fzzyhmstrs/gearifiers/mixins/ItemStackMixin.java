@@ -34,13 +34,15 @@ public abstract class ItemStackMixin {
     @Inject(method = "onCraft", at = @At("HEAD"))
     private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
         if (!world.isClient && getItem() instanceof Modifiable && !GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed((ItemStack) (Object) this)){
-            //LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
-            if (-1 != Nbt.INSTANCE.getItemStackId((ItemStack) (Object) this) && nbt != null){
-                nbt.remove(NbtKeys.ITEM_STACK_ID.str());
-            }
-            EquipmentModifierHelper.INSTANCE.rerollModifiers((ItemStack) (Object) this,(ServerWorld) world, player);
-            if (this.getDamage() > this.getMaxDamage()){
-                this.setDamage(this.getMaxDamage() - 1);
+            if (!GearifiersConfig.INSTANCE.getBlackList().isScreenHandlerBlackListed(player)) {
+                //LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
+                if (-1 != Nbt.INSTANCE.getItemStackId((ItemStack) (Object) this) && nbt != null) {
+                    nbt.remove(NbtKeys.ITEM_STACK_ID.str());
+                }
+                EquipmentModifierHelper.INSTANCE.rerollModifiers((ItemStack) (Object) this, (ServerWorld) world, player);
+                if (this.getDamage() > this.getMaxDamage()) {
+                    this.setDamage(this.getMaxDamage() - 1);
+                }
             }
         }
     }

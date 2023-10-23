@@ -9,11 +9,13 @@ import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreate
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreateUpdated
 import me.fzzyhmstrs.fzzy_core.registry.SyncedConfigRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.Registries
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import java.io.File
 
@@ -44,7 +46,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         modifiers = readOrCreateUpdated("modifiers_v2.json","modifiers_v1.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
         chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
-        blackList = readOrCreate("blackList_v0.json",base = Gearifiers.MOD_ID) { BlackList() }
+        blackList = readOrCreateUpdated("blackList_v1.json","blackList_v0.json",base = Gearifiers.MOD_ID, configClass =  { BlackList() }, previousClass = {BlackList()})
     }
     
     override fun initConfig(){
@@ -64,7 +66,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
         blackList = gson.fromJson(buf.readString(),BlackList::class.java)
     }
 
-    class BlackList{
+    class BlackList: SyncedConfigHelper.OldClass<BlackList>{
 
         fun isItemBlackListed(stack: ItemStack): Boolean{
             val item = stack.item
@@ -81,8 +83,17 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             return false
         }
 
+        fun isScreenHandlerBlackListed(playerEntity: PlayerEntity): Boolean{
+            val handler = playerEntity.currentScreenHandler
+            return blackListedScreenHandlers.contains(Registries.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
+        }
+
         var namespaceBlackList: List<String> = listOf()
         var individualItemBlackList: List<String> = listOf()
+        var blackListedScreenHandlers: List<String> = listOf()
+        override fun generateNewClass(): BlackList {
+            return this
+        }
 
     }
 
