@@ -111,7 +111,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
 
     private fun decrementStack(slot: Int, amount: Int = 1) {
         val itemStack = input.getStack(slot)
-        itemStack.decrement(1)
+        itemStack.decrement(amount)
         input.setStack(slot, itemStack)
     }
 

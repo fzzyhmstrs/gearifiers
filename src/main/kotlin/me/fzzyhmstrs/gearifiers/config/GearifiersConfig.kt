@@ -44,7 +44,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             e.printStackTrace()
         }
 
-        modifiers = readOrCreateUpdated("modifiers_v2.json","modifiers_v1.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
+        modifiers = readOrCreateUpdated("modifiers_v3.json","modifiers_v2.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
         chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
         blackList = readOrCreateUpdated("blackList_v1.json","blackList_v0.json",base = Gearifiers.MOD_ID, configClass =  { BlackList() }, previousClass = {BlackList()})
     }
@@ -85,7 +85,12 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         fun isScreenHandlerBlackListed(playerEntity: PlayerEntity): Boolean{
             val handler = playerEntity.currentScreenHandler
-            return blackListedScreenHandlers.contains(Registries.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
+            return try {
+                blackListedScreenHandlers.contains(Registries.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
+            } catch (e: Exception){
+                false
+            }
+
         }
 
         var namespaceBlackList: List<String> = listOf()
@@ -152,6 +157,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:legendary" to true,
             "gearifiers:vorpal" to true,
             "gearifiers:demonic" to true,
+            "gearifiers:demon_barbed" to true,
             "gearifiers:ungodly_sharp" to true,
             "gearifiers:razor_sharp" to true,
             "gearifiers:keen" to true,
@@ -160,6 +166,12 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:dull" to true,
             "gearifiers:blunt" to true,
             "gearifiers:useless" to true,
+            "gearifiers:needlelike" to true,
+            "gearifiers:barbed" to true,
+            "gearifiers:acute" to true,
+            "gearifiers:pointy" to true,
+            "gearifiers:unpointy" to true,
+            "gearifiers:rounded" to true,
             "gearifiers:indomitable" to true,
             "gearifiers:bulwark" to true,
             "gearifiers:protective" to true,
@@ -218,9 +230,15 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             "gearifiers:enriched" to true,
             "gearifiers:metallic" to true,
             "gearifiers:anthracitic" to true,
+            "gearifiers:explosive" to true,
+            "gearifiers:hobbling" to true,
+            "gearifiers:hungering" to true,
+            "gearifiers:weakening" to true,
+            "gearifiers:vampiric" to true,
             "gearifiers:double_edged" to true,
             "gearifiers:jarring" to true,
             "gearifiers:clanging" to true,
+            "gearifiers:betraying" to true,
             "gearifiers:greater_crumbling" to true,
             "gearifiers:crumbling" to true
         )
