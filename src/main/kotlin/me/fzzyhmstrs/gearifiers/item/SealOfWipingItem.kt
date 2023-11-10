@@ -26,7 +26,7 @@ class SealOfWipingItem(settings: Settings): ModifierAffectingItem(settings) {
         for (modId in list){
             val mod = EquipmentModifierHelper.getModifierByType(modId)?:continue
             if (!mod.rarity.beneficial) {
-                EquipmentModifierHelper.removeModifier(modId, stack)
+                EquipmentModifierHelper.removeModifier(stack, modId, false)
                 fail = false
                 break
             }
