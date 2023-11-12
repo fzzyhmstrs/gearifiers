@@ -27,17 +27,6 @@ import kotlin.math.min
 
 object ModifierConsumers {
 
-    val VORPAL_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
-        EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
-            if (target == null) return@ToolConsumer
-            val damageSource = target.recentDamageSource ?: return@ToolConsumer
-            val recentDamage = (target as LivingEntityAccessor).lastDamageTaken
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.vorpalChance){
-                target.isInvulnerable = false
-                target.damage(damageSource,recentDamage * 9f)
-            }
-        }
-
     val DEMONIC_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer

@@ -92,7 +92,7 @@ object RegisterModifier {
     val VORPAL = buildModifier(Identifier(Gearifiers.MOD_ID,"vorpal"), EquipmentModifier.EquipmentModifierTarget.SWORD,1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,0.20, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
-        .withPostHit(ModifierConsumers.VORPAL_HIT_CONSUMER)
+        .withOnAttack(ModifierFunctions.VORPAL_ATTACK_FUNCTION)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
@@ -111,8 +111,8 @@ object RegisterModifier {
 
     val DEMON_BARBED = buildModifier(Identifier(Gearifiers.MOD_ID,"demon_barbed"), EquipmentModifier.EquipmentModifierTarget.RANGED, 1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_MOVEMENT_SPEED,0.075, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.35f))
+            EntityAttributes.GENERIC_MOVEMENT_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.15f))
         .withToll(VERY_EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
@@ -166,28 +166,28 @@ object RegisterModifier {
 
     //basic ranged damage modification
     val NEEDLELIKE = buildModifier(Identifier(Gearifiers.MOD_ID,"needlelike"), EquipmentModifier.EquipmentModifierTarget.RANGED, 2,EquipmentModifier.Rarity.EPIC)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.25f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(1.10f))
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val BARBED = buildModifier(Identifier(Gearifiers.MOD_ID,"barbed"), EquipmentModifier.EquipmentModifierTarget.RANGED, 4,EquipmentModifier.Rarity.RARE)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.15f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(1.075f))
         .withToll(EXPENSIVE_TOLL)
         .withDescendant(NEEDLELIKE)
         .also { regMod.add(it) }
     val ACUTE = buildModifier(Identifier(Gearifiers.MOD_ID,"acute"), EquipmentModifier.EquipmentModifierTarget.RANGED, 7,EquipmentModifier.Rarity.UNCOMMON)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.10f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(1.05f))
         .withDescendant(BARBED)
         .also { regMod.add(it) }
     val POINTY = buildModifier(Identifier(Gearifiers.MOD_ID,"pointy"), EquipmentModifier.EquipmentModifierTarget.RANGED, 10,EquipmentModifier.Rarity.COMMON)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(1.05f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(1.025f))
         .withDescendant(ACUTE)
         .also { regMod.add(it) }
     val UNPOINTY = buildModifier(Identifier(Gearifiers.MOD_ID,"unpointy"), EquipmentModifier.EquipmentModifierTarget.RANGED, 7,EquipmentModifier.Rarity.BAD)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(0.95f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(0.975f))
         .withDescendant(ACUTE)
         .also { regMod.add(it) }
     val ROUNDED = buildModifier(Identifier(Gearifiers.MOD_ID,"rounded"), EquipmentModifier.EquipmentModifierTarget.RANGED, 3,EquipmentModifier.Rarity.REALLY_BAD)
-        .withOnAttack(ModifierFunctions.DemonBarbedAttackFunction(0.80f))
+        .withOnAttack(BaseFunctions.RangedAttackFunction(0.85f))
         .withDescendant(ACUTE)
         .also { regMod.add(it) }
 

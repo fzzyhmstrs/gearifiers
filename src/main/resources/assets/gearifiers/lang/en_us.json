@@ -82,12 +82,12 @@
 	"equipment.modifier.gearifiers:unpointy": "Unpointy",
 	"equipment.modifier.gearifiers:rounded": "Rounded",
 
-	"equipment.modifier.gearifiers:demon_barbed.desc": "+35% ranged projectile damage. Hits weaken and can blind targets.",
-	"equipment.modifier.gearifiers:needlelike.desc": "+25% ranged projectile damage",
-	"equipment.modifier.gearifiers:barbed.desc": "+15% ranged projectile damage",
-	"equipment.modifier.gearifiers:acute.desc": "+10% ranged projectile damage",
-	"equipment.modifier.gearifiers:pointy.desc": "+5% ranged projectile damage",
-	"equipment.modifier.gearifiers:unpointy.desc": "-5% ranged projectile damage",
+	"equipment.modifier.gearifiers:demon_barbed.desc": "+30% ranged projectile damage. Hits weaken and can blind targets.",
+	"equipment.modifier.gearifiers:needlelike.desc": "+20% ranged projectile damage",
+	"equipment.modifier.gearifiers:barbed.desc": "+12% ranged projectile damage",
+	"equipment.modifier.gearifiers:acute.desc": "+8% ranged projectile damage",
+	"equipment.modifier.gearifiers:pointy.desc": "+4% ranged projectile damage",
+	"equipment.modifier.gearifiers:unpointy.desc": "-4% ranged projectile damage",
 	"equipment.modifier.gearifiers:rounded.desc": "-20% ranged projectile damage",
 
 	"equipment.modifier.gearifiers:bulwark": "Bulwark",

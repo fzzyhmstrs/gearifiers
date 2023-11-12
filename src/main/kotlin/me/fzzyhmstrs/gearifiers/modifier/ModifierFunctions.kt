@@ -4,6 +4,7 @@ import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
 import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
@@ -19,6 +20,16 @@ import java.time.Duration
 import kotlin.text.Typography.amp
 
 object ModifierFunctions {
+
+    val VORPAL_ATTACK_FUNCTION: EquipmentModifier.DamageFunction =
+        EquipmentModifier.DamageFunction { _, user, _, _, amount ->
+            if (user.world.random.nextFloat() < GearifiersConfig.chances.vorpalChance){
+                amount * 10f
+            } else {
+                amount
+            }
+        }
+
 
     val INDOMITABLE_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
