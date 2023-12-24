@@ -76,7 +76,7 @@ object RegisterModifier {
     //legendary modifiers
     val LEGENDARY = buildModifier(Identifier(Gearifiers.MOD_ID,"legendary"), EquipmentModifier.EquipmentModifierTarget.ANY, 1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_DAMAGE,1.5, EntityAttributeModifier.Operation.ADDITION)
         .withAttributeModifier(
@@ -91,14 +91,14 @@ object RegisterModifier {
 
     val VORPAL = buildModifier(Identifier(Gearifiers.MOD_ID,"vorpal"), EquipmentModifier.EquipmentModifierTarget.SWORD,1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.15, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.1, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withOnAttack(ModifierFunctions.VORPAL_ATTACK_FUNCTION)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
 
     val DEMONIC = buildModifier(Identifier(Gearifiers.MOD_ID,"demonic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 3, EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.1, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_KNOCKBACK,0.25, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
         .withAttributeModifier(
@@ -268,29 +268,29 @@ object RegisterModifier {
     //basic attack speed modifiers
     val MANIC = buildModifier(Identifier(Gearifiers.MOD_ID,"manic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 4, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.20, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.15, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withPostHit(ModifierConsumers.MANIC_HIT_CONSUMER)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val FRENZIED = buildModifier(Identifier(Gearifiers.MOD_ID,"frenzied"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 6, EquipmentModifier.Rarity.UNCOMMON)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.125, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.075, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withDescendant(MANIC)
         .also { regMod.add(it) }
     val ENERGETIC = buildModifier(Identifier(Gearifiers.MOD_ID,"energetic"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,0.075, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,0.025, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withDescendant(FRENZIED)
         .also { regMod.add(it) }
     val CLUMSY = buildModifier(Identifier(Gearifiers.MOD_ID,"clumsy"), EquipmentModifier.EquipmentModifierTarget.WEAPON_AND_TRINKET, 8, EquipmentModifier.Rarity.BAD)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,-0.075, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,-0.025, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withDescendant(ENERGETIC)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
     val UNWIELDY = buildModifier(Identifier(Gearifiers.MOD_ID,"unwieldy"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 4, EquipmentModifier.Rarity.REALLY_BAD)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_SPEED,-0.15, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            EntityAttributes.GENERIC_ATTACK_SPEED,-0.10, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withDescendant(CLUMSY)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
