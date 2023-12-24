@@ -3,6 +3,7 @@ package me.fzzyhmstrs.gearifiers.item
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -61,11 +62,17 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
             world.playSound(null,user.blockPos, SoundEvents.ENTITY_EVOKER_PREPARE_ATTACK,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
             return TypedActionResult.success(modifierAffectingItem)
         }
+        val uses = stack.nbt?.getInt("seal_transferal_uses") ?: 0
+        if (uses >= GearifiersConfig.modifiers.maxLegendarySealUses){
+            world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
+            return TypedActionResult.fail(modifierAffectingItem)
+        }
         val storedModifiers = modifierAffectingItem.orCreateNbt.getList("modifier_list",NbtElement.STRING_TYPE.toInt())
         for (modifier in storedModifiers){
             val modId = Identifier(modifier.asString())
             EquipmentModifierHelper.addModifierAsIs(modId,stack,false)
         }
+        stack.orCreateNbt.putInt("seal_transferal_uses",uses + 1)
         modifierAffectingItem.decrement(modifierAffectingItem.count)
         user.incrementStat(Stats.BROKEN.getOrCreateStat(modifierAffectingItem.item))
         user.sendToolBreakStatus(hand)

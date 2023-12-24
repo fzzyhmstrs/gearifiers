@@ -3,6 +3,8 @@ package me.fzzyhmstrs.gearifiers.item
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.fzzy_core.item_util.CustomFlavorItem
+import me.fzzyhmstrs.fzzy_core.item_util.FlavorHelper
+import me.fzzyhmstrs.fzzy_core.item_util.FlavorHelper.addFlavorText
 import me.fzzyhmstrs.fzzy_core.item_util.interfaces.Flavorful
 import me.fzzyhmstrs.gear_core.GC
 import net.minecraft.client.item.TooltipContext
@@ -17,39 +19,21 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
-abstract class ModifierAffectingItem(settings: Settings): Item(settings), Flavorful<ModifierAffectingItem> {
+abstract class ModifierAffectingItem(settings: Settings): Item(settings) {
 
-    override var glint = false
-    override var flavor: String = ""
-    override var flavorDesc: String = ""
+    private var glint = false
 
     private val flavorText: MutableText by lazy{
-        makeFlavorText()
+        FlavorHelper.makeFlavorText(this)
     }
 
     private val flavorTextDesc: MutableText by lazy{
-        makeFlavorTextDesc()
-    }
-
-    private fun makeFlavorText(): MutableText {
-        val id = Registries.ITEM.getId(this)
-        val key = "item.${id.namespace}.${id.path}.flavor"
-        val text = AcText.translatable(key).formatted(Formatting.WHITE, Formatting.ITALIC)
-        if (text.string == key) return AcText.empty()
-        return text
-    }
-
-    private fun makeFlavorTextDesc(): MutableText {
-        val id = Registries.ITEM.getId(this)
-        val key = "item.${id.namespace}.${id.path}.flavor.desc"
-        val text = AcText.translatable(key).formatted(Formatting.WHITE)
-        if (text.string == key) return AcText.empty()
-        return text
+        FlavorHelper.makeFlavorTextDesc(this)
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         super.appendTooltip(stack, world, tooltip, context)
-        addFlavorText(tooltip, context)
+        addFlavorText(tooltip, context, flavorText, flavorTextDesc)
     }
 
     override fun hasGlint(stack: ItemStack): Boolean {
@@ -60,15 +44,8 @@ abstract class ModifierAffectingItem(settings: Settings): Item(settings), Flavor
         }
     }
 
-    override fun flavorText(): MutableText {
-        return flavorText
-    }
-    override fun flavorDescText(): MutableText {
-        return flavorTextDesc
-    }
-
-    override fun getFlavorItem(): ModifierAffectingItem {
-        return this
+    fun withGlint(){
+        glint = true
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
