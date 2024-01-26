@@ -44,7 +44,7 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
             e.printStackTrace()
         }
 
-        modifiers = readOrCreateUpdated("modifiers_v4.json","modifiers_v4.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
+        modifiers = readOrCreateUpdated("modifiers_v4.json","modifiers_v3.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
         chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
         blackList = readOrCreateUpdated("blackList_v1.json","blackList_v0.json",base = Gearifiers.MOD_ID, configClass =  { BlackList() }, previousClass = {BlackList()})
     }

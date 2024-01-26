@@ -44,8 +44,9 @@ abstract class ModifierAffectingItem(settings: Settings): Item(settings) {
         }
     }
 
-    fun withGlint(){
+    fun withGlint(): ModifierAffectingItem{
         glint = true
+        return this
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
