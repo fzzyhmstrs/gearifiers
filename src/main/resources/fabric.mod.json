@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "gearifiers",
+  "id": "${id}",
   "version": "${version}",
   "name": "Gearifiers",
   "description": "Gives armor, tools, and trinkets various quality and effect modifiers.",
@@ -47,10 +47,10 @@
   "depends": {
     "fabricloader": ">=0.14.19",
     "fabric": "*",
-    "fabric-language-kotlin": ">=1.7.0+kotlin.1.6.0",
-    "minecraft": ">=1.20",
+    "fabric-language-kotlin": ">=${fabricKotlinVersion}",
+    "minecraft": ">=1.20.0 <=1.20.1",
     "java": ">=17",
-    "gear_core": ">=0.3.6+1.20.1",
-    "fzzy_core": ">=0.3.1+1.20.1"
+    "gear_core": ">=${gcVersion}",
+    "fzzy_core": ">=${fcVersion}"
   }
 }

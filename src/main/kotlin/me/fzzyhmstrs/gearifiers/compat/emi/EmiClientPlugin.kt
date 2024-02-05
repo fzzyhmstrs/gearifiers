@@ -5,12 +5,12 @@ import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.recipe.EmiRecipeCategory
 import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
-import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 object EmiClientPlugin: EmiPlugin {
@@ -25,8 +25,7 @@ object EmiClientPlugin: EmiPlugin {
         registry.addCategory(ALTAR_CATEGORY)
         registry.addWorkstation(ALTAR_CATEGORY, ALTAR_WORKSTATION)
 
-        for (key in Registries.ITEM.entrySet){
-            val item = key.value
+        for (item in FzzyPort.ITEM){
             if (item !is Modifiable) continue
             if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
             if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue

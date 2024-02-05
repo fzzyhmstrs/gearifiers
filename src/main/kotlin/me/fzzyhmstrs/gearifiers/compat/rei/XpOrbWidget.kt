@@ -8,8 +8,6 @@ import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Element
-import net.minecraft.client.render.GameRenderer
-import net.minecraft.client.util.math.MatrixStack
 import kotlin.math.min
 
 class XpOrbWidget(private val x: Int, private val y: Int, private val cost: Int): WidgetWithBounds() {

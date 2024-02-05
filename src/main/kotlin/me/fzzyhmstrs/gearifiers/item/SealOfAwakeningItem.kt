@@ -15,7 +15,6 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import kotlin.math.max
 
 class SealOfAwakeningItem(settings: Settings): ModifierAffectingItem(settings) {
 

@@ -6,6 +6,8 @@ import com.mojang.brigadier.context.CommandContext
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.fzzy_core.nbt_util.Nbt
+import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
+import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
@@ -23,11 +25,11 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import java.util.function.Function
 import java.util.function.Supplier
-import kotlin.math.max
 
 object ModifierCommand {
 
-    internal val modifierList: MutableList<Identifier> = mutableListOf()
+    internal val modifierList: MutableList<Identifier>
+        get() = ModifierRegistry.getAllByType<EquipmentModifier>().map { it.modifierId }.toMutableList()
 
     fun registerAll(){
         ArgumentTypeRegistry.registerArgumentType(

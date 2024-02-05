@@ -1,14 +1,11 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
-import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
 import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
-import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.projectile.PersistentProjectileEntity
@@ -16,8 +13,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.world.World
-import java.time.Duration
-import kotlin.text.Typography.amp
 
 object ModifierFunctions {
 

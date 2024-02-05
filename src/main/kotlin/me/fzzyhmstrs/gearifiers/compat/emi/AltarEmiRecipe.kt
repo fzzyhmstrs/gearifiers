@@ -7,10 +7,10 @@ import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.widget.WidgetHolder
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.item.Item
-import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 class AltarEmiRecipe(private val input: Item, private val cost: EmiIngredient): EmiRecipe{
@@ -24,7 +24,7 @@ class AltarEmiRecipe(private val input: Item, private val cost: EmiIngredient): 
     private val rerollText = AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_3")
 
     private fun prepareId(): Identifier{
-        val itemId1 = Registries.ITEM.getId(input)
+        val itemId1 = FzzyPort.ITEM.getId(input)
         var itemId2 = ""
         val ids = cost.emiStacks.stream().map { stack -> stack.id }
         ids.forEach{

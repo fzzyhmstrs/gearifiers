@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "EntityMixin",
-    "ItemStackMixin",
     "ItemMixin",
+    "ItemStackMixin",
     "LivingEntityAccessor",
     "LootTableMixin"
   ],

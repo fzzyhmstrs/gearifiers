@@ -1,11 +1,12 @@
 package me.fzzyhmstrs.gearifiers.config
 
+
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.gson
-import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreate
 import me.fzzyhmstrs.fzzy_core.coding_util.SyncedConfigHelper.readOrCreateUpdated
 import me.fzzyhmstrs.fzzy_core.registry.SyncedConfigRegistry
 import me.fzzyhmstrs.gearifiers.Gearifiers
@@ -14,11 +15,10 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import java.io.File
 
+@Suppress("MemberVisibilityCanBePrivate")
 object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
     var modifiers: Modifiers
@@ -70,23 +70,21 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         fun isItemBlackListed(stack: ItemStack): Boolean{
             val item = stack.item
-            val id = Registries.ITEM.getId(item)
+            val id = FzzyPort.ITEM.getId(item)
             if (namespaceBlackList.contains(id.namespace)) return true
-            if (individualItemBlackList.contains(id.toString())) return true
-            return false
+            return individualItemBlackList.contains(id.toString())
         }
 
         fun isItemBlackListed(item: Item): Boolean{
-            val id = Registries.ITEM.getId(item)
+            val id = FzzyPort.ITEM.getId(item)
             if (namespaceBlackList.contains(id.namespace)) return true
-            if (individualItemBlackList.contains(id.toString())) return true
-            return false
+            return individualItemBlackList.contains(id.toString())
         }
 
         fun isScreenHandlerBlackListed(playerEntity: PlayerEntity): Boolean{
             val handler = playerEntity.currentScreenHandler
             return try {
-                blackListedScreenHandlers.contains(Registries.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
+                blackListedScreenHandlers.contains(FzzyPort.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
             } catch (e: Exception){
                 false
             }
@@ -130,8 +128,8 @@ object GearifiersConfig: SyncedConfigHelper.SyncedConfig{
 
         fun fallbackItem(): Item{
             val fallbackId = Identifier(defaultRerollPaymentItem)
-            return if(Registries.ITEM.containsId(fallbackId)){
-                Registries.ITEM.get(fallbackId)
+            return if(FzzyPort.ITEM.containsId(fallbackId)){
+                FzzyPort.ITEM.get(fallbackId)
             } else {
                 Items.DIAMOND
             }

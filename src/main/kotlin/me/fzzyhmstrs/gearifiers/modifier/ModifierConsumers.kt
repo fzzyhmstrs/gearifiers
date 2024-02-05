@@ -1,6 +1,6 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
-import me.fzzyhmstrs.fzzy_core.trinket_util.EffectQueue
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
@@ -8,21 +8,16 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.ExperienceDroppingBlock
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import kotlin.math.max
 import kotlin.math.min
 
 object ModifierConsumers {
@@ -96,10 +91,9 @@ object ModifierConsumers {
             }
         }
         
-    private val METALS_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier("gearifiers","basic_metals"))
+    private val METALS_TAG = FzzyPort.ITEM.tagOf(Identifier("gearifiers","basic_metals"))
     private val METALS: List<Item> by lazy{
-        val opt =  Registries.ITEM.getEntryList(
-            METALS_TAG)
+        val opt =  FzzyPort.ITEM.registry().getEntryList(METALS_TAG)
         if (opt.isPresent){
             opt.get().stream().map { entry -> entry.value() }.toList()
         } else {
@@ -119,9 +113,9 @@ object ModifierConsumers {
             }
         }
         
-    private val GEMS_TAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM,Identifier("gearifiers","basic_gems"))
+    private val GEMS_TAG = FzzyPort.ITEM.tagOf(Identifier("gearifiers","basic_gems"))
     private val GEMS: List<Item> by lazy{
-        val opt =  Registries.ITEM.getEntryList(
+        val opt =  FzzyPort.ITEM.registry().getEntryList(
             GEMS_TAG)
         if (opt.isPresent){
             opt.get().stream().map { entry -> entry.value() }.toList()

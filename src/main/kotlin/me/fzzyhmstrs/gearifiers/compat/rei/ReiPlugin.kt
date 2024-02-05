@@ -2,6 +2,7 @@
 
 package me.fzzyhmstrs.gearifiers.compat.rei
 
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
@@ -9,7 +10,6 @@ import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import net.minecraft.registry.Registries
 
 
 object ReiPlugin: REIClientPlugin {
@@ -22,8 +22,7 @@ object ReiPlugin: REIClientPlugin {
     }
 
     override fun registerDisplays(registry: DisplayRegistry) {
-        for (key in Registries.ITEM.entrySet){
-            val item = key.value
+        for (item in FzzyPort.ITEM){
             if (item !is Modifiable) continue
             if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
             if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue

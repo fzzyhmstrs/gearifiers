@@ -25,7 +25,7 @@ class SealOfLegendsItem(settings: Settings): ModifierAffectingItem(settings) {
         val uses = stack.nbt?.getInt("seal_legend_uses") ?: 0
         if (uses >= GearifiersConfig.modifiers.maxLegendarySealUses){
             world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
-            user.sendMessage(AcText.translatable(""))
+            user.sendMessage(AcText.translatable("item.gearifiers.seal_of_legends.max"))
             return TypedActionResult.fail(modifierAffectingItem)
         }
         val list = EquipmentModifierHelper.getTargetsForItem(stack).stream().filter { it.rarity.beneficial &&( it.rarity == EquipmentModifier.Rarity.LEGENDARY || it.rarity == EquipmentModifier.Rarity.EPIC) }.toList()

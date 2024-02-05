@@ -1,5 +1,6 @@
 package me.fzzyhmstrs.gearifiers.compat.rei
 
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay
@@ -7,7 +8,6 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient
 import me.shedaniel.rei.api.common.util.EntryIngredients
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.item.Item
-import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import java.util.*
 
@@ -44,11 +44,11 @@ class RerollAltarDisplay(inputs: MutableList<EntryIngredient>, outputs: MutableL
         }
         
         private fun getRecipeId(input: Item, cost: Set<Item>): Optional<Identifier>{
-            val itemId1 = Registries.ITEM.getId(input)
+            val itemId1 = FzzyPort.ITEM.getId(input)
             var itemId2 = ""
             cost.forEach {
                 itemId2 += "/"
-                itemId2 += Registries.ITEM.getId(it).namespace + "." + Registries.ITEM.getId(it).path
+                itemId2 += FzzyPort.ITEM.getId(it).namespace + "." + FzzyPort.ITEM.getId(it).path
             }
 
 

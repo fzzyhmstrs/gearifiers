@@ -1,8 +1,6 @@
 package me.fzzyhmstrs.gearifiers.mixins;
 
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable;
-import me.fzzyhmstrs.fzzy_core.nbt_util.Nbt;
-import me.fzzyhmstrs.fzzy_core.nbt_util.NbtKeys;
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper;
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig;
 import net.minecraft.entity.player.PlayerEntity;

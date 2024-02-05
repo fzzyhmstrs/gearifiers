@@ -78,7 +78,7 @@ object RegisterModifier {
         .withAttributeModifier(
             EntityAttributes.GENERIC_ATTACK_SPEED,0.05, EntityAttributeModifier.Operation.MULTIPLY_BASE)
         .withAttributeModifier(
-            EntityAttributes.GENERIC_ATTACK_DAMAGE,1.5, EntityAttributeModifier.Operation.ADDITION)
+            EntityAttributes.GENERIC_ATTACK_DAMAGE,1.0, EntityAttributeModifier.Operation.ADDITION)
         .withAttributeModifier(
             EntityAttributes.GENERIC_ARMOR,1.0, EntityAttributeModifier.Operation.ADDITION)
         .withAttributeModifier(

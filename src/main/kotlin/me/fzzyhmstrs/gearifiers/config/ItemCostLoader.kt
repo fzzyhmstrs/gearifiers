@@ -2,15 +2,13 @@ package me.fzzyhmstrs.gearifiers.config
 
 import com.google.common.collect.HashMultimap
 import com.google.gson.JsonParser
+import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.tag.TagKey
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
@@ -89,7 +87,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                     Gearifiers.LOGGER.warn("Couldn't parse payment item id [${el.key}], skipping!")
                     continue
                 }
-                if (!Registries.ITEM.containsId(paymentName)){
+                if (!FzzyPort.ITEM.containsId(paymentName)){
                     Gearifiers.LOGGER.warn("Item id [${el.key}] not found in the Item Registry, skipping!")
                     continue
                 }
@@ -147,10 +145,10 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     
     private fun getRepairIngredient(item: Item): List<Item>{
         if (item is ArmorItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
         }
         if (item is ToolItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> Registries.ITEM.get(id) }.toList()
+            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
         }
         return listOf()
     }
@@ -158,14 +156,14 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     private fun processItemCostsMap(){
         //println(rawItemCosts)
         for (entry in rawItemCosts.entries()){
-            val costItem = Registries.ITEM.get(entry.key)
+            val costItem = FzzyPort.ITEM.get(entry.key)
             //println("cost item: $costItem")
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
-                    val entries = Registries.ITEM.getEntryList(tagKey)
+                    val tagKey = FzzyPort.ITEM.tagOf(tagId)
+                    val entries = FzzyPort.ITEM.registry().getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -181,8 +179,8 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
                 val itemId = Identifier.tryParse(targetItemString)
                 //println("parsing targetItemString $targetItemString into identifier $itemId")
                 if (itemId != null){
-                    if (Registries.ITEM.containsId(itemId)){
-                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
+                    if (FzzyPort.ITEM.containsId(itemId)){
+                        ITEM_COSTS.put(FzzyPort.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }
@@ -192,13 +190,13 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             }
         }
         for (entry in rawOverrideCosts.entries()){
-            val costItem = Registries.ITEM.get(entry.key)
+            val costItem = FzzyPort.ITEM.get(entry.key)
             val targetItemString = entry.value
             if (targetItemString.startsWith('#') && targetItemString.length > 1){
                 val tagId = Identifier.tryParse(targetItemString.substring(1))
                 if (tagId != null){
-                    val tagKey = TagKey.of(RegistryKeys.ITEM,tagId)
-                    val entries = Registries.ITEM.getEntryList(tagKey)
+                    val tagKey = FzzyPort.ITEM.tagOf(tagId)
+                    val entries = FzzyPort.ITEM.registry().getEntryList(tagKey)
                     if (entries.isPresent){
                         val entriesList = entries.get()
                         entriesList.forEach {
@@ -214,9 +212,9 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             } else {
                 val itemId = Identifier.tryParse(targetItemString)
                 if (itemId != null){
-                    if (Registries.ITEM.containsId(itemId)){
-                        ITEM_COSTS.removeAll(Registries.ITEM.get(itemId))
-                        ITEM_COSTS.put(Registries.ITEM.get(itemId),costItem)
+                    if (FzzyPort.ITEM.containsId(itemId)){
+                        ITEM_COSTS.removeAll(FzzyPort.ITEM.get(itemId))
+                        ITEM_COSTS.put(FzzyPort.ITEM.get(itemId),costItem)
                     } else {
                         Gearifiers.LOGGER.warn("Item id $itemId referenced from reroll cost ${entry.key} couldn't be found in the Item Registry!")
                     }

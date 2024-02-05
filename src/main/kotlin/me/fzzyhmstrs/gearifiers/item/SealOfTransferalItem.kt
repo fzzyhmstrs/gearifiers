@@ -1,7 +1,6 @@
 package me.fzzyhmstrs.gearifiers.item
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
-import me.fzzyhmstrs.fzzy_core.registry.ModifierRegistry
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.item.TooltipContext
@@ -65,6 +64,7 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
         val uses = stack.nbt?.getInt("seal_transferal_uses") ?: 0
         if (uses >= GearifiersConfig.modifiers.maxLegendarySealUses){
             world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
+            user.sendMessage(AcText.translatable("item.gearifiers.seal_of_legends.max"))
             return TypedActionResult.fail(modifierAffectingItem)
         }
         val storedModifiers = modifierAffectingItem.orCreateNbt.getList("modifier_list",NbtElement.STRING_TYPE.toInt())
