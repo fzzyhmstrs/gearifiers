@@ -1,6 +1,8 @@
 package me.fzzyhmstrs.gearifiers.item
 
+import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.world.ServerWorld
@@ -20,6 +22,10 @@ class SealOfFateItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world !is ServerWorld) return TypedActionResult.pass(modifierAffectingItem)
+        if (GearifiersConfig.blackList.isItemBlackListed(stack)) {
+            user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
+            return TypedActionResult.pass(modifierAffectingItem)
+        }
         EquipmentModifierHelper.rerollModifiers(stack,world,user)
         if (stack.damage > stack.maxDamage) {
             stack.damage = stack.maxDamage - 1

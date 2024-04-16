@@ -1,6 +1,7 @@
 package me.fzzyhmstrs.gearifiers.item
 
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.registry.RegisterModifier
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -20,6 +21,7 @@ class WhetstoneItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
+        if (GearifiersConfig.blackList.isItemBlackListed(stack)) return TypedActionResult.pass(modifierAffectingItem)
         if(!RegisterModifier.SHARP.target.isStackAcceptable(stack)) return TypedActionResult.fail(modifierAffectingItem)
         EquipmentModifierHelper.addModifier(RegisterModifier.SHARP.modifierId,stack)
         modifierAffectingItem.decrement(modifierAffectingItem.count)

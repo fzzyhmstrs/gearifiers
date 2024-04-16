@@ -21,6 +21,7 @@
 	"item.gearifiers.seal_of_wiping.flavor": "Removes a negative modifier from your offhand item, leaving the positive modifiers.",
 	"item.gearifiers.whetstone": "Whetstone",
 	"item.gearifiers.whetstone.flavor": "Adds or upgrades the Sharp modifier to your offhand item",
+	"item.gearifiers.seals.blacklisted": "This item is blacklisted in the configs; the seal won't work on it...",
 
 	"block.gearifiers.reroll_altar": "Reroll Altar",
 	"screen.gearifiers.reroll_altar": "Reroll Modifiers",
@@ -42,7 +43,7 @@
 	"commands.gearifiers.success.add_random": "New random modifiers added to %s",
 
 	"recipe.reroll_altar": "Modifier Rerolling",
-	
+
 	"emi.category.gearifiers.reroll_altar": "Reroll Altar",
 	"emi.category.gearifiers.reroll_altar.cost_text_1": "+",
 	"emi.category.gearifiers.reroll_altar.cost_text_2": "per reroll",

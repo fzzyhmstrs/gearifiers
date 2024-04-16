@@ -49,6 +49,10 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
+        if (GearifiersConfig.blackList.isItemBlackListed(stack)) {
+            user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
+            return TypedActionResult.pass(modifierAffectingItem)
+        }
         val nbt = modifierAffectingItem.nbt
         if (nbt == null || !nbt.contains("modifier_list")) {
             val list = EquipmentModifierHelper.getModifiers(stack)

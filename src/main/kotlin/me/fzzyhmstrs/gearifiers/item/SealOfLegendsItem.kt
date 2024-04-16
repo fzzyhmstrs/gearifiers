@@ -22,6 +22,10 @@ class SealOfLegendsItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
+        if (GearifiersConfig.blackList.isItemBlackListed(stack)) {
+            user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
+            return TypedActionResult.pass(modifierAffectingItem)
+        }
         val uses = stack.nbt?.getInt("seal_legend_uses") ?: 0
         if (uses >= GearifiersConfig.modifiers.maxLegendarySealUses){
             world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
