@@ -118,39 +118,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             processItemCostsMap()
         }
         val list = ITEM_COSTS.get(item)
-        return if (list.isEmpty()){
-            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost){
-                val list2 = getRepairIngredient(item)
-                if (list2.isEmpty()){
-                    payment == GearifiersConfig.modifiers.fallbackItem()
-                } else {
-                    list2.contains(payment)
-                }
-            } else {
-                payment == GearifiersConfig.modifiers.fallbackItem()
-            }
-        } else {
-            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts){
-                val list3 = getRepairIngredient(item)
-                if (list3.isEmpty()){
-                    list.contains(payment)
-                } else {
-                    list3.contains(payment)
-                }
-            } else {
-                list.contains(payment)
-            }
-        }
-    }
-    
-    private fun getRepairIngredient(item: Item): List<Item>{
-        if (item is ArmorItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
-        }
-        if (item is ToolItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
-        }
-        return listOf()
+        return GearifiersConfigNew.getInstance().modifiers.getRepairIngredients(item,list.toSet()).contains(payment)
     }
 
     private fun processItemCostsMap(){
