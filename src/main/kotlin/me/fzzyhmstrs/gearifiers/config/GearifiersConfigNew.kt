@@ -23,6 +23,34 @@ object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
     var chances: Chances
     var blackList: BlackList
 
+    fun isItemBlackListed(stack: ItemStack): Boolean{
+        val item = stack.item
+        val id = FzzyPort.ITEM.getId(item)
+        if (namespaceBlackList.contains(id.namespace)) return true
+        return individualItemBlackList.contains(id.toString())
+    }
+
+    fun isItemBlackListed(item: Item): Boolean{
+        val id = FzzyPort.ITEM.getId(item)
+        if (namespaceBlackList.contains(id.namespace)) return true
+        return individualItemBlackList.contains(id.toString())
+    }
+
+    fun isScreenHandlerBlackListed(playerEntity: PlayerEntity): Boolean{
+        val handler = playerEntity.currentScreenHandler
+        return try {
+            blackListedScreenHandlers.contains(FzzyPort.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
+        } catch (e: Exception){
+            false
+        }
+
+    }
+
+    var namespaceBlackList: List<String> = listOf()
+    var individualItemBlackList: List<String> = listOf()
+    var blackListedScreenHandlers: List<String> = listOf()
+
+
     init{
         try {
             val (dir, dirCreated) = SyncedConfigHelper.makeDir("", Gearifiers.MOD_ID)
@@ -48,32 +76,7 @@ object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
     }
     class BlackList: SyncedConfigHelper.OldClass<BlackList>{
 
-        fun isItemBlackListed(stack: ItemStack): Boolean{
-            val item = stack.item
-            val id = FzzyPort.ITEM.getId(item)
-            if (namespaceBlackList.contains(id.namespace)) return true
-            return individualItemBlackList.contains(id.toString())
-        }
 
-        fun isItemBlackListed(item: Item): Boolean{
-            val id = FzzyPort.ITEM.getId(item)
-            if (namespaceBlackList.contains(id.namespace)) return true
-            return individualItemBlackList.contains(id.toString())
-        }
-
-        fun isScreenHandlerBlackListed(playerEntity: PlayerEntity): Boolean{
-            val handler = playerEntity.currentScreenHandler
-            return try {
-                blackListedScreenHandlers.contains(FzzyPort.SCREEN_HANDLER.getId(handler.type)?.toString()?:"")
-            } catch (e: Exception){
-                false
-            }
-
-        }
-
-        var namespaceBlackList: List<String> = listOf()
-        var individualItemBlackList: List<String> = listOf()
-        var blackListedScreenHandlers: List<String> = listOf()
         override fun generateNewClass(): BlackList {
             return this
         }
