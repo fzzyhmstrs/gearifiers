@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.item
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
@@ -30,11 +30,11 @@ class SealOfAwakeningItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world !is ServerWorld) return TypedActionResult.pass(modifierAffectingItem)
-        if (GearifiersConfig.blackList.isItemBlackListed(stack)) {
+        if (GearifiersConfigNew.getInstance().isItemBlackListed(stack)) {
             user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
             return TypedActionResult.pass(modifierAffectingItem)
         }
-        val list = EquipmentModifierHelper.getTargetsForItem(stack).stream().filter { it.rarity.beneficial }.toList()
+        val list = GearifiersConfigNew.getInstance().modifiers.getApplicableModifiers(stack, { it.rarity.beneficial })
         val parameters = LootContextParameterSet.Builder(world).luck(user.luck).build(LootContextTypes.EMPTY)
         val seed = world.random.nextLong().takeIf { it != 0L }?:1L
         val contextBuilder = LootContext.Builder(parameters).random(seed)
