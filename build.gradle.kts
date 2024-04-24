@@ -31,6 +31,13 @@ repositories {
         }
     }
     maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+    maven {
         name = "Jitpack"
         url = uri("https://jitpack.io")
     }
@@ -60,7 +67,7 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:$reiVersion")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:$reiVersion")
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:$reiVersion")
-    
+
     val fcVersion: String by project
     modImplementation(":fzzy_core-$fcVersion"){
         exclude("net.fabricmc.fabric-api")
@@ -81,10 +88,13 @@ dependencies {
     val meVersion: String by project
     implementation("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
     annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:$meVersion")
-    
+
     val emiVersion: String by project
     modCompileOnly ("dev.emi:emi-fabric:${emiVersion}:api")
     modLocalRuntime ("dev.emi:emi-fabric:${emiVersion}")
+
+    val fzzyConfigVersion: String by project
+    modImplementation("maven.modrinth:fzzy-config:$fzzyConfigVersion")
 
 }
 tasks {
@@ -97,8 +107,6 @@ tasks {
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions { jvmTarget = javaVersion.toString() }
-        sourceCompatibility = javaVersion.toString()
-        targetCompatibility = javaVersion.toString()
     }
     jar { from("LICENSE") { rename { "${base.archivesName.get()}_${it}" } } }
     processResources {
