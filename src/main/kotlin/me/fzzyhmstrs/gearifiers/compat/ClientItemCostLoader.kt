@@ -3,7 +3,7 @@ package me.fzzyhmstrs.gearifiers.compat
 import com.google.common.collect.HashMultimap
 import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.ToolItem
