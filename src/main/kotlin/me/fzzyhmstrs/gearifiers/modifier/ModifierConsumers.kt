@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import me.fzzyhmstrs.gearifiers.mixins.LivingEntityAccessor
 import net.minecraft.block.BlockState
 import net.minecraft.block.ExperienceDroppingBlock
@@ -25,7 +25,7 @@ object ModifierConsumers {
     val DEMONIC_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.demonicChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.demonicChance){
                 target.addStatusEffect(StatusEffectInstance( StatusEffects.WEAKNESS,50,1))
             }
         }
@@ -33,7 +33,7 @@ object ModifierConsumers {
     val MANIC_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, target: LivingEntity? ->
             if (target == null) return@ToolConsumer
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.manicChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.manicChance){
                 if (user.hasStatusEffect(StatusEffects.HASTE)){
                     val effect = user.getStatusEffect(StatusEffects.HASTE)
                     val amp = effect?.amplifier?:0
@@ -50,21 +50,21 @@ object ModifierConsumers {
 
     val JARRING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.jarringChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.jarringChance){
                 user.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS,50,1))
             }
         }
 
     val CLANGING_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.clangingChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.clangingChance){
                 user.addStatusEffect(StatusEffectInstance(StatusEffects.WEAKNESS,50,1))
             }
         }
 
     val DOUBLE_EDGED_HIT_CONSUMER: EquipmentModifier.ToolConsumer =
         EquipmentModifier.ToolConsumer { _: ItemStack, user: LivingEntity, _: LivingEntity? ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.doubleEdgedChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.doubleEdgedChance){
                 user.damage(user.damageSources.generic(),1.0f)
             }
         }
@@ -72,7 +72,7 @@ object ModifierConsumers {
     val SPLITTING_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.isIn(BlockTags.LOGS)){
-                if (world.random.nextFloat() < GearifiersConfig.chances.splittingChance){
+                if (world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.splittingChance){
                     val sticks = world.random.nextInt(3) + 1
                     val stickEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(Items.STICK,sticks))
                     world.spawnEntity(stickEntity)
@@ -83,7 +83,7 @@ object ModifierConsumers {
     val ANTHRACITIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is ExperienceDroppingBlock){
-                if (world.random.nextFloat() < GearifiersConfig.chances.anthraciticChance){
+                if (world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.anthraciticChance){
                     val coals = world.random.nextInt(3) + 1
                     val coalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(Items.COAL,coals))
                     world.spawnEntity(coalEntity)
@@ -104,7 +104,7 @@ object ModifierConsumers {
     val METALLIC_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is ExperienceDroppingBlock){
-                if (world.random.nextFloat() < GearifiersConfig.chances.metallicChance && METALS.isNotEmpty()){
+                if (world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.metallicChance && METALS.isNotEmpty()){
                     val metals = world.random.nextInt(3) + 1
                     val metalItem = METALS[world.random.nextInt(METALS.size)]
                     val metalEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(metalItem,metals))
@@ -127,7 +127,7 @@ object ModifierConsumers {
     val ENRICHED_MINE_CONSUMER: EquipmentModifier.MiningConsumer =
         EquipmentModifier.MiningConsumer { _: ItemStack, world: World, state: BlockState, pos: BlockPos, _: PlayerEntity ->
             if (state.block is ExperienceDroppingBlock){
-                if (world.random.nextFloat() < GearifiersConfig.chances.enrichedChance && GEMS.isNotEmpty()){
+                if (world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.enrichedChance && GEMS.isNotEmpty()){
                     val gems = world.random.nextInt(3) + 1
                     val gemItem = GEMS[world.random.nextInt(GEMS.size)]
                     val gemEntity = ItemEntity(world,pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, ItemStack(gemItem,gems))
