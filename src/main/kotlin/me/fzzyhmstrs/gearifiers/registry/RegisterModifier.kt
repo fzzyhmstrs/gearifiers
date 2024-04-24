@@ -11,7 +11,7 @@ import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gear_core.trinkets.TrinketsUtil
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import me.fzzyhmstrs.gearifiers.modifier.ConfigEquipmentModifier
 import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
 import me.fzzyhmstrs.gearifiers.modifier.ModifierConsumers
