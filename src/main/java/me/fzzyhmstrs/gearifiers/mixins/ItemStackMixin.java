@@ -33,8 +33,8 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "onCraft", at = @At("TAIL"))
     private void gearifiers_onCraftAddModifiers(World world, PlayerEntity player, int amount, CallbackInfo ci){
-        if (!world.isClient && getItem() instanceof Modifiable && !GearifiersConfigNew.getInstance().isItemBlackListed((ItemStack) (Object) this)){
-            if (!GearifiersConfigNew.getInstance().isScreenHandlerBlackListed(player)) {
+        if (!world.isClient && getItem() instanceof Modifiable && !GearifiersConfig.getInstance().isItemBlackListed((ItemStack) (Object) this)){
+            if (!GearifiersConfig.getInstance().isScreenHandlerBlackListed(player)) {
                 //LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) world).random(world.random).luck(player.getLuck());
                 NbtCompound nbt = getNbt();
                 if (nbt == null || !nbt.getBoolean("addedViaCraft")) {

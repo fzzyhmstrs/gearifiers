@@ -10,7 +10,7 @@ import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.util.Identifier
 
 object EmiClientPlugin: EmiPlugin {
@@ -18,7 +18,7 @@ object EmiClientPlugin: EmiPlugin {
     private val ALTAR_ID = Identifier(Gearifiers.MOD_ID,"reroll_altar")
     private val ALTAR_WORKSTATION = EmiStack.of(Gearifiers.REROLL_ALTAR.asItem())
     internal val ALTAR_CATEGORY = EmiRecipeCategory(ALTAR_ID, ALTAR_WORKSTATION)
-    
+
 
     override fun register(registry: EmiRegistry) {
 
@@ -27,7 +27,7 @@ object EmiClientPlugin: EmiPlugin {
 
         for (item in FzzyPort.ITEM){
             if (item !is Modifiable) continue
-            if (GearifiersConfigNew.getInstance().isItemBlackListed(item)) continue
+            if (GearifiersConfig.getInstance().isItemBlackListed(item)) continue
             if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             val ingredient = EmiIngredient.of(costs.stream().map { cost -> EmiStack.of(cost) }.toList())

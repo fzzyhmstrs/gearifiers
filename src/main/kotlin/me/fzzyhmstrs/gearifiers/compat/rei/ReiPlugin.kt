@@ -24,7 +24,7 @@ object ReiPlugin: REIClientPlugin {
     override fun registerDisplays(registry: DisplayRegistry) {
         for (item in FzzyPort.ITEM){
             if (item !is Modifiable) continue
-            if (GearifiersConfigNew.getInstance().isItemBlackListed(item)) continue
+            if (GearifiersConfig.getInstance().isItemBlackListed(item)) continue
             if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             registry.add(RerollAltarDisplay(item, costs))

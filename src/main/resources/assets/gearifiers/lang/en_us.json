@@ -148,10 +148,12 @@
 	"equipment.modifier.gearifiers:super_lucky": "Super Lucky",
 	"equipment.modifier.gearifiers:lucky": "Lucky",
 	"equipment.modifier.gearifiers:unlucky": "Unlucky",
+	"equipment.modifier.gearifiers:super_unlucky": "Super Unlucky",
 
 	"equipment.modifier.gearifiers:super_lucky.desc": "+1 luck",
 	"equipment.modifier.gearifiers:lucky.desc": "+0.5 luck",
 	"equipment.modifier.gearifiers:unlucky.desc": "-0.5 luck",
+	"equipment.modifier.gearifiers:super_unlucky.desc": "-1 luck",
 
 	"equipment.modifier.gearifiers:quick": "Quick",
 	"equipment.modifier.gearifiers:racing": "Racing",
@@ -253,7 +255,7 @@
 	"equipment.modifier.gearifiers:clanging.desc": "Chance to inflict weakness on the wielder",
 	"equipment.modifier.gearifiers:betraying.desc": "Projectiles regenerate targets on hit",
 	"equipment.modifier.gearifiers:greater_crumbling.desc": "50% chance item takes double durability loss",
-	"equipment.modifier.gearifiers:crumbling.desc": "25% chance item takes double durability loss"
+	"equipment.modifier.gearifiers:crumbling.desc": "25% chance item takes double durability loss",
 
 	"gearifiers.config.repair_ingredient_usage.NO": "Never",
 	"gearifiers.config.repair_ingredient_usage.YES": "As Fallback",

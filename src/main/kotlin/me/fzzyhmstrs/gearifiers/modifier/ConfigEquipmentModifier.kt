@@ -1,9 +1,9 @@
 package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.fzzy_core.modifier_util.AbstractModifierHelper
-import me.fzzyhmstrs.gear_core.modifier_util.ConfigEquipmentModifier as ConfigEquipmentModifier1
 import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.util.Identifier
+import me.fzzyhmstrs.gear_core.modifier_util.ConfigEquipmentModifier as ConfigEquipmentModifier1
 
 class ConfigEquipmentModifier(
     modifierId: Identifier = AbstractModifierHelper.BLANK,
@@ -17,6 +17,6 @@ class ConfigEquipmentModifier(
     rarity
 ){
     override fun isEnabled(): Boolean{
-        return GearifiersConfigNew.getInstance().modifiers.isModifierEnabled(modifierId)
+        return GearifiersConfig.getInstance().modifiers.isModifierEnabled(modifierId)
     }
 }

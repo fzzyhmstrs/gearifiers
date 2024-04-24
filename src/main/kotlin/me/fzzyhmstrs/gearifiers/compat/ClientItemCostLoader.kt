@@ -3,10 +3,8 @@ package me.fzzyhmstrs.gearifiers.compat
 import com.google.common.collect.HashMultimap
 import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
-import net.minecraft.item.ArmorItem
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.item.Item
-import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
 
@@ -22,7 +20,7 @@ object ClientItemCostLoader {
             processItemCostsMap()
         }
         val set = ITEM_COSTS.get(item)
-        return GearifiersConfigNew.getInstance().modifiers.getRepairIngredients(item,set)
+        return GearifiersConfig.getInstance().modifiers.getRepairIngredients(item,set)
     }
 
     private fun processItemCostsMap(){

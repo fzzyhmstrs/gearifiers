@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.DiffuseLighting
@@ -28,18 +28,18 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         RenderSystem.disableBlend()
         super.drawForeground(context, mouseX, mouseY)
     }
-    
+
     override fun drawBackground(context: DrawContext,delta: Float, mouseX: Int, mouseY: Int){
         RenderSystem.setShaderTexture(0, TEXTURE)
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight)
         drawInvalidRecipeArrow(context, x, y)
-        if (!GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled || handler.enchants.get() == 0) return
+        if (!GearifiersConfig.getInstance().modifiers.rerollCosts.enabled || handler.enchants.get() == 0) return
         val i = (width - backgroundWidth) / 2
         val j = (height - backgroundHeight) / 2
 
         val item = handler.getRerollItem()
         val payments = ClientItemCostLoader.getItemCosts(item.item)
-        if (payments.isNotEmpty() && !GearifiersConfigNew.getInstance().isItemBlackListed(item)){
+        if (payments.isNotEmpty() && !GearifiersConfig.getInstance().isItemBlackListed(item)){
             val payment = payments.elementAt(0)
             RenderSystem.disableDepthTest()
             val stack = ItemStack(payment,handler.items.get())
@@ -149,7 +149,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
             context.drawTooltip(textRenderer,list, mouseX, mouseY)
         }
     }
-    
+
     companion object{
         internal val TEXTURE = Identifier(Gearifiers.MOD_ID,"textures/reroll_altar_gui.png")
     }

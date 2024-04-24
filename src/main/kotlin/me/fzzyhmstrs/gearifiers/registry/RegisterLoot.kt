@@ -1,6 +1,6 @@
 package me.fzzyhmstrs.gearifiers.registry
 
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.minecraft.entity.EntityType
 import net.minecraft.loot.LootPool
@@ -40,10 +40,10 @@ object RegisterLoot {
     * Buried Treasure: Transfer
     * */
 
-    private val common = { RandomChanceLootCondition.builder(GearifiersConfigNew.getInstance().chances.commonLoot) }
-    private val uncommon = { RandomChanceLootCondition.builder(GearifiersConfigNew.getInstance().chances.uncommonLoot) }
-    private val rare = { RandomChanceLootCondition.builder(GearifiersConfigNew.getInstance().chances.rareLoot) }
-    private val epic = { RandomChanceLootCondition.builder(GearifiersConfigNew.getInstance().chances.epicLoot) }
+    private val common = { RandomChanceLootCondition.builder(GearifiersConfig.getInstance().chances.commonLoot) }
+    private val uncommon = { RandomChanceLootCondition.builder(GearifiersConfig.getInstance().chances.uncommonLoot) }
+    private val rare = { RandomChanceLootCondition.builder(GearifiersConfig.getInstance().chances.rareLoot) }
+    private val epic = { RandomChanceLootCondition.builder(GearifiersConfig.getInstance().chances.epicLoot) }
 
     private fun loot() {
         LootTableEvents.MODIFY.register { _, _, id, table, _ ->
@@ -173,4 +173,3 @@ object RegisterLoot {
     }
 
 }
-

@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.item
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -49,7 +49,7 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
-        if (GearifiersConfigNew.getInstance().isItemBlackListed(stack)) {
+        if (GearifiersConfig.getInstance().isItemBlackListed(stack)) {
             user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
             return TypedActionResult.pass(modifierAffectingItem)
         }
@@ -66,7 +66,7 @@ class SealOfTransferalItem(settings: Settings): ModifierAffectingItem(settings) 
             return TypedActionResult.success(modifierAffectingItem)
         }
         val uses = stack.nbt?.getInt("seal_transferal_uses") ?: 0
-        if (uses >= GearifiersConfigNew.getInstance().modifiers.maxLegendarySealUses){
+        if (uses >= GearifiersConfig.getInstance().modifiers.maxLegendarySealUses){
             world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
             user.sendMessage(AcText.translatable("item.gearifiers.seal_of_legends.max"))
             return TypedActionResult.fail(modifierAffectingItem)

@@ -5,9 +5,7 @@ import com.google.gson.JsonParser
 import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
-import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
-import net.minecraft.item.ToolItem
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
@@ -22,7 +20,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     gold armor
     wood tools
     stone tools
-       
+
     Emerald:
     chain armor
     iron armor
@@ -30,7 +28,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     gold tools
     bow
     crossbow
-    
+
     Diamond:
     diamond armor
     turtle shell
@@ -41,7 +39,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
     netherite armor
     netherite tools
     */
-    
+
     private val rawItemCosts: HashMultimap<Identifier,String> = HashMultimap.create()
     private val rawOverrideCosts: HashMultimap<Identifier,String> = HashMultimap.create()
     internal val ITEM_COSTS: HashMultimap<Item,Item> = HashMultimap.create()
@@ -118,7 +116,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
             processItemCostsMap()
         }
         val list = ITEM_COSTS.get(item)
-        return GearifiersConfigNew.getInstance().modifiers.getRepairIngredients(item,list.toSet()).contains(payment)
+        return GearifiersConfig.getInstance().modifiers.getRepairIngredients(item,list.toSet()).contains(payment)
     }
 
     private fun processItemCostsMap(){
@@ -194,7 +192,7 @@ object ItemCostLoader: SimpleSynchronousResourceReloadListener {
         //println("prepared map:")
         //println(ITEM_COSTS)
     }
-    
+
     fun writeRawDataToClient(buf: PacketByteBuf){
         //println(">>>>>>>>>>>>> writing to client <<<<<<<<<<<<<<<<")
         //println(rawItemCosts)

@@ -3,7 +3,7 @@ package me.fzzyhmstrs.gearifiers.item
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
@@ -22,17 +22,17 @@ class SealOfLegendsItem(settings: Settings): ModifierAffectingItem(settings) {
         hand: Hand
     ): TypedActionResult<ItemStack> {
         if (world.isClient) return TypedActionResult.pass(modifierAffectingItem)
-        if (GearifiersConfigNew.getInstance().isItemBlackListed(stack)) {
+        if (GearifiersConfig.getInstance().isItemBlackListed(stack)) {
             user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
             return TypedActionResult.pass(modifierAffectingItem)
         }
         val uses = stack.nbt?.getInt("seal_legend_uses") ?: 0
-        if (uses >= GearifiersConfigNew.getInstance().modifiers.maxLegendarySealUses){
+        if (uses >= GearifiersConfig.getInstance().modifiers.maxLegendarySealUses){
             world.playSound(null,user.blockPos, SoundEvents.BLOCK_LAVA_EXTINGUISH,SoundCategory.PLAYERS,1.0f, world.random.nextFloat()*0.4f + 0.8f)
             user.sendMessage(AcText.translatable("item.gearifiers.seal_of_legends.max"))
             return TypedActionResult.fail(modifierAffectingItem)
         }
-        val list = GearifiersConfigNew.getInstance().modifiers.getApplicableModifiers(stack, { it.rarity.beneficial && (it.rarity == EquipmentModifier.Rarity.LEGENDARY || it.rarity == EquipmentModifier.Rarity.EPIC) })
+        val list = GearifiersConfig.getInstance().modifiers.getApplicableModifiers(stack, { it.rarity.beneficial && (it.rarity == EquipmentModifier.Rarity.LEGENDARY || it.rarity == EquipmentModifier.Rarity.EPIC) })
         var success = false
         var tries = 0
         while(!success && tries < 10){

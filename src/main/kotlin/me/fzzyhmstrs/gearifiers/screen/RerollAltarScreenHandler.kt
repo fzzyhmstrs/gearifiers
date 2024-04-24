@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.screen
 
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import net.minecraft.entity.player.PlayerEntity
@@ -38,7 +38,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     }
     protected val output = CraftingResultInventory()
     protected val player: PlayerEntity = playerInventory.player
-    
+
     init{
         addProperty(enchants).set(0)
         addProperty(items).set(1)
@@ -152,7 +152,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     private fun checkForMatch(player: PlayerEntity): Boolean{
         val stack1 = this.input.getStack(0)
         if (stack1.isEmpty) return false
-        if (GearifiersConfigNew.getInstance().isItemBlackListed((stack1))) return false
+        if (GearifiersConfig.getInstance().isItemBlackListed((stack1))) return false
         val item = stack1.item
         if (item !is Modifiable) return false
         if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) return false
@@ -162,10 +162,10 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
         if (itemCost(stack1) > stack2.count) return false
         return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
     }
-    
+
     private fun rerollCost(stack: ItemStack): Int{
         val nbt = stack.nbt
-        return GearifiersConfigNew.getInstance().modifiers.getRerollCost(if(nbt == null) 0 else nbt.getInt("rerolls"))
+        return GearifiersConfig.getInstance().modifiers.getRerollCost(if(nbt == null) 0 else nbt.getInt("rerolls"))
     }
 
     private fun itemCost(stack: ItemStack): Int{
@@ -176,7 +176,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
             1
         } else {
             val rerolls = nbt.getInt("rerolls")
-            GearifiersConfigNew.getInstance().modifiers.getItemCountNeeded(rerolls)
+            GearifiersConfig.getInstance().modifiers.getItemCountNeeded(rerolls)
         }
     }
 

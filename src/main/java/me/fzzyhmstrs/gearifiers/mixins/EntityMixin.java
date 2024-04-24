@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.mixins;
 
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable;
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper;
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew;
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +30,7 @@ public class EntityMixin {
         if (!((Object)this instanceof PlayerEntity)) {
             NbtCompound nbt = stack.getNbt();
             if (nbt == null || !nbt.getBoolean("addedViaDrop")) {
-                if (!world.isClient && stack.getItem() instanceof Modifiable && !GearifiersConfigNew.getInstance().isItemBlackListed(stack)) {
+                if (!world.isClient && stack.getItem() instanceof Modifiable && !GearifiersConfig.getInstance().isItemBlackListed(stack)) {
                     LootContextParameterSet.Builder parameters = new LootContextParameterSet.Builder((ServerWorld) world);
                     if (((Entity) (Object) this) instanceof PlayerEntity player) {
                         parameters.luck(player.getLuck());

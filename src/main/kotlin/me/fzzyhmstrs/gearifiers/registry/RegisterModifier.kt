@@ -11,7 +11,6 @@ import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
 import me.fzzyhmstrs.gear_core.trinkets.TrinketsUtil
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import me.fzzyhmstrs.gearifiers.modifier.ConfigEquipmentModifier
 import me.fzzyhmstrs.gearifiers.modifier.ModifierCommand
 import me.fzzyhmstrs.gearifiers.modifier.ModifierConsumers
@@ -30,7 +29,7 @@ import net.minecraft.util.Identifier
 object RegisterModifier {
 
     private val regMod: MutableList<AbstractModifier<*>> = mutableListOf()
-    
+
     private val CHEAP_TOLL = ConstantLootNumberProvider.create(3f) // 96% probability
     // private val NORMAL_TOLL = ConstantLootNumberProvider.create(5f) //75% probability
     private val EXPENSIVE_TOLL = UniformLootNumberProvider.create(6f,7f) //50% chance of enough toll
@@ -42,7 +41,7 @@ object RegisterModifier {
             return TRINKET.isItemAcceptableOrTagged(stack) || stack.item is ShieldItem
         }
     }
-    
+
     private val TRINKET_AND_ARMOR_AND_SHIELD = object: EquipmentModifier.EquipmentModifierTarget(Identifier(Gearifiers.MOD_ID,"trinket_and_armor_and_shield")){
         override fun isAcceptableItem(stack: ItemStack): Boolean {
             return TRINKET_AND_SHIELD.isItemAcceptableOrTagged(stack) || ARMOR.isItemAcceptableOrTagged(stack)
@@ -60,11 +59,11 @@ object RegisterModifier {
             return ARMOR_LEGS.isItemAcceptableOrTagged(stack) || ARMOR_FEET.isItemAcceptableOrTagged(stack)
         }
     }
-    
+
     private fun buildModifier(modifierId: Identifier, target: EquipmentModifier.EquipmentModifierTarget, weight: Int = 10, rarity: EquipmentModifier.Rarity = EquipmentModifier.Rarity.COMMON): EquipmentModifier{
         return ConfigEquipmentModifier(modifierId,target,weight,rarity)
     }
-    
+
     //legendary modifiers
     val LEGENDARY = buildModifier(Identifier(Gearifiers.MOD_ID,"legendary"), EquipmentModifier.EquipmentModifierTarget.ANY, 1,EquipmentModifier.Rarity.LEGENDARY)
         .withAttributeModifier(
@@ -256,7 +255,7 @@ object RegisterModifier {
         .withDescendant(DISREPAIRED)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-        
+
     //basic attack speed modifiers
     val MANIC = buildModifier(Identifier(Gearifiers.MOD_ID,"manic"), EquipmentModifier.EquipmentModifierTarget.WEAPON, 4, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
@@ -286,7 +285,7 @@ object RegisterModifier {
         .withDescendant(CLUMSY)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-        
+
     //basic health modifiers
     val FLOURISHING = buildModifier(Identifier(Gearifiers.MOD_ID,"flourishing"), EquipmentModifier.EquipmentModifierTarget.ARMOR, 3, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
@@ -338,7 +337,7 @@ object RegisterModifier {
         .withDescendant(LUCKY)
         .withToll(EXPENSIVE_TOLL)
         .also { regMod.add(it) }
-    
+
     //basic movement speed modifiers
     val RACING = buildModifier(Identifier(Gearifiers.MOD_ID,"racing"), ARMOR_BOTTOM, 3, EquipmentModifier.Rarity.EPIC)
         .withAttributeModifier(
