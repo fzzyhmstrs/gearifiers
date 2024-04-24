@@ -22,39 +22,7 @@ object ClientItemCostLoader {
             processItemCostsMap()
         }
         val set = ITEM_COSTS.get(item)
-        return if (set.isEmpty()) {
-            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost) {
-                val list = getRepairIngredient(item)
-                if (list.isEmpty()){
-                    setOf(GearifiersConfig.modifiers.fallbackItem())
-                } else {
-                    setOf(*list.toTypedArray())
-                }
-            } else {
-                setOf(GearifiersConfig.modifiers.fallbackItem())
-            }
-        } else {
-            if (GearifiersConfig.modifiers.useRepairIngredientAsRerollCost && GearifiersConfig.modifiers.repairIngredientOverrideDefinedCosts) {
-                val list = getRepairIngredient(item)
-                if (list.isEmpty()){
-                    set
-                } else {
-                    setOf(*list.toTypedArray())
-                }
-            } else {
-                set
-            }
-        }
-    }
-
-    private fun getRepairIngredient(item: Item): List<Item>{
-        if (item is ArmorItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
-        }
-        if (item is ToolItem){
-            return item.material.repairIngredient.matchingItemIds.stream().map { id -> FzzyPort.ITEM.get(id) }.toList()
-        }
-        return listOf()
+        return GearifiersConfigNew.getInstance().modifiers.getRepairIngredients(item,set)
     }
 
     private fun processItemCostsMap(){
