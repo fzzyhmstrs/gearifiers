@@ -10,7 +10,7 @@ import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.util.Identifier
 
 object EmiClientPlugin: EmiPlugin {
@@ -27,7 +27,7 @@ object EmiClientPlugin: EmiPlugin {
 
         for (item in FzzyPort.ITEM){
             if (item !is Modifiable) continue
-            if (GearifiersConfig.blackList.isItemBlackListed(item)) continue
+            if (GearifiersConfigNew.getInstance().isItemBlackListed(item)) continue
             if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) continue
             val costs = ClientItemCostLoader.getItemCosts(item)
             val ingredient = EmiIngredient.of(costs.stream().map { cost -> EmiStack.of(cost) }.toList())
