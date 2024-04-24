@@ -22,6 +22,7 @@ class GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
     companion object{
         private val INSTANCE = ConfigApi.registerAndLoadConfig({ GearifiersConfigNew() })
 
+        @JvmStatic
         fun getInstance(): GearifiersConfigNew{
             return INSTANCE
         }
