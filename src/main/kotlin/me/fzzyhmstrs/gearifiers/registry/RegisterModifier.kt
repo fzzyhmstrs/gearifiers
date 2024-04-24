@@ -30,7 +30,6 @@ import net.minecraft.util.Identifier
 object RegisterModifier {
 
     private val regMod: MutableList<AbstractModifier<*>> = mutableListOf()
-    internal val defaultEnabledMap: MutableMap<String,Boolean> = mutableMapOf()
     
     private val CHEAP_TOLL = ConstantLootNumberProvider.create(3f) // 96% probability
     // private val NORMAL_TOLL = ConstantLootNumberProvider.create(5f) //75% probability
@@ -63,13 +62,6 @@ object RegisterModifier {
     }
     
     private fun buildModifier(modifierId: Identifier, target: EquipmentModifier.EquipmentModifierTarget, weight: Int = 10, rarity: EquipmentModifier.Rarity = EquipmentModifier.Rarity.COMMON): EquipmentModifier{
-        val key = modifierId.toString()
-        if (!GearifiersConfig.modifiers.enabledModifiers.containsKey(key)){
-            defaultEnabledMap[key] = true
-            GearifiersConfig.modifiers.enabledModifiers = defaultEnabledMap
-        } else{
-            defaultEnabledMap[key] = GearifiersConfig.modifiers.enabledModifiers[key]?:true
-        }
         return ConfigEquipmentModifier(modifierId,target,weight,rarity)
     }
     
@@ -565,9 +557,8 @@ object RegisterModifier {
             TrinketsUtil.registerTrinketPredicate {nbt -> nbt.contains("Name") && nbt.getString("Name").contains(Gearifiers.MOD_ID)}
         }
         regMod.forEach {
-            val id = it.modifierId
-            defaultEnabledMap[id.toString()] = true
             ModifierRegistry.register(it)
+            val id = it.modifierId
             ModifierCommand.modifierList.add(id)
         }
     }
