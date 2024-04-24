@@ -80,7 +80,7 @@ class RerollAltarCategory: DisplayCategory<RerollAltarDisplay> {
     }
 
     override fun getDisplayHeight(): Int {
-        return if (GearifiersConfig.modifiers.enableRerollXpCost){46}else{28}
+        return if (GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled){46}else{28}
     }
 
     override fun getDisplayWidth(display: RerollAltarDisplay): Int {
