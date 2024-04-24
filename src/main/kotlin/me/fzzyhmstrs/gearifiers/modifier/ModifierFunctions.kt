@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.modifier
 
 import me.fzzyhmstrs.gear_core.modifier_util.BaseFunctions
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifier
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
@@ -18,7 +18,7 @@ object ModifierFunctions {
 
     val VORPAL_ATTACK_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.vorpalChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.vorpalChance){
                 amount * 10f
             } else {
                 amount
@@ -28,10 +28,10 @@ object ModifierFunctions {
 
     val INDOMITABLE_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.indomitableChance){
                 user.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION,80,0))
             }
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.indomitableChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.indomitableChance){
                 user.addStatusEffect(StatusEffectInstance(StatusEffects.RESISTANCE,80,0))
             }
             amount
@@ -39,7 +39,7 @@ object ModifierFunctions {
 
     val SHIELDING_DAMAGE_FUNCTION: EquipmentModifier.DamageFunction =
         EquipmentModifier.DamageFunction { _, user, _, _, amount ->
-            if (user.world.random.nextFloat() < GearifiersConfig.chances.shieldingChance){
+            if (user.world.random.nextFloat() < GearifiersConfigNew.getInstance().chances.shieldingChance){
                 user.world.playSound(null,user.blockPos,SoundEvents.ITEM_SHIELD_BLOCK,SoundCategory.PLAYERS,1.0f, 0.8f + user.world.random.nextFloat() * 0.4f)
                 0f
             } else {
