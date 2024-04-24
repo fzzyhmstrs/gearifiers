@@ -17,7 +17,15 @@ import net.minecraft.util.Identifier
 import java.io.File
 
 @Suppress("MemberVisibilityCanBePrivate")
-object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
+class GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
+
+    companion object{
+        private val INSTANCE = ConfigApi.registerAndLoadConfig({ GearifiersConfigNew() })
+
+        fun getInstance(): GearifiersConfigNew{
+            return INSTANCE
+        }
+    }
 
     fun isItemBlackListed(stack: ItemStack): Boolean{
         val item = stack.item
