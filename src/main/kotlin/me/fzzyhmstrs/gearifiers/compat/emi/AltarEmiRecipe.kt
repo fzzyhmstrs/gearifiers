@@ -57,7 +57,7 @@ class AltarEmiRecipe(private val input: Item, private val cost: EmiIngredient): 
     }
     
     override fun getDisplayHeight(): Int{
-        return if (GearifiersConfig.modifiers.enableRerollXpCost){36}else{18}
+        return if (GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled){36}else{18}
     }
     
     override fun supportsRecipeTree(): Boolean{
