@@ -16,7 +16,7 @@ public class LootTableMixin {
     @ModifyReturnValue(method = "generateLoot (Lnet/minecraft/loot/context/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;", at = @At("RETURN"))
     private ObjectArrayList<ItemStack> gearifiers_generateLootAddModifiers(ObjectArrayList<ItemStack> original, LootContext context){
         original.forEach(stack -> {
-            if (!GearifiersConfig.INSTANCE.getBlackList().isItemBlackListed(stack)) {
+            if (!GearifiersConfigNew.getInstance().isItemBlackListed(stack)) {
                 EquipmentModifierHelper.INSTANCE.addRandomModifiers(stack, context);
                 if (stack.getDamage() > stack.getMaxDamage()){
                     stack.setDamage(stack.getMaxDamage() - 1);
