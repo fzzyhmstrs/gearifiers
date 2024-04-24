@@ -33,7 +33,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
         RenderSystem.setShaderTexture(0, TEXTURE)
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight)
         drawInvalidRecipeArrow(context, x, y)
-        if (!GearifiersConfig.modifiers.enableRerollXpCost || handler.enchants.get() == 0) return
+        if (!GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled || handler.enchants.get() == 0) return
         val i = (width - backgroundWidth) / 2
         val j = (height - backgroundHeight) / 2
 
