@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.screen
 
 import me.fzzyhmstrs.fzzy_core.interfaces.Modifiable
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import me.fzzyhmstrs.gearifiers.config.ItemCostLoader
 import me.fzzyhmstrs.gearifiers.registry.RegisterHandler
 import net.minecraft.entity.player.PlayerEntity
@@ -152,14 +152,12 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     private fun checkForMatch(player: PlayerEntity): Boolean{
         val stack1 = this.input.getStack(0)
         if (stack1.isEmpty) return false
-        if (GearifiersConfig.blackList.isItemBlackListed((stack1))) return false
+        if (GearifiersConfigNew.getInstance().isItemBlackListed((stack1))) return false
         val item = stack1.item
         if (item !is Modifiable) return false
         if (!item.canBeModifiedBy(EquipmentModifierHelper.getType())) return false
-        if (GearifiersConfig.modifiers.enableRerollXpCost){
-            val cost = rerollCost(stack1)
-            if (player.experienceLevel < cost && !player.abilities.creativeMode) return false
-        }
+        val cost = rerollCost(stack1)
+        if (player.experienceLevel < cost && !player.abilities.creativeMode) return false
         val stack2 = this.input.getStack(1)
         if (itemCost(stack1) > stack2.count) return false
         return ItemCostLoader.itemCostMatches(item,this.input.getStack(1).item)
@@ -167,14 +165,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     
     private fun rerollCost(stack: ItemStack): Int{
         val nbt = stack.nbt
-        return if (nbt == null){
-            GearifiersConfig.modifiers.firstRerollXpCost
-        } else if (!nbt.contains("rerolls")) {
-            GearifiersConfig.modifiers.firstRerollXpCost
-        } else {
-            val rerolls = nbt.getInt("rerolls")
-            GearifiersConfig.modifiers.firstRerollXpCost + (rerolls * GearifiersConfig.modifiers.addedRerollXpCostPerRoll)
-        }
+        return GearifiersConfigNew.getInstance().modifiers.getRerollCost(if(nbt == null) 0 else nbt.getInt("rerolls"))
     }
 
     private fun itemCost(stack: ItemStack): Int{
@@ -185,7 +176,7 @@ class RerollAltarScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
             1
         } else {
             val rerolls = nbt.getInt("rerolls")
-            GearifiersConfig.modifiers.getItemCountNeeded(rerolls)
+            GearifiersConfigNew.getInstance().modifiers.getItemCountNeeded(rerolls)
         }
     }
 
