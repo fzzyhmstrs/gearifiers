@@ -18,6 +18,6 @@ class ConfigEquipmentModifier(
 ){
 
     override fun randomlySelectable(): Boolean{
-        return GearifiersConfig.modifiers.isModifierEnabled(modifierId)
+        return GearifiersConfigNew.getInstance().modifiers.isModifierEnabled(modifierId)
     }
 }
