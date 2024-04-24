@@ -255,4 +255,19 @@
 	"equipment.modifier.gearifiers:greater_crumbling.desc": "50% chance item takes double durability loss",
 	"equipment.modifier.gearifiers:crumbling.desc": "25% chance item takes double durability loss"
 
+	"gearifiers.config.repair_ingredient_usage.NO": "Never",
+	"gearifiers.config.repair_ingredient_usage.YES": "As Fallback",
+	"gearifiers.config.repair_ingredient_usage.ALWAYS": "Always",
+	"gearifiers.config.repair_ingredient_usage.NO.desc": "Repair ingredient won't be used as the reroll cost. Defined ingredient or fallback item will be used.",
+	"gearifiers.config.repair_ingredient_usage.YES.desc": "Repair ingredient will be used for reroll costs if no specific ingredient is defined for the item.",
+	"gearifiers.config.repair_ingredient_usage.ALWAYS.desc": "Repair ingredient will always be used for reroll costs, if one exists.",
+	"gearifiers.config.namespaceBlackList.desc":"Blacklists an entire mod by mod id.",
+	"gearifiers.config.itemBlackList.desc":"Blacklists an individual item by its identifier.",
+	"gearifiers.config.chances.commonLoot.desc":"Chance that common loot will appear when a chest's loot is generated.",
+	"gearifiers.config.chances.uncommonLoot.desc":"Chance that uncommon loot will appear when a chest's loot is generated.",
+	"gearifiers.config.chances.rareLoot.desc":"Chance that rare loot will appear when a chest's loot is generated.",
+	"gearifiers.config.chances.epicLoot.desc":"Chance that epic loot will appear when a chest's loot is generated.",
+	"gearifiers.config.modifiers.rerollCosts.enabled.desc":"Whether the reroll altar costs experience to reroll. False will disable all experience costs entirely.",
+	"gearifiers.config.modifiers.rerollCosts.addedPerRoll.desc":"The experience levels added to the total reroll cost per roll, after the first roll.",
+	"gearifiers.config.modifiers.paymentItemScaling.desc":"Scales the count of the payment item per roll after the first. Example: 0.5 will add 1 to the items needed per every 2 rerolls."
 }
