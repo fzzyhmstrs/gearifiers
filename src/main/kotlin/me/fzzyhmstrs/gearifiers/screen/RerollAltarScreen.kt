@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
 import me.fzzyhmstrs.gearifiers.compat.ClientItemCostLoader
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.DiffuseLighting
@@ -39,7 +39,7 @@ class RerollAltarScreen(handler: RerollAltarScreenHandler,playerInventory: Playe
 
         val item = handler.getRerollItem()
         val payments = ClientItemCostLoader.getItemCosts(item.item)
-        if (payments.isNotEmpty() && !GearifiersConfig.blackList.isItemBlackListed(item)){
+        if (payments.isNotEmpty() && !GearifiersConfigNew.getInstance().isItemBlackListed(item)){
             val payment = payments.elementAt(0)
             RenderSystem.disableDepthTest()
             val stack = ItemStack(payment,handler.items.get())
