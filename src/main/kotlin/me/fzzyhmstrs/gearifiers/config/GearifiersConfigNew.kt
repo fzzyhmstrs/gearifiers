@@ -19,10 +19,6 @@ import java.io.File
 @Suppress("MemberVisibilityCanBePrivate")
 object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
 
-    var modifiers: Modifiers
-    var chances: Chances
-    var blackList: BlackList
-
     fun isItemBlackListed(stack: ItemStack): Boolean{
         val item = stack.item
         val id = FzzyPort.ITEM.getId(item)
@@ -46,44 +42,13 @@ object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
 
     }
 
-    var namespaceBlackList: List<String> = listOf()
-    var individualItemBlackList: List<String> = listOf()
-    var blackListedScreenHandlers: List<String> = listOf()
+    var namespaceBlackList:ValidatedList<String> = ValidatedString.fromList(FabricLoader.getInstance().getAllMods().map{ it.getMetadata().getId() }).toList()
+    var itemBlackList: ValidatedList<Identifier> = ValidatedIdentifier.ofRegistry(Registries.ITEM).toList()
+    var blackListedScreenHandlers: = ValidatedIdentifier.fromRegistry(Registries.SCREEN_HANDLER).toList()
 
-
-    init{
-        try {
-            val (dir, dirCreated) = SyncedConfigHelper.makeDir("", Gearifiers.MOD_ID)
-            if (dirCreated) {
-                val f = File(dir, "modifiers_v1.json")
-                if (f.exists()) {
-                    val tempModifiers = JsonParser.parseString(f.readLines().joinToString(""))
-                    if (tempModifiers is JsonObject) {
-                        if (tempModifiers.has("fallbackId\$delegate")) {
-                            tempModifiers.remove("fallbackId\$delegate")
-                            f.writeText(gson.toJson(tempModifiers))
-                        }
-                    }
-                }
-            }
-        } catch (e:Exception){
-            e.printStackTrace()
-        }
-
-        modifiers = readOrCreateUpdated("modifiers_v4.json","modifiers_v3.json", base = Gearifiers.MOD_ID, configClass = { Modifiers() }, previousClass = { Modifiers() })
-        chances = readOrCreateUpdated("chances_v2.json","chances_v1.json", base = Gearifiers.MOD_ID, configClass =  { Chances() },previousClass = {Chances()})
-        blackList = readOrCreateUpdated("blackList_v1.json","blackList_v0.json",base = Gearifiers.MOD_ID, configClass =  { BlackList() }, previousClass = {BlackList()})
-    }
-    class BlackList: SyncedConfigHelper.OldClass<BlackList>{
-
-
-        override fun generateNewClass(): BlackList {
-            return this
-        }
-
-    }
-
-    class Chances: SyncedConfigHelper.OldClass<Chances>{
+    var chances = Chances()
+    
+    class Chances: ConfigSection(){
 
         var vorpalChance: Float = 0.025f
         var demonicChance: Float = 0.3333333f
@@ -101,45 +66,81 @@ object GearifiersConfigNew: Config(Identifier(Gearifiers.MOD_ID,"config")){
         var uncommonLoot: Float = 0.06f
         var rareLoot: Float = 0.04f
         var epicLoot: Float = 0.02f
-        override fun generateNewClass(): Chances {
-            this.shieldingChance = 0.0125f
-            return this
-        }
     }
 
-    class Modifiers: SyncedConfigHelper.OldClass<Modifiers>{
+    var modifiers = Modifiers()
+    
+    class Modifiers: ConfigSection() {
 
         fun fallbackItem(): Item {
-            val fallbackId = Identifier(defaultRerollPaymentItem)
-            return if(FzzyPort.ITEM.containsId(fallbackId)){
-                FzzyPort.ITEM.get(fallbackId)
+            return if(FzzyPort.ITEM.containsId(defaultPaymentItem)){
+                FzzyPort.ITEM.get(defaultPaymentItem)
             } else {
                 Items.DIAMOND
             }
         }
 
-        fun isModifierEnabled(id: Identifier): Boolean{
-            return !disabledModifier.contains(id)
+        fun isModifierEnabled(id: Identifier): Boolean {
+            return !disabledModifiers.contains(id)
         }
 
-        fun getItemCountNeeded(rerolls: Int): Int{
-            return 1 + (rerolls * paymentItemCountIncreasePerLevel).toInt()
+        fun getItemCountNeeded(rerolls: Int): Int {
+            return 1 + (rerolls * paymentItemScaling).toInt()
         }
 
-        var enableRerollXpCost: Boolean = true
-        var firstRerollXpCost: Int = 5
-        var addedRerollXpCostPerRoll: Int = 2
-        var useRepairIngredientAsRerollCost: Boolean = false
-        var repairIngredientOverrideDefinedCosts: Boolean = false
-        var defaultRerollPaymentItem: String = "minecraft:diamond"
-        var paymentItemCountIncreasePerLevel: Double = 0.0
+        fun getRerollCost(rerolls: Int) {
+            if (!rerollCosts.enabled) return 0
+            return rerollCosts.firstRerollCost + (rerollCosts.addedPerReroll * rerolls)
+        }
+
+        fun getRepairIngredients(item: Item, set: Set<Item>): Set<Item> {
+            return when(useRepairIngredient){
+                useRepairIngredient.NO -> if(set.isEmpty()) setOf(fallbackItem()) else set
+                useRepairIngredient.YES -> if(set.isEmpty()) getRepairIngredient(item) else set
+                useRepairIngredient.ALWAYS -> getRepairIngredient(item)
+            }
+        }
+        private fun getRepairIngredient(item: Item): Set<Item> {
+            if (item is ArmorItem) {
+                return item.material.repairIngredient.matchingItemIds.map { id -> FzzyPort.ITEM.get(id) }.toSet()
+            }
+            if (item is ToolItem){
+                return item.material.repairIngredient.matchingItemIds.map { id -> FzzyPort.ITEM.get(id) }.toSet()
+            }
+            return setOf(fallbackItem())
+        }
+
+        fun getApplicableModifiers(stack: ItemStack, predicate: Predicate<EquipmentModifier> = { _ -> true }): List<EquipmentModifier> {
+            return EquipmentModifierHelper.getTargetsForItem(stack).filter { predicate.test(it) }
+        }
+
+        var rerollCosts = RerollCosts()
+
+        class RerollCosts: Walkable {
+            var enabled: Boolean = true
+            @ValidatedInt.Restrict(0,50)
+            var firstRerollCost: Int = 5
+            @ValidatedInt.Restrict(0,50)
+            var addedPerReroll: Int = 2
+        }
+        
+        
+        var useRepairIngredient: RepairIngredientUsage = RepairIngredientUsage.NO
+        var defaultPaymentItem: ValidatedIdentifier = ValidatedIdentifier.ofRegistry(Identifier("diamond"),Registries.ITEM)
+        @ValidatedDouble.Restrict(0.0,4.0)
+        var paymentItemScaling: Double = 0.0
+        @ValidatedInt.Restrict(1,Int.MAX_VALUE)
         var maxLegendarySealUses = 1
+        var disabledModifiers: ValidatedList<Identifier> = ValidatedIdentifier.ofSuppliedList { ModifierRegistry.getAllByType<EquimentModifier>().filter{ it.id.namespace == Gearifiers.MOD_ID } }.toList()
+    }
 
-        var disabledModifier: List<Identifier> = listOf(
-        )
+    enum class RepairIngredientUsage: EnumTranslatable {
+        NO,
+        YES,
+        ALWAYS;
 
-        override fun generateNewClass(): Modifiers {
-            return this
+        override fun prefix(): String{
+            return "${Gearifiers.MOD_ID}.config.repair_ingredient_usage"
         }
     }
 }
