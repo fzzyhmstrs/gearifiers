@@ -9,7 +9,7 @@ import dev.emi.emi.api.widget.WidgetHolder
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.fzzy_core.coding_util.FzzyPort
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 
@@ -70,10 +70,10 @@ class AltarEmiRecipe(private val input: Item, private val cost: EmiIngredient): 
 		    widgets.addSlot(inputStack, 0, 0)
 		    widgets.addSlot(cost, 49, 0)
 		    widgets.addSlot(inputStack, 107, 0).recipeContext(this).appendTooltip(rerollText)
-        if (GearifiersConfig.modifiers.enableRerollXpCost){
-            widgets.add(XpOrbWidget(10,20,GearifiersConfig.modifiers.firstRerollXpCost,"emi.category.gearifiers.reroll_altar.tooltip_1"))
+        if (GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled){
+            widgets.add(XpOrbWidget(10,20,GearifiersConfigNew.getInstance().modifiers.rerollCosts.firstRerollCost,"emi.category.gearifiers.reroll_altar.tooltip_1"))
             widgets.addText(costText1,31,23,0x55FF55,true)
-            widgets.add(XpOrbWidget(41,20,GearifiersConfig.modifiers.addedRerollXpCostPerRoll,"emi.category.gearifiers.reroll_altar.tooltip_2"))
+            widgets.add(XpOrbWidget(41,20,GearifiersConfigNew.getInstance().modifiers.rerollCosts.addedPerReroll,"emi.category.gearifiers.reroll_altar.tooltip_2"))
             widgets.addText(costText2,62,23,0x55FF55,true)
         }
     }
