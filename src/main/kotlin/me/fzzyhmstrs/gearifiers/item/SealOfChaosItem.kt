@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.item
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gear_core.modifier_util.EquipmentModifierHelper
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
@@ -25,7 +25,7 @@ class SealOfChaosItem(settings: Settings): ModifierAffectingItem(settings) {
             user.sendMessage(AcText.translatable("item.gearifiers.seals.blacklisted"))
             return TypedActionResult.pass(modifierAffectingItem)
         }
-        val list = EquipmentModifierHelper.getTargetsForItem(stack)
+        val list = GearifiersConfigNew.getInstance().modifiers.getApplicableModifiers(stack)
         var success = false
         var tries = 0
         while(!success && tries < 10){
