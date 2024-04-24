@@ -2,7 +2,7 @@ package me.fzzyhmstrs.gearifiers.compat.rei
 
 import me.fzzyhmstrs.fzzy_core.coding_util.AcText
 import me.fzzyhmstrs.gearifiers.Gearifiers
-import me.fzzyhmstrs.gearifiers.config.GearifiersConfig
+import me.fzzyhmstrs.gearifiers.config.GearifiersConfigNew
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.Renderer
@@ -63,16 +63,16 @@ class RerollAltarCategory: DisplayCategory<RerollAltarDisplay> {
         outputSlot.entries(display.outputEntries[0])
         widgets.add(outputSlot)
 
-        if (GearifiersConfig.modifiers.enableRerollXpCost){
+        if (GearifiersConfigNew.getInstance().modifiers.rerollCosts.enabled){
             val text1 = Widgets.createLabel(Point(bounds.x + xOffset + 33, bounds.y + yOffset + 23),AcText.translatable("emi.category.gearifiers.reroll_altar.cost_text_1").formatted(Formatting.GREEN))
             widgets.add(text1)
             val text2Text = AcText.translatable("emi.category.gearifiers.reroll_altar.cost_text_2").formatted(Formatting.GREEN)
             val text2TextWidth = MinecraftClient.getInstance().textRenderer.getWidth(text2Text)
             val text2 = Widgets.createLabel(Point(bounds.x + xOffset + 62 + (text2TextWidth/2), bounds.y + yOffset + 23),text2Text)
             widgets.add(text2)
-            val orb1 = Widgets.withTooltip(XpOrbWidget(bounds.x + xOffset + 10, bounds.y + yOffset + 20,GearifiersConfig.modifiers.firstRerollXpCost),AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_1"))
+            val orb1 = Widgets.withTooltip(XpOrbWidget(bounds.x + xOffset + 10, bounds.y + yOffset + 20,GearifiersConfigNew.getInstance().modifiers.rerollCosts.firstRerollCost),AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_1"))
             widgets.add(orb1)
-            val orb2 = Widgets.withTooltip(XpOrbWidget(bounds.x + xOffset + 41, bounds.y + yOffset + 20,GearifiersConfig.modifiers.addedRerollXpCostPerRoll),AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_2"))
+            val orb2 = Widgets.withTooltip(XpOrbWidget(bounds.x + xOffset + 41, bounds.y + yOffset + 20,GearifiersConfigNew.getInstance().modifiers.rerollCosts.addedPerRoll),AcText.translatable("emi.category.gearifiers.reroll_altar.tooltip_2"))
             widgets.add(orb2)
         }
 
