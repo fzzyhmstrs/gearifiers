@@ -117,10 +117,10 @@ class GearifiersConfig: Config(Identifier(Gearifiers.MOD_ID,"config")){
         }
         private fun getRepairIngredient(item: Item): Set<Item> {
             if (item is ArmorItem) {
-                return item.material.repairIngredient.matchingItemIds.map { id -> FzzyPort.ITEM.get(id) }.toSet()
+                return item.material.repairIngredient?.matchingItemIds?.map { id -> FzzyPort.ITEM.get(id) }?.toSet() ?: setOf(fallbackItem())
             }
             if (item is ToolItem){
-                return item.material.repairIngredient.matchingItemIds.map { id -> FzzyPort.ITEM.get(id) }.toSet()
+                return item.material.repairIngredient?.matchingItemIds?.map { id -> FzzyPort.ITEM.get(id) }?.toSet() ?: setOf(fallbackItem())
             }
             return setOf(fallbackItem())
         }
