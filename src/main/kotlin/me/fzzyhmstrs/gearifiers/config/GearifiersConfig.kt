@@ -6,6 +6,7 @@ import me.fzzyhmstrs.fzzy_config.config.ConfigSection
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable
 import me.fzzyhmstrs.fzzy_config.util.Walkable
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedList
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedSet
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedDouble
@@ -57,9 +58,9 @@ class GearifiersConfig: Config(Identifier(Gearifiers.MOD_ID,"config")){
 
     }
 
-    var namespaceBlackList: ValidatedList<String> = ValidatedString.fromList(FabricLoader.getInstance().allMods.map{ it.metadata.id }).toList()
-    var itemBlackList: ValidatedList<Identifier> = ValidatedIdentifier.ofRegistry(Registries.ITEM).toList()
-    var blackListedScreenHandlers: ValidatedList<Identifier> = ValidatedIdentifier.ofRegistry(Registries.SCREEN_HANDLER).toList()
+    var namespaceBlackList: ValidatedSet<String> = ValidatedSet(setOf(), ValidatedString.fromList(FabricLoader.getInstance().allMods.map{ it.metadata.id }))
+    var itemBlackList: ValidatedSet<Identifier> = ValidatedSet(setOf(), ValidatedIdentifier.ofRegistry(Registries.ITEM))
+    var blackListedScreenHandlers: ValidatedSet<Identifier> = ValidatedSet(setOf(), ValidatedIdentifier.ofRegistry(Registries.SCREEN_HANDLER))
 
     var chances = Chances()
 
@@ -146,7 +147,7 @@ class GearifiersConfig: Config(Identifier(Gearifiers.MOD_ID,"config")){
         var paymentItemScaling: Double = 0.0
         @ValidatedInt.Restrict(1,Int.MAX_VALUE)
         var maxLegendarySealUses = 1
-        var disabledModifiers: ValidatedList<Identifier> = ValidatedIdentifier.ofSuppliedList { ModifierRegistry.getAllByType<EquipmentModifier>().filter{ it.modifierId.namespace == Gearifiers.MOD_ID }.map { it.modifierId } }.toList()
+        var disabledModifiers: ValidatedSet<Identifier> = ValidatedSet(setOf(), ValidatedIdentifier.ofSuppliedList { ModifierRegistry.getAllByType<EquipmentModifier>().filter{ it.modifierId.namespace == Gearifiers.MOD_ID }.map { it.modifierId } })
     }
 
     enum class RepairIngredientUsage: EnumTranslatable {
